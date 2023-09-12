@@ -14,7 +14,19 @@ public class WordCountService {
 	 * 1. 각 뉴스 별로 단어를 센다.
 	 * 2. 각 뉴스 카테고리 별로 단어를 합하여 최다 빈도의 단어 20개를 추출한다.
 	 *
-	 * @param article : 뉴스를 크롤링 하여 json파일로 만든 것
+	 * @param article : 뉴스를 크롤링 하여 json파일로 만든 것 ;
+	 *               [
+	 *                {
+	 *                 "category1":"dd",
+	 *                 "category2":"aa",
+	 *                	,,,
+	 *                 },
+	 *                {
+	 *                 "category1":"dd",
+	 * 	 *             "category2":"aa",
+	 * 	 *              ,,,
+	 * 	 *             }
+	 *                ]
 	 */
 	@KafkaListener(topics = "NEWS", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(JSONObject article){
