@@ -13,20 +13,39 @@ public class SparkConfig {
 	private String appResource;
 
 	private String master;
-	//
+
+
+	/**
+	 *	aws서버의 java home path
+	 */
 	public String getJavaHome(){
 		return javaHome;
 	}
+
+	/**
+	 *	aws서버의 spark home path
+	 */
 	public String getSparkHome(){
 		return sparkHome;
 	}
+
+	/**
+	 *	스파크를 사용하는 파이썬 코드의 메인 클래스 이름
+	 */
 	public String getMainClass(){
 		return mainClass;
 	}
+
+	/**
+	 *	스파크를 사용하는 파이썬 코드의 파일 경로
+	 */
 	public String getAppResource(){
 		return appResource;
 	}
 
+	/**
+	 *	스파크 마스터 노드의 ip { spark://ip:port }
+	 */
 	public String getMaster(){
 		return master;
 	}
