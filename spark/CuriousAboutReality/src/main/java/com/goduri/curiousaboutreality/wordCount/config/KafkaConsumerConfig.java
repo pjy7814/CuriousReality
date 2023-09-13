@@ -1,4 +1,4 @@
-package com.goduri.curiousaboutreality.config;
+package com.goduri.curiousaboutreality.wordCount.config;
 
 import java.util.HashMap;
 import java.util.Map;

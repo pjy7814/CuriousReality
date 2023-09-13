@@ -1,60 +1,48 @@
 package com.goduri.curiousaboutreality.wordCount.service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.spark.launcher.SparkLauncher;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.goduri.curiousaboutreality.wordCount.config.SparkConfig;
+
 @Service
+@EnableConfigurationProperties(SparkConfig.class)
 public class WordCountService {
+
+	// 커스텀 properties
+	private final SparkConfig sparkConfig;
+
+	@Autowired
+	public WordCountService(SparkConfig sparkConfig){
+		this.sparkConfig = sparkConfig;
+	}
+
 	/**
-	 * Kafka로부터 뉴스들을 받아 다음 작업을 수행한다.
+	 * Kafka로부터 파일 위치를 받아 스파크에서 연산을 한다.
 	 *
-	 * 1. 각 뉴스 별로 단어를 센다.
-	 * 2. 각 뉴스 카테고리 별로 단어를 합하여 최다 빈도의 단어 20개를 추출한다.
-	 *
-	 * @param article : 뉴스를 크롤링 하여 json파일로 만든 것 ;
-	 *               [
-	 *                {
-	 *                 "category1":"dd",
-	 *                 "category2":"aa",
-	 *                	,,,
-	 *                 },
-	 *                {
-	 *                 "category1":"dd",
-	 * 	 *             "category2":"aa",
-	 * 	 *              ,,,
-	 * 	 *             }
-	 *                ]
+	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
 	@KafkaListener(topics = "NEWS", groupId = ConsumerConfig.GROUP_ID_CONFIG)
-	public void consume(JSONObject article){
-		System.out.println(article);
+	public void consume(String fileLocation) throws IOException {
+
+		// spark launcher로 스파크 코드 실행
+		SparkLauncher sparkLauncher = new SparkLauncher()
+			.addAppArgs(fileLocation)
+			.setJavaHome(sparkConfig.getJavaHome())
+			.setSparkHome(sparkConfig.getSparkHome())
+			.setMaster(sparkConfig.getMaster())
+			.setAppResource(sparkConfig.getAppResource())
+			.setMainClass(sparkConfig.getMainClass())
+			.setConf(SparkLauncher.EXECUTOR_MEMORY, "2g");
+
+		Process proc = sparkLauncher.launch();
 	}
 
-	/**
-	 * 한 뉴스를 받아서 wordCount를 수행한다.
-	 *
-	 * 여기에서 SparkLauncher를 사용 할 것
-	 * > 로직 설명 여기에 <
-	 *
-	 * @param article
-	 * @return
-	 */
-	private HashMap<String, Integer> wordCount(JSONObject article)  {
-		return null;
-	}
-
-	/**
-	 * Kafka로부터 같은 카테고리에 속하는 뉴스들의 리스트를 가져와서 집계를 한다.
-	 *
-	 *  > 로직 설명 여기에 <
-	 *여 기에서 SparkLauncher를 사용 할 것.
-	 *
-	 * @param articles : wordCount를 한 뉴스들의 리스트
-	 */
-	private void categoryReduce(JSONObject articles){
-
-	}
 }

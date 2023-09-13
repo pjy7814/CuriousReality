@@ -24,6 +24,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
+	// https://mvnrepository.com/artifact/org.apache.spark/spark-launcher
+	implementation group: 'org.apache.spark', name: 'spark-launcher_2.13', version: '3.4.1'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
