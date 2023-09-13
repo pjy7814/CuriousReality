@@ -40,7 +40,7 @@ public class WordCountService {
 			.setMaster(sparkConfig.getMaster())
 			.setAppResource(sparkConfig.getAppResource())
 			.setMainClass(sparkConfig.getMainClass())
-			.setConf(SparkLauncher.EXECUTOR_MEMORY, "2g");
+			.setConf(SparkLauncher.EXECUTOR_MEMORY, "2G");
 
 		Process proc = sparkLauncher.launch();
 	}

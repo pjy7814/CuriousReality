@@ -14,6 +14,25 @@ public class SparkConfig {
 
 	private String master;
 
+	public void setJavaHome(String javaHome) {
+		this.javaHome = javaHome;
+	}
+
+	public void setSparkHome(String sparkHome) {
+		this.sparkHome = sparkHome;
+	}
+
+	public void setMainClass(String mainClass) {
+		this.mainClass = mainClass;
+	}
+
+	public void setAppResource(String appResource) {
+		this.appResource = appResource;
+	}
+
+	public void setMaster(String master) {
+		this.master = master;
+	}
 
 	/**
 	 *	aws서버의 java home path
