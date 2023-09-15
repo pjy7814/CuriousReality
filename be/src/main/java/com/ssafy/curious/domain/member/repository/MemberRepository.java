@@ -8,8 +8,8 @@ import java.util.*;
 
 public interface MemberRepository extends JpaRepository<MemberEntity,Long> {
 
-    Optional<MemberEntity> checkByEmail(String email);
-    Optional<MemberEntity> checkByContact(String contact);
+    Optional<MemberEntity> findByEmail(String email);
+    Optional<MemberEntity> findByContact(String contact);
 //    @Query("select m from MemberEntity m where m.email = :email")
 //    MemberEntity findByEmail(String email);
 

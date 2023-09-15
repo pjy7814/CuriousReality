@@ -31,11 +31,11 @@ public class MemberServiceImpl implements MemberService {
 
         // [1] 중복 검사
         // [1-1] 이메일 중복 검사
-        Optional<MemberEntity> byEmail = memberRepository.checkByEmail(email);
+        Optional<MemberEntity> byEmail = memberRepository.findByEmail(email);
         if (byEmail.isPresent())
             throw new AlreadyExistException(ErrorCode.MEMBER_EMAIL_EXISTS);
         // [1-2] 전화번호 중복 검사
-        Optional<MemberEntity> byContact = memberRepository.checkByContact(contact);
+        Optional<MemberEntity> byContact = memberRepository.findByContact(contact);
         if (byContact.isPresent())
             throw new AlreadyExistException(ErrorCode.MEMBER_CONTACT_EXISTS);
 
