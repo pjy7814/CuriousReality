@@ -4,8 +4,8 @@ import java.util.regex.Pattern;
 
 public class RegexUtil {
     private static final String PW_REGEX = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$";
-    private static final String EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]{1,255}$";
-    private static final String CONTACT_REGEX = "^01(?:0|1|[6-9])[-]?(\\d{3}|\\d{4})[-]?(\\d{4}$";
+    private static final String EMAIL_REGEX = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$";
+    private static final String CONTACT_REGEX = "^01(?:0|1|[6-9])[-]?(\\d{3}|\\d{4})[-]?(\\d{4})$";
 
     private static final String NAME_REGEX = "^[a-zA-Zㄱ-ㅎ가-힣]*$";
 
