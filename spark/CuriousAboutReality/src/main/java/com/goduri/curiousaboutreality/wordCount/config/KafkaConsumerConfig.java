@@ -27,7 +27,7 @@ public class KafkaConsumerConfig {
 			KAFKA_SERVER_IP);
 		props.put(
 			ConsumerConfig.GROUP_ID_CONFIG,
-			"realityNam");
+			"realityNamTest");
 		props.put(
 			ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
 			StringDeserializer.class);
