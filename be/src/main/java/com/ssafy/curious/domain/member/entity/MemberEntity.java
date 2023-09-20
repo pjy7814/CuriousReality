@@ -4,6 +4,7 @@ import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.model.ArticlePress;
 import com.ssafy.curious.global.entity.CUDEntity;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,15 +15,18 @@ import java.util.Map;
 @Getter
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends CUDEntity {
+public class MemberEntity extends CUDEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", updatable = false)
     private Long id;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", length = 255, unique = true, nullable = false)
     private String email;
+
+    @Column(name = "password", length = 20, unique = false, nullable = false)
+    private String password;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -33,7 +37,8 @@ public class Member extends CUDEntity {
     @Column(name = "contact")
     private String contact;
 
-    @Column(name = "is_social")
+    @ColumnDefault("false")
+    @Column(name = "is_social", nullable = false)
     private Boolean isSocial;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -47,13 +52,14 @@ public class Member extends CUDEntity {
     private Map<ArticlePress, Float> pressPreference;
 
     @Builder
-    public Member(Long id, String email, String name, LocalDate birthday, String contact) {
+    public MemberEntity(Long id, String email, String password, String name, LocalDate birthday, String contact, Boolean isSocial) {
         this.id = id;
         this.email = email;
+        this.password = password;
         this.name = name;
         this.birthday = birthday;
         this.contact = contact;
-        this.isSocial = false;
+        this.isSocial = isSocial;
         initializePreference();
     }
 
