@@ -1,31 +1,52 @@
 <template>
-  <div class="sub-menu">
-    <!-- 세부 내비게이션 메뉴 아이템들 -->
-    <router-link to="/">서브메뉴 1</router-link>
-    <router-link to="/">서브메뉴 2</router-link>
-    <!-- 필요한 만큼 추가 -->
+  <div class="navigation-bar">
+    <div class="nav-item">
+      <PoliticsMenu class="category"/>
+      <EconomyMenu class="category"/>
+      <SocietyMenu class="category"/>
+      <ITScienceMenu class="category"/>
+      <WorldMenu class="category"/>
+    </div>
   </div>
 </template>
 
 <script>
+import PoliticsMenu from './SubMenu/PoliticsMenu.vue';
+import EconomyMenu from './SubMenu/EconomyMenu.vue';
+import SocietyMenu from './SubMenu/SocietyMenu.vue';
+import ITScienceMenu from './SubMenu/ITScienceMenu.vue';
+import WorldMenu from './SubMenu/WorldMenu.vue';
+
 export default {
-  name: "SubNavigationBar",
+  components: {
+    PoliticsMenu,
+    EconomyMenu,
+    SocietyMenu,
+    ITScienceMenu,
+    WorldMenu
+  }
 };
 </script>
 
 <style scoped>
-.sub-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 10px;
-  display: none;
-  z-index: 1001;
+.navigation-bar {
+  width: 100%;
+  margin-top: 70px;
+  position: fixed;
+  flex-shrink: 0;
+  align-items: flex-start;
+  display: flex;
+  margin-left: 15%;
+  background: #FFF;
 }
 
-.category:hover .sub-menu {
-  display: block;
+.nav-item {
+  cursor: pointer;
+  flex-direction: row;
+  display: flex;
+}
+
+.category {
+  width: 130px;
 }
 </style>

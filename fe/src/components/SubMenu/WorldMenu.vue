@@ -1,0 +1,39 @@
+<template>
+  <div class="sub-item">
+  <div class="nav-item">
+    <router-link class="category" to="/">세계일반</router-link>
+    <router-link class="category" to="/">아시아/호주</router-link>
+    <router-link class="category" to="/">미국/중남미</router-link>
+    <router-link class="category" to="/">유럽</router-link>
+    <router-link class="category" to="/">중동/아프리카</router-link>
+  </div>
+</div>
+</template>
+  
+<script>
+export default {
+
+};
+</script>
+  
+<style scoped>
+.sub-item {
+  padding: 15px 25px 10px 55px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 21px;
+} 
+.category {
+  display: flex;
+  flex-direction: column;
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 43px;
+  display: flex;
+  color: #1c1b1b;
+  text-decoration: none;
+}
+</style>
+  

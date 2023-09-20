@@ -16,9 +16,8 @@ export default {
 
 <style scoped>
 .login {
-  position: absolute;
   width: 100%;
-  height: 100%;
+  height: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,22 +41,22 @@ export default {
 }
 
 .login-button {
-  width: 300px;
-  height: 43px;
+  width: 200px;
+  height: 50px;
   background: #1f2db1;
   font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 500;
-  font-size: 30px;
+  font-size: 1.2rem;
   line-height: 43px;
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.13rem;
   color: #ffffff;
   border-radius: 26px;
   cursor: pointer;
-  border-radius: 26px;
+  border-radius: 1rem;
   margin-top: 20px;
 }
 

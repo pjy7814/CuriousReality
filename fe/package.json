@@ -8,10 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@builder.io/sdk-vue": "^0.6.2",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-navigation-bar": "^6.0.1",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vuetify": "^3.3.16"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
