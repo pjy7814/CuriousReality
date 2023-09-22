@@ -1,7 +1,7 @@
 <!-- src/components/NavigationBar.vue -->
 <template>
   <div class="navigation-bar" @mouseover="showSubMenu" @mouseleave="hideSubMenu">
-    <router-link class="logo" to="/">Logo</router-link>
+    <router-link class="logo" to="/"><img src="@/assets/logo.png"></router-link>
     <router-link class="category" to="/">정치</router-link>
     <router-link class="category" to="/">경제</router-link>
     <router-link class="category" to="/">사회</router-link>
@@ -49,5 +49,9 @@ export default {
   text-decoration: none;
 }
 
+img {
+  margin: auto;
+  width: 100px;
+}
 
 </style>

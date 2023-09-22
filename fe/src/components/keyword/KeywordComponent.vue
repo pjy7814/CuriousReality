@@ -1,6 +1,6 @@
 <template>
     <div class="keyword">
-        <div class="title">실시간 검색어</div>
+        <div class="title">실시간 키워드</div>
         <div class="item">
 
             <KeywordItem v-for="keywordItem in keyword" :key="keywordItem.rank" :id="keywordItem.rank"
