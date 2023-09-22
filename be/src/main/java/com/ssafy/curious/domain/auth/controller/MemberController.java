@@ -40,7 +40,7 @@ public class MemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<LogoutDTO.Response> logout(){
-        @AuthenticationPrincipal JwtAuthentication auth
+//        @AuthenticationPrincipal JwtAuthentication auth
         LogoutDTO.Response response = memberService.logout();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
