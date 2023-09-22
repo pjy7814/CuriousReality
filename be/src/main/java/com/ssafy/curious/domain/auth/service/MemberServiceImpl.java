@@ -1,14 +1,19 @@
-package com.ssafy.curious.domain.member.service;
+package com.ssafy.curious.domain.auth.service;
 
-import com.ssafy.curious.domain.member.dto.RegisterDTO;
-import com.ssafy.curious.domain.member.entity.MemberEntity;
-import com.ssafy.curious.domain.member.repository.MemberRepository;
-import com.ssafy.curious.global.exception.AlreadyExistException;
-import com.ssafy.curious.global.exception.CustomValidationException;
-import com.ssafy.curious.global.exception.ErrorCode;
+import com.ssafy.curious.domain.auth.dto.LoginDTO;
+import com.ssafy.curious.domain.auth.dto.LogoutDTO;
+import com.ssafy.curious.domain.auth.dto.MemberDTO;
+import com.ssafy.curious.domain.auth.dto.RegisterDTO;
+import com.ssafy.curious.domain.auth.entity.MemberEntity;
+import com.ssafy.curious.domain.auth.repository.MemberRepository;
+import com.ssafy.curious.global.exception.*;
+import com.ssafy.curious.global.utils.JwtUtil;
 import com.ssafy.curious.global.utils.RegexUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +26,11 @@ import java.util.*;
 @Transactional
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder encoder;
 
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private Long expiredMs = 1000 * 60 * 60l;
     @Override
     @Transactional
     public RegisterDTO.Response register(RegisterDTO.Request dto) {
@@ -58,10 +67,18 @@ public class MemberServiceImpl implements MemberService {
         if (!RegexUtil.checkContactRegex(dto.getContact()))
             throw new CustomValidationException(ErrorCode.INVALID_CONTACT_FORMAT);
         log.info("contact format test done");
+        // [2-5] 비밀번호 일치 검사
+        if (!Objects.equals(dto.getPassword(), dto.getPasswordCheck()))
+            throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
+        log.info("password match test done");
+
+        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
+        String password = encoder.encode(dto.getPassword());
+        log.info("password : {}, encoded : {}", dto.getPassword(), password);
 
         MemberEntity member = MemberEntity.builder()
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(password)
                 .name(dto.getName())
                 .contact(dto.getContact())
                 .birthday(dto.getBirthday())
@@ -73,6 +90,52 @@ public class MemberServiceImpl implements MemberService {
 
         return RegisterDTO.Response.builder()
                 .email(savedMember.getEmail())
+                .token(token)
+                .build();
+    }
+
+    @Override
+    public MemberDTO.Response update(MemberDTO.Request dto){
+
+//        Optional<MemberEntity> member = memberRepository.findByEmail(email);
+
+
+        return null;
+    }
+
+
+    @Override
+    public LoginDTO.Response login(LoginDTO.Request dto) {
+
+        String email = dto.getEmail();
+
+
+        // [1] 유효성 검사
+        // [1-1] 유저가 없음
+        MemberEntity member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new MemberNotFoundException(ErrorCode.NO_SUCH_MEMBER));
+
+        // [1-2] 비밀번호 틀림
+        if(!encoder.matches(dto.getPassword(),member.getPassword())){
+            throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        // [2] 로그인 처리
+        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
+
+        return LoginDTO.Response.builder()
+                .success(true)
+                .token(token)
+                .build();
+    }
+
+    @Override
+    public LogoutDTO.Response logout() {
+
+        // 컨텍스트에 있는 값 제거
+        SecurityContextHolder.clearContext();
+        return LogoutDTO.Response.builder()
+                .success(true)
                 .build();
     }
 }

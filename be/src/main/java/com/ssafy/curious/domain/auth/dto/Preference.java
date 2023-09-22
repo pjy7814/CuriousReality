@@ -1,4 +1,4 @@
-package com.ssafy.curious.domain.member.dto;
+package com.ssafy.curious.domain.auth.dto;
 
 import lombok.Builder;
 
