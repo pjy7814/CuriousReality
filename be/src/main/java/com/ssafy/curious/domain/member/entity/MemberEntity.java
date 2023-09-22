@@ -1,5 +1,6 @@
 package com.ssafy.curious.domain.member.entity;
 
+import com.ssafy.curious.domain.article.entity.LikedArticleEntity;
 import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.model.ArticlePress;
 import com.ssafy.curious.global.entity.CUDEntity;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -40,6 +42,10 @@ public class MemberEntity extends CUDEntity {
     @ColumnDefault("false")
     @Column(name = "is_social", nullable = false)
     private Boolean isSocial;
+
+
+    @OneToMany(mappedBy = "liked_article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LikedArticleEntity> likedArticles;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "category_preferences", joinColumns = @JoinColumn(name = "member_id"))
