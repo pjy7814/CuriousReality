@@ -14,7 +14,7 @@ public class ArticleResult implements Serializable {
 	private String thumbnail;
 	private String company;
 	private String article;
-	private Map<String,Long> keywords;
+	private WordCount keywords;
 
 	private List<String> preprocessed;
 
@@ -57,7 +57,7 @@ public class ArticleResult implements Serializable {
 		return article;
 	}
 
-	public Map<String, Long> getKeywords() {
+	public WordCount getKeywords() {
 		return keywords;
 	}
 
@@ -103,7 +103,7 @@ public class ArticleResult implements Serializable {
 		this.article = article;
 	}
 
-	public void setKeywords(Map<String, Long> keywords) {
+	public void setKeywords(WordCount keywords) {
 		this.keywords = keywords;
 	}
 
