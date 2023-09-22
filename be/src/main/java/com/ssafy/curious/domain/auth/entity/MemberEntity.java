@@ -1,4 +1,4 @@
-package com.ssafy.curious.domain.member.entity;
+package com.ssafy.curious.domain.auth.entity;
 
 import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.model.ArticlePress;
@@ -25,7 +25,7 @@ public class MemberEntity extends CUDEntity {
     @Column(name = "email", length = 255, unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", length = 20, unique = false, nullable = false)
+    @Column(name = "password", length = 255, unique = false, nullable = false)
     private String password;
 
     @Column(name = "name", nullable = false)
@@ -52,7 +52,7 @@ public class MemberEntity extends CUDEntity {
     private Map<ArticlePress, Float> pressPreference;
 
     @Builder
-    public MemberEntity(Long id, String email, String password, String name, LocalDate birthday, String contact, Boolean isSocial) {
+    public MemberEntity(Long id, String email, String password,String name, LocalDate birthday, String contact, Boolean isSocial) {
         this.id = id;
         this.email = email;
         this.password = password;

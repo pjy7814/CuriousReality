@@ -1,4 +1,4 @@
-package com.ssafy.curious.domain.member.dto;
+package com.ssafy.curious.domain.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +17,7 @@ public class RegisterDTO {
     public static class Request {
         private String email; // example@example.com
         private String password; // 제약조건 : 숫자, 특수문자, 대문자, 소문자
+        private String passwordCheck; // 위와 동일해야 함
         private String name;
         private LocalDate birthday;
         private String contact; // 000-0000-0000
@@ -29,5 +30,6 @@ public class RegisterDTO {
     @NoArgsConstructor
     public static class Response {
         private String email;
+        private String token;
     }
 }
