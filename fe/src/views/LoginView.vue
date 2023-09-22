@@ -24,7 +24,7 @@ export default {
   flex-direction: column;
 }
 
-.id,
+/* .id,
 .password {
   font-family: "Noto Sans KR";
   font-style: normal;
@@ -38,6 +38,16 @@ export default {
   background: transparent;
   width: 100%;
   margin-bottom: 10px;
+} */
+
+input {
+  padding: 23px 20px 22px 20px;
+  margin-bottom: 10px;
+  width: 20%;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 1.5rem;
+  border: 1px solid #A8A8A8;
 }
 
 .login-button {
