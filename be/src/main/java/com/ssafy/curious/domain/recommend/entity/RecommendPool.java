@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "recommend_pool")
-public class RecommendPool extends CEntity {
+public class RecommendPool {
 
     @Id
     private String id;
