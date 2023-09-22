@@ -1,8 +1,7 @@
-package com.ssafy.curious.domain.member.repository;
+package com.ssafy.curious.domain.auth.repository;
 
-import com.ssafy.curious.domain.member.entity.MemberEntity;
+import com.ssafy.curious.domain.auth.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.*;
 
