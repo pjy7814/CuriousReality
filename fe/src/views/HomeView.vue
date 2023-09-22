@@ -8,8 +8,15 @@
     </div>
 
     <div class="content-1"> <!-- 워드클라우드 + 실시간 키워드  -->
-      <div class="content-item1 word-cloud">
-        워드클라우드 들어가는 곳
+      <div class="word-cloud">
+        <vue-word-cloud :words="words" >
+          <template #default="{ text, weight, word }">
+            <div :title="weight" @click="onWordClick(word)" class="word-cloud-text">
+              {{ text }}
+            </div>
+          </template>
+        </vue-word-cloud>
+
       </div>
       <VDatePicker v-model.range="range" mode="dateTime" />
       <div class="content-item2">
@@ -27,12 +34,13 @@
 import { ref } from 'vue';
 import KeywordComponent from '@/components/keyword/KeywordComponent.vue';
 import ArticleComponent from '@/components/article/ArticleComponent.vue';
-
+import VueWordCloud from 'vuewordcloud';
 export default {
   name: "HomeView",
   components: {
     KeywordComponent,
-    ArticleComponent
+    ArticleComponent,
+    [VueWordCloud.name]: VueWordCloud,
   },
   setup() {
     const range = ref({
@@ -41,6 +49,11 @@ export default {
     });
 
     return { range };
+  },
+  data() { // 함수형태
+    return {
+      words: [['남현실', 19], ['남현실논란', 3], ['남현실나이', 7], ['남현실충격발언', 3]],
+    }
   }
 };
 </script>
@@ -84,15 +97,16 @@ img {
   width: 100%;
 }
 
-.word-cloud{
-  background-color: #bbb;
-}
-.content-item1 {
+.word-cloud {
   width: 60%;
-  height: 300px;
+  height: 400px;
   margin: 50px;
 }
 
+.word-cloud-text {
+  cursor: pointer;
+  font-family: Noto Sans KR;
+}
 .content-item2 {
   width: 15%;
   height: 300px;
