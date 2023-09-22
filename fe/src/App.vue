@@ -3,7 +3,7 @@
   <div id="app">
     <NavigationBar class="navigation-bar" @mouseover="showSub = true"/>
     <SubNavigationBar class="sub-navigation-bar" v-if="showSub" @mouseover="showSub = true" @mouseleave="showSub = false"/>
-    <router-view class="body"/>
+    <router-view class="body" @mouseover="showSub = false"/>
   </div>
 </template>
 

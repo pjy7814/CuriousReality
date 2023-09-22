@@ -11,6 +11,7 @@
       <div class="content-item1 word-cloud">
         워드클라우드 들어가는 곳
       </div>
+      <VDatePicker v-model.range="range" mode="dateTime" />
       <div class="content-item2">
         <KeywordComponent />
       </div>
@@ -23,16 +24,27 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import KeywordComponent from '@/components/keyword/KeywordComponent.vue';
 import ArticleComponent from '@/components/article/ArticleComponent.vue';
+
 export default {
   name: "HomeView",
   components: {
     KeywordComponent,
     ArticleComponent
+  },
+  setup() {
+    const range = ref({
+      start: new Date(2020, 0, 6),
+      end: new Date(2020, 0, 10),
+    });
+
+    return { range };
   }
 };
 </script>
+
 
 <style scoped>
 .content {

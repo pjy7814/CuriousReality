@@ -96,7 +96,7 @@ img {
 .bookmark>img {
     width: 100px;
     height: 100px;
-
+    cursor:pointer;
     object-fit: cover;
 }
 </style>
