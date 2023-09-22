@@ -22,9 +22,8 @@ export default {
   
 <style scoped>
 .sub-item {
-  padding: 15px 25px 10px 25px;
-  flex-direction: column;
   align-items: flex-start;
+  width: 100%;
   gap: 21px;
 } 
 

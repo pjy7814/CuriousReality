@@ -1,21 +1,24 @@
 <template>
   <div class="navigation-bar">
     <div class="nav-item">
+      <br class="category"/>
       <PoliticsMenu class="category"/>
       <EconomyMenu class="category"/>
       <SocietyMenu class="category"/>
       <ITScienceMenu class="category"/>
       <WorldMenu class="category"/>
+      <br class="category"/>
+      <br class="category"/>
     </div>
   </div>
 </template>
 
 <script>
-import PoliticsMenu from './SubMenu/PoliticsMenu.vue';
-import EconomyMenu from './SubMenu/EconomyMenu.vue';
-import SocietyMenu from './SubMenu/SocietyMenu.vue';
-import ITScienceMenu from './SubMenu/ITScienceMenu.vue';
-import WorldMenu from './SubMenu/WorldMenu.vue';
+import PoliticsMenu from './submenu/PoliticsMenu.vue';
+import EconomyMenu from './submenu/EconomyMenu.vue';
+import SocietyMenu from './submenu/SocietyMenu.vue';
+import ITScienceMenu from './submenu/ITScienceMenu.vue';
+import WorldMenu from './submenu/WorldMenu.vue';
 
 export default {
   components: {
@@ -34,19 +37,20 @@ export default {
   margin-top: 70px;
   position: fixed;
   flex-shrink: 0;
-  align-items: flex-start;
-  display: flex;
-  margin-left: 15%;
-  background: #FFF;
+  background: #ffffff;
+  padding-left: 30px;
+  padding-right: 200px;
 }
 
 .nav-item {
   cursor: pointer;
+  padding-left: 14%;
+  padding-right: 24%;
   flex-direction: row;
   display: flex;
 }
 
 .category {
-  width: 130px;
+  padding: 15px 0px 10px 0px;
 }
 </style>

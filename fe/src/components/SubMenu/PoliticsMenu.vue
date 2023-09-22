@@ -19,9 +19,8 @@ export default {
   
 <style>
 .sub-item {
-  padding: 15px 25px 10px 25px;
-  flex-direction: column;
   align-items: flex-start;
+  width: 100%;
   gap: 21px;
 } 
 
@@ -33,7 +32,6 @@ export default {
   font-weight: 500;
   font-size: 15px;
   line-height: 43px;
-  display: flex;
   color: #1c1b1b;
   text-decoration: none;
 }

@@ -40,6 +40,7 @@ export default {
 .recommend-news,
 .login {
   color: #1C1B1B;
+  width: 100px;
   padding: 15px 25px 10px 25px;
   font-family: "Noto Sans KR";
   font-size: 20px;
