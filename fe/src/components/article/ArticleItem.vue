@@ -3,7 +3,7 @@
         <img :src="article.thumbnail" />
 
         <div class="body">
-            <div class="title">{{ article.title }}</div>
+            <a :href="article.original_url" class="title">{{ article.title }}</a>
             <div class="created-at">{{ article.created_at }}</div>
             <div class="article">{{ article.article }}</div>
         </div>
@@ -59,7 +59,8 @@ img {
     width: 60%;
 }
 
-.body>div {
+.body>div,
+.body>a {
     color: #1C1B1B;
     font-family: Noto Sans KR;
     font-style: normal;
