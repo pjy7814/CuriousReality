@@ -1,24 +1,24 @@
 <template>
   <div class="navigation-bar">
     <div class="nav-item">
-      <br class="category"/>
-      <PoliticsMenu class="category"/>
-      <EconomyMenu class="category"/>
-      <SocietyMenu class="category"/>
-      <ITScienceMenu class="category"/>
-      <WorldMenu class="category"/>
-      <br class="category"/>
-      <br class="category"/>
+      <br class="category" />
+      <PoliticsMenu class="category" />
+      <EconomyMenu class="category" />
+      <SocietyMenu class="category" />
+      <ITScienceMenu class="category" />
+      <WorldMenu class="category" />
+      <br class="category" />
+      <br class="category" />
     </div>
   </div>
 </template>
 
 <script>
-import PoliticsMenu from './submenu/PoliticsMenu.vue';
-import EconomyMenu from './submenu/EconomyMenu.vue';
-import SocietyMenu from './submenu/SocietyMenu.vue';
-import ITScienceMenu from './submenu/ITScienceMenu.vue';
-import WorldMenu from './submenu/WorldMenu.vue';
+import PoliticsMenu from "./submenu/PoliticsMenu.vue";
+import EconomyMenu from "./submenu/EconomyMenu.vue";
+import SocietyMenu from "./submenu/SocietyMenu.vue";
+import ITScienceMenu from "./submenu/ITScienceMenu.vue";
+import WorldMenu from "./submenu/WorldMenu.vue";
 
 export default {
   components: {
@@ -26,8 +26,8 @@ export default {
     EconomyMenu,
     SocietyMenu,
     ITScienceMenu,
-    WorldMenu
-  }
+    WorldMenu,
+  },
 };
 </script>
 

@@ -1,58 +1,148 @@
 <template>
   <div class="signup">
     <div class="head">회원가입</div>
-    <div class="input-body">
-      <div class="input-head"><b>이메일</b></div>
-      <div class="input-email">
-        <input type="text" placeholder="EMAIL" />
-        <!-- <div class="check-button">중복확인</div> -->
+    <form @submit.prevent="submitForm">
+      <div class="input-body">
+        <div class="input-head"><b>이메일</b></div>
+        <div class="input-email">
+          <input type="text" placeholder="EMAIL" v-model="email" />
+        </div>
+        <div class="alert-message" v-show="!isEmailValid && email !== ''">
+          올바른 이메일 형식이 아닙니다.
+        </div>
       </div>
-      
-    </div>
-    <div class="input-body">
-      <div class="input-head"><b>비밀번호</b></div>
-      <input type="password" placeholder="PASSWORD" />
-    </div>
-    <div class="input-body">
-      <div class="input-head"><b>비밀번호 확인</b></div>
-      <input type="password" placeholder="PASSWORD" />
-    </div>
-    <div class="input-body">
-      <div class="input-head"><b>이름</b></div>
-      <input type="text" placeholder="NAME" />
-    </div>
-    <div class="input-body">
-      <div class="input-head"><b>생년월일</b></div>
-      <input type="date" placeholder="BIRTH" />
-    </div>
-    <div class="input-body">
-      <div class="input-head"><b>전화번호</b></div>
-      <input type="text" placeholder="CONTACT" />
-    </div>
-    <div class="input-body">
-      <div class="input-head"><b>관심분야</b></div>
-      <div class="checkbox-interest">
-        <input type="checkbox" v-model="interest" value="politics">정치
-        <input type="checkbox" v-model="interest" value="economy">경제
-        <input type="checkbox" v-model="interest" value="society">사회
-        <input type="checkbox" v-model="interest" value="itscience">IT/과학
-        <input type="checkbox" v-model="interest" value="world">세계
+      <div class="input-body">
+        <div class="input-head"><b>비밀번호</b></div>
+        <input type="password" placeholder="PASSWORD" v-model="password" />
+        <div class="alert-message" v-show="!isPasswordValid && password !== ''">
+          8,16자 사이의 영어, 숫자, 특수문자를 사용하여 생성해주세요.
+        </div>
       </div>
-      
-    </div>
-    <div class="signup-button">회원가입</div>
+      <div class="input-body">
+        <div class="input-head"><b>비밀번호 확인</b></div>
+        <input type="password" placeholder="PASSWORD" v-model="password_check" />
+        <div class="alert-message" v-show="!isPasswordCheckValid && password_check !== ''">
+          비밀번호가 일치하지 않습니다.
+        </div>
+      </div>
+      <div class="input-body">
+        <div class="input-head"><b>이름</b></div>
+        <input type="text" placeholder="NAME" v-model="name" />
+        <div class="alert-message" v-show="!isNameValid && name !== ''">
+          올바른 이름 형식이 아닙니다.
+        </div>
+      </div>
+      <div class="input-body">
+        <div class="input-head"><b>생년월일</b></div>
+        <input type="date" placeholder="BIRTH" v-model="birthday" />
+        <div class="alert-message" v-show="!isBirthdayValid">생년월일을 입력해주세요</div>
+      </div>
+      <div class="input-body">
+        <div class="input-head"><b>전화번호</b></div>
+        <input type="text" placeholder="CONTACT" v-model="contact" />
+        <div class="alert-message" v-show="!isContactValid && contact !== ''">
+          올바른 전화번호 형식이 아닙니다. 010-0000-0000
+        </div>
+      </div>
+      <div class="input-body">
+        <div class="input-head"><b>관심분야</b></div>
+        <div class="checkbox-interest">
+          <input type="checkbox" v-model="preference_category" value="politics" />정치
+          <input type="checkbox" v-model="preference_category" value="economy" />경제
+          <input type="checkbox" v-model="preference_category" value="society" />사회
+          <input type="checkbox" v-model="preference_category" value="itscience" />IT/과학
+          <input type="checkbox" v-model="preference_category" value="world" />세계
+        </div>
+      </div>
+      <button :disabled="!isValidSignUp" type="submit" class="signup-button">회원가입</button>
+    </form>
   </div>
-  
 </template>
 
 <script>
+import { registerMember } from "@/api/index";
+// import { validateEmail, validateContact, validateName, validatePassword } from "@/utils/validation";     // 유효성 검사
 export default {
   name: "SignupView",
   data() {
     return {
-      interest: []
-    }
-  }
+      email: "",
+      password: "",
+      password_check: "",
+      name: "",
+      birthday: "",
+      contact: "",
+      preference_category: [],
+    };
+  },
+  computed: {
+    // 유효성 검사
+    isEmailValid() {
+      return true;
+      // return validateEmail(this.email);
+    },
+    isPasswordValid() {
+      return true;
+      // return validatePassword(this.password);
+    },
+    isNameValid() {
+      return true;
+      // return validateName(this.name);
+    },
+    isContactValid() {
+      return true;
+      // return validateContact(this.contact);
+    },
+    isPasswordCheckValid() {
+      return true;
+      // return this.password === this.password_check;
+    },
+    isBirthdayValid() {
+      return true;
+      // return !!this.birthday;
+    },
+    isValidSignUp() {
+      return (
+        this.isEmailValid &&
+        this.isPasswordValid &&
+        this.isNameValid &&
+        this.isContactValid &&
+        this.isPasswordCheckValid &&
+        this.isBirthdayValid
+      );
+    },
+  },
+  methods: {
+    async submitForm() {
+      if (this.isValidSignUp) {
+        const memberData = {
+          email: this.email,
+          password: this.password,
+          name: this.name,
+          birthday: this.birthday,
+          contact: this.contact,
+          preference_category: this.preference_category,
+        };
+        try {
+          const { data } = await registerMember(memberData);
+          alert(`${data.username}님이 가입되었습니다`);
+          this.initSignUp();
+        } catch (error) {
+          alert("회원가입에 실패했습니다.");
+          console.error(error);
+        }
+      }
+    },
+    initSignUp() {
+      this.email = "";
+      this.password = "";
+      this.password_check = "";
+      this.name = "";
+      this.birthday = "";
+      this.contact = "";
+      this.preference_category = [];
+    },
+  },
 };
 </script>
 
@@ -86,7 +176,7 @@ export default {
   height: 100px;
   justify-content: center;
   flex-shrink: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 30px;
 }
 
 .input-head {
@@ -105,7 +195,7 @@ input {
   align-items: center;
   flex-shrink: 0;
   border-radius: 1.5rem;
-  border: 1px solid #A8A8A8;
+  border: 1px solid #a8a8a8;
 }
 
 .signup-button {
@@ -134,17 +224,16 @@ input {
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  background: #1F2DB1;
-  color: #FFF;
+  background: #1f2db1;
+  color: #fff;
   font-family: Noto Sans KR;
   font-size: 20px;
   font-style: normal;
   letter-spacing: 3.9px;
 }
-.checkbox-interest{
-display: inline-flex;
-margin-top:1rem;
-
+.checkbox-interest {
+  display: inline-flex;
+  margin-top: 1rem;
 }
 
 .checkbox-interest > input {
@@ -158,6 +247,11 @@ margin-top:1rem;
   font-size: 20px;
   font-style: normal;
   text-align: center;
-  
+}
+
+.alert-message {
+  margin-top: 5px;
+  margin-left: 15px;
+  color: red;
 }
 </style>
