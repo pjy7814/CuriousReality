@@ -102,6 +102,12 @@ export default {
       // return !!this.birthday;
     },
     isValidSignUp() {
+      if (this.email == '' || 
+          this.password == '' || 
+          this.password_check == '' || 
+          this.name == '' ||
+          this.birthday == '' || 
+          this.contact == '') return false; 
       return (
         this.isEmailValid &&
         this.isPasswordValid &&
@@ -216,6 +222,10 @@ input {
   cursor: pointer;
   border-radius: 1rem;
   margin-top: 20px;
+}
+
+.signup-button:disabled{
+  background-color: #cccccc;
 }
 
 .check-button {
