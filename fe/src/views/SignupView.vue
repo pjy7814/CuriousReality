@@ -197,7 +197,7 @@ export default {
 }
 input {
   padding: 23px 20px 22px 20px;
-  width: 100%;
+  width: 90%;
   align-items: center;
   flex-shrink: 0;
   border-radius: 1.5rem;
@@ -221,7 +221,7 @@ input {
   border-radius: 26px;
   cursor: pointer;
   border-radius: 1rem;
-  margin-top: 20px;
+  margin: auto;
 }
 
 .signup-button:disabled{
