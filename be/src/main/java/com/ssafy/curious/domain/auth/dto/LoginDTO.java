@@ -22,6 +22,7 @@ public class LoginDTO {
     @NoArgsConstructor
     public static class Response {
         private Boolean success;
-        private String token;
+        private String accessToken;
+        private String refreshToken;
     }
 }

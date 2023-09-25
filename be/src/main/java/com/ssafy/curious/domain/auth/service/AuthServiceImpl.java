@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService{
             throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
         log.info("password match test done");
 
-        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
+        String accessToken = JwtUtil.createJWT(email, secretKey, expiredMs);
         String password = encoder.encode(dto.getPassword());
         log.info("password : {}, encoded : {}", dto.getPassword(), password);
 
@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService{
 
         return RegisterDTO.Response.builder()
                 .email(savedMember.getEmail())
-                .token(token)
+                .accessToken(accessToken)
                 .build();
     }
 
@@ -109,11 +109,11 @@ public class AuthServiceImpl implements AuthService{
         }
 
         // [2] 로그인 처리
-        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
+        String accessToken = JwtUtil.createJWT(email, secretKey, expiredMs);
 
         return LoginDTO.Response.builder()
                 .success(true)
-                .token(token)
+                .accessToken(accessToken)
                 .build();
     }
 
