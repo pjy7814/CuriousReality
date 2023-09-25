@@ -2,10 +2,9 @@ package com.ssafy.curious.domain.auth.service;
 
 import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.LogoutDTO;
-import com.ssafy.curious.domain.auth.dto.MemberDTO;
 import com.ssafy.curious.domain.auth.dto.RegisterDTO;
-import com.ssafy.curious.domain.auth.entity.MemberEntity;
-import com.ssafy.curious.domain.auth.repository.MemberRepository;
+import com.ssafy.curious.domain.member.entity.MemberEntity;
+import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
 import com.ssafy.curious.global.utils.JwtUtil;
 import com.ssafy.curious.global.utils.RegexUtil;
@@ -17,14 +16,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.bind.ValidationException;
 import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberServiceImpl implements MemberService {
+public class AuthServiceImpl implements AuthService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
 
@@ -93,16 +91,6 @@ public class MemberServiceImpl implements MemberService {
                 .token(token)
                 .build();
     }
-
-    @Override
-    public MemberDTO.Response update(MemberDTO.Request dto){
-
-//        Optional<MemberEntity> member = memberRepository.findByEmail(email);
-
-
-        return null;
-    }
-
 
     @Override
     public LoginDTO.Response login(LoginDTO.Request dto) {

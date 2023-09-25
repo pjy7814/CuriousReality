@@ -1,6 +1,6 @@
 package com.ssafy.curious.global.config;
 
-import com.ssafy.curious.domain.auth.service.MemberService;
+import com.ssafy.curious.domain.auth.service.AuthService;
 import com.ssafy.curious.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final MemberService memberService;
+    private final AuthService authService;
     private final String secretKey;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
