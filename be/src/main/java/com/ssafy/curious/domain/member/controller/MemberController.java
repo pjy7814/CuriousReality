@@ -1,7 +1,6 @@
 package com.ssafy.curious.domain.member.controller;
 
 import com.ssafy.curious.domain.member.service.MemberService;
-import com.ssafy.curious.domain.member.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,9 +18,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/update")
-    public ResponseEntity<MemberDTO.Response> update(
-            @RequestBody MemberDTO.Request dto){
-        MemberDTO.Response response = memberService.update(dto);
+    public ResponseEntity<com.ssafy.curious.domain.member.dto.MemberDTO.Response> update(
+            @RequestBody com.ssafy.curious.domain.member.dto.MemberDTO.Request dto){
+        com.ssafy.curious.domain.member.dto.MemberDTO.Response response = memberService.update(dto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

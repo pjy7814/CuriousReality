@@ -1,6 +1,7 @@
 package com.ssafy.curious.domain.article.entity;
 
 import com.ssafy.curious.domain.model.ArticlePress;
+import com.ssafy.curious.domain.model.Keyword;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "article_info")
-public class ArticleInfo {
+public class ArticleInfoEntity {
 
     @Id
     private String id;
@@ -48,9 +49,9 @@ public class ArticleInfo {
     private List<Keyword> keywords;
 
     @Builder
-    public ArticleInfo(String id, String originalUrl, String category1, String category2, String title,
-                       LocalDateTime createdAt, String thumbnail, ArticlePress company, String article,
-                       List<Keyword> keywords) {
+    public ArticleInfoEntity(String id, String originalUrl, String category1, String category2, String title,
+                             LocalDateTime createdAt, String thumbnail, ArticlePress company, String article,
+                             List<Keyword> keywords) {
         this.id = id;
         this.originalUrl = originalUrl;
         this.category1 = category1;

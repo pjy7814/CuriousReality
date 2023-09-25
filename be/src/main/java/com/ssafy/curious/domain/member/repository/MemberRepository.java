@@ -2,7 +2,7 @@ package com.ssafy.curious.domain.member.repository;
 
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.*;
 
