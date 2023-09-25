@@ -2,10 +2,9 @@ package com.ssafy.curious.domain.auth.service;
 
 import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.LogoutDTO;
-import com.ssafy.curious.domain.auth.dto.MemberDTO;
-import com.ssafy.curious.domain.auth.dto.RegisterDTO;
-import com.ssafy.curious.domain.auth.entity.MemberEntity;
-import com.ssafy.curious.domain.auth.repository.MemberRepository;
+import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
+import com.ssafy.curious.domain.member.entity.MemberEntity;
+import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
 import com.ssafy.curious.global.utils.JwtUtil;
 import com.ssafy.curious.global.utils.RegexUtil;
@@ -17,14 +16,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.bind.ValidationException;
 import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberServiceImpl implements MemberService {
+public class AuthServiceImpl implements AuthService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
 
@@ -33,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
     private Long expiredMs = 1000 * 60 * 60l;
     @Override
     @Transactional
-    public RegisterDTO.Response register(RegisterDTO.Request dto) {
+    public MemberRegisterDTO.Response register(MemberRegisterDTO.Request dto) {
 
         String email = dto.getEmail();
         String contact = dto.getContact();
@@ -72,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
             throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
         log.info("password match test done");
 
-        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
+        String accessToken = JwtUtil.createJWT(email, secretKey, expiredMs);
         String password = encoder.encode(dto.getPassword());
         log.info("password : {}, encoded : {}", dto.getPassword(), password);
 
@@ -88,21 +86,11 @@ public class MemberServiceImpl implements MemberService {
 
         MemberEntity savedMember = memberRepository.save(member);
 
-        return RegisterDTO.Response.builder()
+        return MemberRegisterDTO.Response.builder()
                 .email(savedMember.getEmail())
-                .token(token)
+                .accessToken(accessToken)
                 .build();
     }
-
-    @Override
-    public MemberDTO.Response update(MemberDTO.Request dto){
-
-//        Optional<MemberEntity> member = memberRepository.findByEmail(email);
-
-
-        return null;
-    }
-
 
     @Override
     public LoginDTO.Response login(LoginDTO.Request dto) {
@@ -121,11 +109,11 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // [2] 로그인 처리
-        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
+        String accessToken = JwtUtil.createJWT(email, secretKey, expiredMs);
 
         return LoginDTO.Response.builder()
                 .success(true)
-                .token(token)
+                .accessToken(accessToken)
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package com.ssafy.curious.domain.auth.entity;
+package com.ssafy.curious.domain.member.entity;
 
 import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.model.ArticlePress;
