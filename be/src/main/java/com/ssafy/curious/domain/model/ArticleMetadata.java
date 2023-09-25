@@ -1,4 +1,4 @@
-package com.ssafy.curious.domain.recommend.entity;
+package com.ssafy.curious.domain.model;
 
 import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.model.ArticlePress;
