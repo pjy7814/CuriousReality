@@ -2,7 +2,7 @@ package com.ssafy.curious.domain.auth.controller;
 
 import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.LogoutDTO;
-import com.ssafy.curious.domain.auth.dto.RegisterDTO;
+import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterDTO.Response> register(@RequestBody RegisterDTO.Request dto){
-        RegisterDTO.Response response = authService.register(dto);
+    public ResponseEntity<MemberRegisterDTO.Response> register(@RequestBody MemberRegisterDTO.Request dto){
+        MemberRegisterDTO.Response response = authService.register(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

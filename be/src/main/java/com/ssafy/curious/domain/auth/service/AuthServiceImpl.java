@@ -2,7 +2,7 @@ package com.ssafy.curious.domain.auth.service;
 
 import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.LogoutDTO;
-import com.ssafy.curious.domain.auth.dto.RegisterDTO;
+import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService{
     private Long expiredMs = 1000 * 60 * 60l;
     @Override
     @Transactional
-    public RegisterDTO.Response register(RegisterDTO.Request dto) {
+    public MemberRegisterDTO.Response register(MemberRegisterDTO.Request dto) {
 
         String email = dto.getEmail();
         String contact = dto.getContact();
@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService{
 
         MemberEntity savedMember = memberRepository.save(member);
 
-        return RegisterDTO.Response.builder()
+        return MemberRegisterDTO.Response.builder()
                 .email(savedMember.getEmail())
                 .accessToken(accessToken)
                 .build();
