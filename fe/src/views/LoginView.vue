@@ -1,16 +1,42 @@
 <template>
   <div class="login">
-    <input class="id" type="text" placeholder="ID" />
+    <form @submit.prevent="submitForm">
+      <input class="id" type="text" placeholder="ID" v-model="id" />
 
-    <input class="password" type="password" placeholder="PASSWORD" />
-    <div class="login-button">로그인</div>
+      <input class="password" type="password" placeholder="PASSWORD" v-model="password" />
+      <button type="submit" class="login-button">로그인</button>
+    </form>
     <router-link to="/signup" class="not-a-member">아직 회원이 아니신가요?</router-link>
   </div>
 </template>
 
 <script>
+import { login } from "@/api/index";
 export default {
   name: "LoginView",
+  data() {
+    return {
+      id: '',
+      password: ''
+    }
+  },
+  methods: {
+    async submitForm() {
+      const memberData = {
+        id: this.id,
+        password: this.password
+      };
+      try {
+        const { data, status } = await login(memberData);
+        console.log(data, status);
+        localStorage.setItem("userData", data);
+        localStorage.setItem("userEmail", this.id);
+      } catch (error) {
+        alert("로그인에 실패했습니다. 다시 로그인해주세요.");
+        console.error(error);
+      }
+    },
+  }
 };
 </script>
 
@@ -24,26 +50,10 @@ export default {
   flex-direction: column;
 }
 
-/* .id,
-.password {
-  font-family: "Noto Sans KR";
-  font-style: normal;
-  font-weight: 100;
-  font-size: 20px;
-  line-height: 43px;
-  letter-spacing: 6px;
-  border-radius: 20px;
-  max-width: 400px;
-  color: #a8a8a8;
-  background: transparent;
-  width: 100%;
-  margin-bottom: 10px;
-} */
-
 input {
   padding: 23px 20px 22px 20px;
   margin-bottom: 10px;
-  width: 20%;
+  width: 90%;
   align-items: center;
   flex-shrink: 0;
   border-radius: 1.5rem;
@@ -67,7 +77,8 @@ input {
   border-radius: 26px;
   cursor: pointer;
   border-radius: 1rem;
-  margin-top: 20px;
+  margin: auto;
+  margin-top: 30px;
 }
 
 .not-a-member {

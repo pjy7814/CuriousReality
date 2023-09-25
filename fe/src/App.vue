@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import NavigationBar from "./components/NavigationBar.vue";
-import SubNavigationBar from "@/components/SubNavigationBar.vue";
+import NavigationBar from "./components/navigation/NavigationBar.vue";
+import SubNavigationBar from "@/components/navigation/SubNavigationBar.vue";
 export default {
   name: "App",
   components: {
@@ -38,6 +38,8 @@ export default {
 
 
 .body {
+  margin: auto;
+  width: 70%;
   padding-top: 70px;
   padding-bottom: 100px;
 }
