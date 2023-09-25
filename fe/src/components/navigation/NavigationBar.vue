@@ -7,7 +7,7 @@
     <router-link class="category" to="/">사회</router-link>
     <router-link class="category" to="/">IT/과학</router-link>
     <router-link class="category" to="/">세계</router-link>
-    <router-link class="recommend-news" to="/">추천뉴스</router-link>
+    <div class="recommend-news" @click="openModal">추천뉴스</div>
     <router-link class="login" to="/login">로그인</router-link>
   </div>
 </template>
@@ -16,10 +16,18 @@
 
 export default {
   name: "NavigationBar",
+  props: {
+    isOpenArticleCard: Boolean, // isModalOpen을 props로 받습니다.
+  },
   components: {
 
   },
-
+  methods: {
+    openModal() {
+      // 부모 컴포넌트로 이벤트를 전달하여 모달을 닫습니다.
+      this.$emit('openModal');
+    },
+  }
 };
 </script>
 
@@ -49,9 +57,12 @@ export default {
   text-decoration: none;
 }
 
+.recommend-news {
+  cursor: pointer;
+}
+
 img {
   margin: auto;
   width: 100px;
 }
-
 </style>

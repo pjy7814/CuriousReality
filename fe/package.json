@@ -19,7 +19,8 @@
     "vue-navigation-bar": "^6.0.1",
     "vue-router": "^4.0.3",
     "vuetify": "^3.3.16",
-    "vuewordcloud": "^19.0.0"
+    "vuewordcloud": "^19.0.0",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

@@ -1,13 +1,15 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
-    <NavigationBar class="navigation-bar" @mouseover="showSub = true"/>
+    <NavigationBar class="navigation-bar" @mouseover="showSub = true" @openModal="openModal"/>
     <SubNavigationBar class="sub-navigation-bar" v-if="showSub" @mouseover="showSub = true" @mouseleave="showSub = false"/>
     <router-view class="body" @mouseover="showSub = false"/>
+    <ArticleCardComponent v-show="openArticleCard" @closeModal="closeModal"/>
   </div>
 </template>
 
 <script>
+import ArticleCardComponent from "./components/article/ArticleCardComponent.vue";
 import NavigationBar from "./components/navigation/NavigationBar.vue";
 import SubNavigationBar from "@/components/navigation/SubNavigationBar.vue";
 export default {
@@ -15,16 +17,21 @@ export default {
   components: {
     NavigationBar,
     SubNavigationBar,
-  },
+    ArticleCardComponent
+},
   data() {
     return {
       showSub: false,
+      openArticleCard: false
     };
   },
   methods: {
-    toggleDropdown() {
-      this.showSub = !this.showSub;
+    openModal() {
+      this.openArticleCard = true;
     },
+    closeModal() {
+      this.openArticleCard = false;
+    }
   },
 };
 </script>
