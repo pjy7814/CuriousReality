@@ -1,4 +1,4 @@
-package com.ssafy.curious.domain.article.entity;
+package com.ssafy.curious.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
