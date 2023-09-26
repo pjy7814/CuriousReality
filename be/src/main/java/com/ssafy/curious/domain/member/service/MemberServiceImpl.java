@@ -1,6 +1,6 @@
 package com.ssafy.curious.domain.member.service;
 
-import com.ssafy.curious.domain.member.dto.RegisterDTO;
+import com.ssafy.curious.domain.member.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.AlreadyExistException;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.bind.ValidationException;
 import java.util.*;
 
 @Slf4j
@@ -24,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public RegisterDTO.Response register(RegisterDTO.Request dto) {
+    public MemberRegisterDTO.Response register(MemberRegisterDTO.Request dto) {
 
         String email = dto.getEmail();
         String contact = dto.getContact();
@@ -71,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
 
         MemberEntity savedMember = memberRepository.save(member);
 
-        return RegisterDTO.Response.builder()
+        return MemberRegisterDTO.Response.builder()
                 .email(savedMember.getEmail())
                 .build();
     }

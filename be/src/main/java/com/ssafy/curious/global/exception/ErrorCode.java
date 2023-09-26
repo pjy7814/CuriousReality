@@ -24,8 +24,8 @@ public enum ErrorCode {
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "M003", "이메일 제약조건에 맞지 않습니다."),
     INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "M004", "비밀번호 제약조건에 맞지 않습니다."),
     INVALID_NAME_FORMAT(HttpStatus.BAD_REQUEST, "M005", "이름 제약조건에 맞지 않습니다."),
-    INVALID_CONTACT_FORMAT(HttpStatus.BAD_REQUEST, "M006", "전화번호 제약조건에 맞지 않습니다.");
-
+    INVALID_CONTACT_FORMAT(HttpStatus.BAD_REQUEST, "M006", "전화번호 제약조건에 맞지 않습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "M007", "멤버가 존재하지 않습니다.");
     // 뉴스
 
 

@@ -43,8 +43,7 @@ public class MemberEntity extends CUDEntity {
     @Column(name = "is_social", nullable = false)
     private Boolean isSocial;
 
-
-    @OneToMany(mappedBy = "liked_article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikedArticleEntity> likedArticles;
 
     @ElementCollection(fetch = FetchType.LAZY)

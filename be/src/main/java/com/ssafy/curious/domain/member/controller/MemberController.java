@@ -1,6 +1,6 @@
 package com.ssafy.curious.domain.member.controller;
 
-import com.ssafy.curious.domain.member.dto.RegisterDTO;
+import com.ssafy.curious.domain.member.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +16,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterDTO.Response> register(@RequestBody RegisterDTO.Request dto){
+    public ResponseEntity<MemberRegisterDTO.Response> register(@RequestBody MemberRegisterDTO.Request dto){
         System.out.println("start");
         System.out.println(dto);
-        RegisterDTO.Response response = memberService.register(dto);
+        MemberRegisterDTO.Response response = memberService.register(dto);
         System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

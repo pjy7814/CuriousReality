@@ -1,7 +1,7 @@
 package com.ssafy.curious.domain.member.service;
 
-import com.ssafy.curious.domain.member.dto.RegisterDTO;
+import com.ssafy.curious.domain.member.dto.MemberRegisterDTO;
 
 public interface MemberService {
-    RegisterDTO.Response register(RegisterDTO.Request dto);
+    MemberRegisterDTO.Response register(MemberRegisterDTO.Request dto);
 }
