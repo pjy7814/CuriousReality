@@ -29,7 +29,7 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/auth/register","/api/v1/auth/login").permitAll() // 로그인, 회원가입은 항상 허용해야 가능
+                .antMatchers("/api/v1/**","/api/v1/auth/register","/api/v1/auth/login","/swagger/**","/webjars/**", "/swagger-resources/**", "/swagger-ui.html").permitAll() // 로그인, 회원가입은 항상 허용해야 가능
 //                .antMatchers(HttpMethod.POST,"/api/v1/**").authenticated() // POST method는 인증되지 않은 유저는 사용할 수 없게 막기
                 .and()
                 .sessionManagement()
