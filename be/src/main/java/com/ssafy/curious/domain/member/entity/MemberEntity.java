@@ -1,7 +1,7 @@
 package com.ssafy.curious.domain.member.entity;
 
 import com.ssafy.curious.domain.model.ArticleCategory;
-import com.ssafy.curious.domain.model.ArticleConsumptionHistory;
+import com.ssafy.curious.domain.preference.entity.HistoryEntity;
 import com.ssafy.curious.domain.model.ArticlePress;
 import com.ssafy.curious.global.entity.CUDEntity;
 import lombok.*;
@@ -55,7 +55,7 @@ public class MemberEntity extends CUDEntity {
     private Map<ArticlePress, Float> pressPreference;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ArticleConsumptionHistory> articleHistory = new ArrayList<>();
+    private List<HistoryEntity> articleHistory = new ArrayList<>();
 
     @Builder
     public MemberEntity(Long id, String email, String password,String name, LocalDate birthday, String contact, Boolean isSocial) {
