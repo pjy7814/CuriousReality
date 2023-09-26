@@ -1,9 +1,7 @@
 package com.ssafy.curious.domain.article.repository;
 
-import com.ssafy.curious.domain.article.entity.ArticleInfo;
+import com.ssafy.curious.domain.article.entity.ArticleInfoEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ArticleInfoRepository extends MongoRepository<ArticleInfo, String> {
+public interface ArticleInfoRepository extends MongoRepository<ArticleInfoEntity, String> {
 }

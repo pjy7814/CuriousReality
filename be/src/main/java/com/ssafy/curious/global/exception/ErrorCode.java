@@ -16,9 +16,14 @@ public enum ErrorCode {
     INVALID_PATH_VALUE(HttpStatus.BAD_REQUEST,"C006","요청이 잘못됐습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C007", "서버 에러"),
 
-    // 인증
+    // 인증 Auth
+    NO_SUCH_MEMBER(HttpStatus.UNAUTHORIZED, "A001", "존재하지 않는 사용자입니다."),
+    PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "A002", "비밀번호가 일치하지 않습니다."),
+    UNAUTHENTICATED_MEMBER(HttpStatus.UNAUTHORIZED,"A003","인증되지 않은 사용자입니다."),
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A004", "토큰이 만료되었습니다."),
+    TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "A005", "유효하지 않은 토큰입니다."),
 
-    // 유저
+    // 유저 Member
     MEMBER_EMAIL_EXISTS(HttpStatus.BAD_REQUEST, "M001", "이미 존재하는 이메일입니다."),
     MEMBER_CONTACT_EXISTS(HttpStatus.BAD_REQUEST, "M002", "이미 등록된 번호입니다."),
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "M003", "이메일 제약조건에 맞지 않습니다."),

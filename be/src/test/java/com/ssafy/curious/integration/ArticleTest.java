@@ -3,7 +3,8 @@ package com.ssafy.curious.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.curious.domain.article.dto.ArticleLikeDTO;
 import com.ssafy.curious.domain.article.repository.LikedArticleRepository;
-import com.ssafy.curious.domain.member.dto.MemberRegisterDTO;
+import com.ssafy.curious.domain.auth.dto.LoginDTO;
+import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,17 +34,23 @@ public class ArticleTest {
     private LikedArticleRepository likedArticleRepository;
 
     final String memberId = "membertest1@test.com";
+    final String memberPw = "Qwer1234!";
+
+    String accessToken;
 
     @BeforeEach
     public void init() throws Exception {
         createDummyMember();
+        loginMember();
     }
 
     public void createDummyMember() throws Exception {
+        System.out.println("=== Start create dummpy member ===");
         MemberRegisterDTO.Request requestDTO = MemberRegisterDTO.Request.builder()
                 .email(memberId)
                 .name("멤버테스트일")
-                .password("qwer1234!")
+                .password(memberPw)
+                .passwordCheck(memberPw)
                 .contact("010-1234-5678")
                 .isSocial(false)
                 .build();
@@ -53,18 +59,21 @@ public class ArticleTest {
                 .content(mapper.writeValueAsString(requestDTO)));
     }
 
-    /*
-    public String loginPUser(String pUserId, String pUserPw) throws Exception {
-        MvcResult result = mvc.perform(post("/pusers/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("email", pUserId)
-                        .param("password", pUserPw))
+    public void loginMember() throws Exception {
+        System.out.println("=== Start login member ===");
+        LoginDTO.Request requestDTO = LoginDTO.Request.builder()
+                .email(memberId)
+                .password(memberPw)
+                .build();
+
+        MvcResult result = mvc.perform(post("/auth/login")
+                .contentType("application/json;charset=utf-8")
+                .content(mapper.writeValueAsString(requestDTO)))
                 .andReturn();
 
-        JwtResponseDto responseDto = mapper.readValue(result.getResponse().getContentAsString(), JwtResponseDto.class);
-        return responseDto.getAccessToken();
+        LoginDTO.Response responseDto = mapper.readValue(result.getResponse().getContentAsString(), LoginDTO.Response.class);
+        accessToken = responseDto.getAccessToken();
     }
-    */
 
     @Nested
     @DisplayName("like test")
@@ -83,6 +92,7 @@ public class ArticleTest {
                         .build();
 
                 mvc.perform(post("/article/like")
+                                .header("Authorization", "Bearer " + accessToken)
                                 .contentType("application/json;charset=utf-8")
                                 .content(mapper.writeValueAsString(requestDto)))
                         // then
@@ -104,6 +114,7 @@ public class ArticleTest {
                 // when
                 mvc.perform(post("/article/like")
                                 .contentType("application/json;charset=utf-8")
+                                .header("Authorization", "Bearer " + accessToken)
                                 .content(mapper.writeValueAsString(requestDto)))
                         // then
                         .andExpect(status().isOk())

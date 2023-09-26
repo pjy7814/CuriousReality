@@ -1,6 +1,6 @@
 package com.ssafy.curious.domain.recommend.entity;
 
-import com.ssafy.curious.global.entity.CEntity;
+import com.ssafy.curious.domain.model.ArticleMetadata;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "recommend_pool")
-public class RecommendPool {
+public class RecommendPoolEntity {
 
     @Id
     private String id;
@@ -32,7 +32,7 @@ public class RecommendPool {
     private LocalDateTime updatedAt;
 
     @Builder
-    public RecommendPool(String id, Long memberId, List<ArticleMetadata> articleList) {
+    public RecommendPoolEntity(String id, Long memberId, List<ArticleMetadata> articleList) {
         this.id = id;
         this.memberId = memberId;
         this.articleList = articleList;
