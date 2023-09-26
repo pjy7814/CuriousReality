@@ -13,11 +13,11 @@ public class ArticleCategoryConverter {
     private static final Map<String, ArticleCategory> categoryMap = new HashMap<>();
 
     static {
-        categoryMap.put("정치", ArticleCategory.POLITICS);
-        categoryMap.put("경제", ArticleCategory.ECONOMICS);
-        categoryMap.put("사회", ArticleCategory.SOCIAL);
-        categoryMap.put("과학", ArticleCategory.SCIENCE);
-        categoryMap.put("국제", ArticleCategory.WORLD);
+        categoryMap.put("100", ArticleCategory.POLITICS);  // 정치
+        categoryMap.put("200", ArticleCategory.ECONOMICS);  // 경제
+        categoryMap.put("300", ArticleCategory.SOCIAL);  // 사회
+        categoryMap.put("400", ArticleCategory.SCIENCE);  // 과학
+        categoryMap.put("500", ArticleCategory.WORLD);  // 국제
     }
 
     public static ArticleCategory convertRawCategory(String rawCategory) {
