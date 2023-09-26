@@ -1,19 +1,23 @@
 <template>
   <div class="sub-item">
     <div class="nav-item">
-      <router-link class="category" to="/">대통령실</router-link>
-      <router-link class="category" to="/">국회/정당</router-link>
-      <router-link class="category" to="/">북한</router-link>
-      <router-link class="category" to="/">행정</router-link>
-      <router-link class="category" to="/">국방/외교</router-link>
-      <router-link class="category" to="/">정치일반</router-link>
+      <router-link class="category" to="/101">대통령실</router-link>
+      <router-link class="category" to="/102">국회/정당</router-link>
+      <router-link class="category" to="/103">북한</router-link>
+      <router-link class="category" to="/104">행정</router-link>
+      <router-link class="category" to="/105">국방/외교</router-link>
+      <router-link class="category" to="/106">정치일반</router-link>
     </div>
   </div>
 </template>
   
 <script>
 export default {
-
+  // data() {
+  //   return {
+  //     categories: []
+  //   }
+  // }
 };
 </script>
   

@@ -1,11 +1,11 @@
 <template>
   <div class="sub-item">
   <div class="nav-item">
-    <router-link class="category" to="/">세계일반</router-link>
-    <router-link class="category" to="/">아시아/호주</router-link>
-    <router-link class="category" to="/">미국/중남미</router-link>
-    <router-link class="category" to="/">유럽</router-link>
-    <router-link class="category" to="/">중동/아프리카</router-link>
+    <router-link class="category" to="/501">세계일반</router-link>
+    <router-link class="category" to="/502">아시아/호주</router-link>
+    <router-link class="category" to="/503">미국/중남미</router-link>
+    <router-link class="category" to="/504">유럽</router-link>
+    <router-link class="category" to="/505">중동/아프리카</router-link>
   </div>
 </div>
 </template>

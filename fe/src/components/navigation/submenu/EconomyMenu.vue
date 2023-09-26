@@ -1,14 +1,14 @@
 <template>
   <div class="sub-item">
     <div class="nav-item">
-      <router-link class="category" to="/">금융</router-link>
-      <router-link class="category" to="/">증권</router-link>
-      <router-link class="category" to="/">사회/재계</router-link>
-      <router-link class="category" to="/">중기/벤쳐</router-link>
-      <router-link class="category" to="/">부동산</router-link>
-      <router-link class="category" to="/">글로벌경제</router-link>
-      <router-link class="category" to="/">생활경제</router-link>
-      <router-link class="category" to="/">경제일반</router-link>
+      <router-link class="category" to="/201">금융</router-link>
+      <router-link class="category" to="/202">증권</router-link>
+      <router-link class="category" to="/203">사회/재계</router-link>
+      <router-link class="category" to="/204">중기/벤쳐</router-link>
+      <router-link class="category" to="/205">부동산</router-link>
+      <router-link class="category" to="/206">글로벌경제</router-link>
+      <router-link class="category" to="/207">생활경제</router-link>
+      <router-link class="category" to="/208">경제일반</router-link>
 
     </div>
   </div>

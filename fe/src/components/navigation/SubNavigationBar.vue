@@ -2,11 +2,11 @@
   <div class="navigation-bar">
     <div class="nav-item">
       <br class="category" />
-      <PoliticsMenu class="category" />
+      <PoliticsMenu class="category"/>
       <EconomyMenu class="category" />
       <SocietyMenu class="category" />
-      <ITScienceMenu class="category" />
-      <WorldMenu class="category" />
+      <ITScienceMenu class="category"/>
+      <WorldMenu class="category"/>
       <br class="category" />
       <br class="category" />
     </div>
@@ -21,6 +21,12 @@ import ITScienceMenu from "./submenu/ITScienceMenu.vue";
 import WorldMenu from "./submenu/WorldMenu.vue";
 
 export default {
+
+  data() {
+    return {
+     
+    };
+  },
   components: {
     PoliticsMenu,
     EconomyMenu,

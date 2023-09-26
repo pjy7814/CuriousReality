@@ -3,6 +3,7 @@ import Home from "../views/HomeView.vue";
 import Login from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import MyPageView from "../views/MyPageView.vue";
+import CategoryView from "../views/CategoryView.vue";
 const routes = [
   {
     path: "/",
@@ -24,6 +25,11 @@ const routes = [
     name: "MyPage",
     component: MyPageView,
   },
+  {
+    path: "/:category",
+    name: "Category",
+    component: CategoryView,
+  }
 ];
 
 const router = createRouter({
