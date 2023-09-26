@@ -5,7 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 
-public class JwtUtil {
+public class Depricated_JwtUtil {
     public static String getEmail(String token, String secretKey){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("email", String.class);
 
