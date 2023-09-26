@@ -1,6 +1,5 @@
-package com.ssafy.curious.global.config;
+package com.ssafy.curious.security.filter;
 
-import com.ssafy.curious.domain.auth.service.AuthService;
 import com.ssafy.curious.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
-@RequiredArgsConstructor
 @Slf4j
-public class JwtFilter extends OncePerRequestFilter {
+@RequiredArgsConstructor
+// 동일한 request 안에서 한번만 필터링을 하기 위해 OncePerRequestFilter를 사용한다
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthService authService;
     private final String secretKey;
     @Override
+    // doFilter()는 다음 filter-chain 을 실행하며, filter-chian의 마지막 부분인 경우 Dispatcher Servlet이 실행됨
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -38,7 +37,15 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // Token 꺼내기
-        String token = authorization.split(" ")[1];
+        String token;
+        try {
+            token = authorization.split(" ")[1].trim();
+        } catch (Exception e){
+            log.error("토큰 분리에 실패했습니다 : {}", authorization);
+            filterChain.doFilter(request, response);
+            return;
+        }
+        log.info("token : {}", token);
 
         // Token Expire 여부
         if (JwtUtil.isExpired(token, secretKey)) {
