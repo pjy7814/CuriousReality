@@ -30,7 +30,5 @@ public class MemberRegisterDTO {
     @NoArgsConstructor
     public static class Response {
         private String email;
-        private String accessToken;
-        private String refreshToken;
     }
 }

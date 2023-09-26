@@ -32,7 +32,6 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public MemberRegisterDTO.Response register(MemberRegisterDTO.Request dto) {
-
         String email = dto.getEmail();
         String contact = dto.getContact();
 
@@ -70,7 +69,6 @@ public class AuthServiceImpl implements AuthService{
             throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
         log.info("password match test done");
 
-        String accessToken = JwtUtil.createJWT(email, secretKey, expiredMs);
         String password = encoder.encode(dto.getPassword());
         log.info("password : {}, encoded : {}", dto.getPassword(), password);
 
@@ -88,7 +86,6 @@ public class AuthServiceImpl implements AuthService{
 
         return MemberRegisterDTO.Response.builder()
                 .email(savedMember.getEmail())
-                .accessToken(accessToken)
                 .build();
     }
 
@@ -114,6 +111,7 @@ public class AuthServiceImpl implements AuthService{
         return LoginDTO.Response.builder()
                 .success(true)
                 .accessToken(accessToken)
+                .refreshToken(null)
                 .build();
     }
 
