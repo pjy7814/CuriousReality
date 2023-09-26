@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
@@ -26,6 +26,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginDTO.Response> login(@RequestBody LoginDTO.Request dto){
         LoginDTO.Response response = authService.login(dto);
+        log.info("컨트롤러 들어온다아앙아아 ");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
