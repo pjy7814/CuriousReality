@@ -1,5 +1,6 @@
 package com.ssafy.curious.security.filter;
 
+import com.ssafy.curious.security.dto.UserAuth;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,20 +8,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    private final UserDetailsService userDetailsService;
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 30l; // 30mins
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60l; // 1H
+
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -54,13 +59,18 @@ public class JwtProvider {
 
     // 토큰 기반 Authentication 구현체 생성
     public Authentication getAuthentication(String token){
+//        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmail(token));
+        UserAuth userDetails = new UserAuth(getUserEmail(token));
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmail(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        List<String> roles = Arrays.asList("USER");
+        List<SimpleGrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList());
+        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
-    // Claims 에서 email 추출
-    private String getUserEmail(String token){
+    // Claims 에서 email 추출 -> 필터
+    String getUserEmail(String token){
         return  getClaims(token).getSubject();
     }
 
@@ -79,6 +89,8 @@ public class JwtProvider {
             throw new BadCredentialsException("지원되지 않는 형식의 토큰", e);
         } catch (IllegalArgumentException e){
             throw new BadCredentialsException("잘못된 입력값", e);
+        } catch (UsernameNotFoundException e){
+            throw new BadCredentialsException("찾을 수 없는 유저", e);
         }
         return claims;
     }
@@ -94,71 +106,3 @@ public class JwtProvider {
                 .compact();
     }
 }
-
-/*
-public class JwtProvider {
-
-    private static final long MILLI_SECOND = 1000L;
-    private final String issuer;
-    private final String secretKey;
-    private final int accessTokenExpire;
-    private final int refreshTokenExpire;
-
-    public JwtProvider(
-            @Value("${issuer}") String issuer,
-            @Value("${secret-key}") String secretKey,
-            @Value("${access-token-expire}") int accessTokenExpire,
-            @Value("${refresh-token-expire}") int refreshTokenExpire
-    ) {
-        this.issuer=issuer;
-        this.secretKey=secretKey;
-        this.accessTokenExpire=accessTokenExpire;
-        this.refreshTokenExpire=refreshTokenExpire;
-    }
-
-    public String createAccessToken(Long userId, List<MemberRoleEntity> memberRoles) {
-        Date now = new Date();
-        Date expiredDate = new Date(now.getTime() + accessTokenExpire * MILLI_SECOND);
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", userId);
-
-        List<String> roles = memberRoles.stream().map(
-                role -> role.getMemberRole().getRole()
-        ).collect(Collectors.toList());
-
-        claims.put("roles", roles);
-        return Jwts.builder()
-                .setIssuer(issuer)
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expiredDate)
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(UTF_8)))
-                .compact();
-    }
-
-    public Claims getClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(UTF_8)))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public String createRefreshToken() {
-        Date now = new Date();
-        Date expiredDate = new Date(now.getTime() + refreshTokenExpire * MILLI_SECOND);
-
-        return Jwts.builder()
-                .setIssuer(issuer)
-                .setIssuedAt(now)
-                .setExpiration(expiredDate)
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(UTF_8)))
-                .compact();
-    }
-
-    public int getRefreshTokenExpire() {
-        return refreshTokenExpire;
-    }
-}
-
- */

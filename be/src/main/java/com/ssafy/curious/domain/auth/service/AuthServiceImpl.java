@@ -11,6 +11,8 @@ import com.ssafy.curious.security.filter.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class AuthServiceImpl implements AuthService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
     private final JwtProvider jwtProvider;
+    private final RedisTemplate redisTemplate;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -108,6 +111,12 @@ public class AuthServiceImpl implements AuthService{
         // [2] 로그인 처리
         String accessToken = jwtProvider.createAccessToken(email);
         String refreshToken = jwtProvider.createRefreshToken();
+
+        log.info("====로그인 처리중 ====");
+
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(email, refreshToken);
+        log.info("redis refresh token : {}", valueOperations.get(email));
 
         return LoginDTO.Response.builder()
                 .success(true)

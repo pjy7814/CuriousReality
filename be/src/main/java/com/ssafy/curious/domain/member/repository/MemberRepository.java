@@ -10,8 +10,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity,Long> {
 
     Optional<MemberEntity> findByEmail(String email);
     Optional<MemberEntity> findByContact(String contact);
-//    @Query("select m from MemberEntity m where m.email = :email")
-//    MemberEntity findByEmail(String email);
+    @Query("select m from MemberEntity m where m.email = :email")
+    MemberEntity findMemberByEmail(String email);
 
 
 }
