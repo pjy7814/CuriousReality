@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("api/article")
+@RequestMapping("/article")
 @RestController
 public class RecommendController {
 

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class PreferenceController {
 
@@ -20,7 +19,7 @@ public class PreferenceController {
      * 특정 기사 클릭 시 시청 기록에 저장
      */
     // Todo: JWT 적용 후 @AuthenticationPrincipal로 변경
-    @PostMapping("history/{memberId}")
+    @PostMapping("/history/{memberId}")
     public ResponseEntity<Void> saveHistory(@PathVariable("member_id") Long memberId,
                                             @RequestBody SaveHistoryRequest request) {
         historyService.saveHistory(memberId, request);
