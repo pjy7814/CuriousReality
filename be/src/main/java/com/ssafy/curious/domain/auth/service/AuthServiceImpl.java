@@ -6,8 +6,8 @@ import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
-import com.ssafy.curious.global.utils.JwtUtil;
 import com.ssafy.curious.global.utils.RegexUtil;
+import com.ssafy.curious.security.filter.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +25,7 @@ import java.util.*;
 public class AuthServiceImpl implements AuthService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
+    private final JwtProvider jwtProvider;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -94,7 +95,6 @@ public class AuthServiceImpl implements AuthService{
 
         String email = dto.getEmail();
 
-
         // [1] 유효성 검사
         // [1-1] 유저가 없음
         MemberEntity member = memberRepository.findByEmail(email)
@@ -106,12 +106,13 @@ public class AuthServiceImpl implements AuthService{
         }
 
         // [2] 로그인 처리
-        String accessToken = JwtUtil.createJWT(email, secretKey, expiredMs);
+        String accessToken = jwtProvider.createAccessToken(email);
+        String refreshToken = jwtProvider.createRefreshToken();
 
         return LoginDTO.Response.builder()
                 .success(true)
                 .accessToken(accessToken)
-                .refreshToken(null)
+                .refreshToken(refreshToken)
                 .build();
     }
 
