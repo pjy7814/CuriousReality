@@ -42,8 +42,10 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더에 응답 허용
+        configuration.setAllowCredentials(true); // 내 서버가 응답할 때 json 을 JS에서 처리할 수 있게
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:80","https://j9a303.p.ssafy.io","http://curious303.kro.kr/api/v1"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","PATCH"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
