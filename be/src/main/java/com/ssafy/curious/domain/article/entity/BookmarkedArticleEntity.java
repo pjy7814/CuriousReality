@@ -12,11 +12,11 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name="liked_article")
+@Table(name="bookmarked_article")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LikedArticleEntity extends CEntity {
+public class BookmarkedArticleEntity extends CEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column

@@ -1,5 +1,7 @@
 package com.ssafy.curious.domain.member.controller;
 
+import com.ssafy.curious.domain.member.dto.ArticleBookmarkListDTO;
+import com.ssafy.curious.domain.member.dto.MemberDTO;
 import com.ssafy.curious.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +20,15 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/update")
-    public ResponseEntity<com.ssafy.curious.domain.member.dto.MemberDTO.Response> update(
-            @RequestBody com.ssafy.curious.domain.member.dto.MemberDTO.Request dto){
-        com.ssafy.curious.domain.member.dto.MemberDTO.Response response = memberService.update(dto);
+    public ResponseEntity<MemberDTO.Response> update( @RequestBody MemberDTO.Request dto) {
+        MemberDTO.Response response = memberService.update(dto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+    @GetMapping("/article/bookmark")
+    public ResponseEntity<ArticleBookmarkListDTO.Response> getArticleBookmarkList( @RequestBody ArticleBookmarkListDTO.Request dto) {
+        ArticleBookmarkListDTO.Response response = memberService.getArticleBookmarkList(dto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
