@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { registerMember } from "@/api/index";
+import { registerMember } from "@/api/userApi";
 // import { validateEmail, validateContact, validateName, validatePassword } from "@/utils/validation";     // 유효성 검사
 export default {
   name: "SignupView",

@@ -1,14 +1,16 @@
 <template>
   <div class="navigation-bar">
     <div class="nav-item">
-      <br class="category" />
+      <div class="empty-space"></div>
       <PoliticsMenu class="category"/>
       <EconomyMenu class="category" />
       <SocietyMenu class="category" />
       <ITScienceMenu class="category"/>
       <WorldMenu class="category"/>
-      <br class="category" />
-      <br class="category" />
+      <div class="empty-space"></div>
+      <UserMenu  v-if="userEmail" class="category"/>
+      <div v-else class="empty-space"></div>
+      
     </div>
   </div>
 </template>
@@ -19,12 +21,13 @@ import EconomyMenu from "./submenu/EconomyMenu.vue";
 import SocietyMenu from "./submenu/SocietyMenu.vue";
 import ITScienceMenu from "./submenu/ITScienceMenu.vue";
 import WorldMenu from "./submenu/WorldMenu.vue";
+import UserMenu from "./submenu/UserMenu.vue";
 
 export default {
 
   data() {
     return {
-     
+      userEmail: localStorage.getItem('userEmail') 
     };
   },
   components: {
@@ -33,6 +36,7 @@ export default {
     SocietyMenu,
     ITScienceMenu,
     WorldMenu,
+    UserMenu
   },
 };
 </script>
@@ -44,19 +48,25 @@ export default {
   position: fixed;
   flex-shrink: 0;
   background: #ffffff;
-  padding-left: 30px;
-  padding-right: 200px;
+  justify-content: space-around;
 }
 
 .nav-item {
   cursor: pointer;
-  padding-left: 14%;
-  padding-right: 24%;
+  /* padding-left: 4%; */
   flex-direction: row;
   display: flex;
 }
 
-.category {
+.empty-space {
+  flex-grow: 1; 
   padding: 15px 0px 10px 0px;
+  align-items: flex-start;
+  width: 100%;
+  gap: 21px;
+}
+.empty-space,
+.category {
+  padding: 15px 25px 10px 25px;
 }
 </style>

@@ -1,4 +1,3 @@
-<!-- src/components/NavigationBar.vue -->
 <template>
   <div class="navigation-bar" @mouseover="showSubMenu" @mouseleave="hideSubMenu">
     <router-link class="logo" to="/"><img src="@/assets/logo.png"></router-link>
@@ -8,7 +7,8 @@
     <router-link class="category" to="/">IT/과학</router-link>
     <router-link class="category" to="/">세계</router-link>
     <div class="recommend-news" @click="openModal">추천뉴스</div>
-    <router-link class="login" to="/login">로그인</router-link>
+    <router-link v-if="userEmail" class="mypage" to="/mypage">마이페이지</router-link>
+    <router-link v-else class="login" to="/login">로그인</router-link>
   </div>
 </template>
 
@@ -17,14 +17,15 @@
 export default {
   name: "NavigationBar",
   props: {
-    isOpenArticleCard: Boolean, // isModalOpen을 props로 받습니다.
+    isOpenArticleCard: Boolean,
   },
-  components: {
-
+  data() {
+    return {
+      userEmail: localStorage.getItem('userEmail') 
+    };
   },
   methods: {
     openModal() {
-      // 부모 컴포넌트로 이벤트를 전달하여 모달을 닫습니다.
       this.$emit('openModal');
     },
   }
@@ -46,9 +47,10 @@ export default {
 .logo,
 .category,
 .recommend-news,
+.mypage,
 .login {
   color: #1C1B1B;
-  width: 100px;
+  width: 100%;
   padding: 15px 25px 10px 25px;
   font-family: "Noto Sans KR";
   font-size: 20px;

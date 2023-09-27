@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <form @submit.prevent="submitForm">
-      <input class="id" type="text" placeholder="ID" v-model="id" />
+      <input class="id" type="text" placeholder="ID" v-model="email" />
 
       <input class="password" type="password" placeholder="PASSWORD" v-model="password" />
       <button type="submit" class="login-button">로그인</button>
@@ -11,26 +11,29 @@
 </template>
 
 <script>
-import { login } from "@/api/index";
+import { login } from "@/api/userApi";
 export default {
   name: "LoginView",
   data() {
     return {
-      id: '',
+      email: '',
       password: ''
     }
   },
   methods: {
     async submitForm() {
       const memberData = {
-        id: this.id,
+        email: this.email,
         password: this.password
       };
       try {
-        const { data, status } = await login(memberData);
-        console.log(data, status);
-        localStorage.setItem("userData", data);
-        localStorage.setItem("userEmail", this.id);
+        const { data } = await login(memberData);
+        console.log(data);
+        localStorage.setItem("userEmail", this.email);
+        localStorage.setItem("userToken", data.accessToken);
+        localStorage.setItem("userRefresh", data.refreshToken);
+
+        window.location.href = '/';
       } catch (error) {
         alert("로그인에 실패했습니다. 다시 로그인해주세요.");
         console.error(error);
