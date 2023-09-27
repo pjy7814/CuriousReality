@@ -15,13 +15,13 @@
         <div class="input-head"><b>비밀번호</b></div>
         <input type="password" placeholder="PASSWORD" v-model="password" />
         <div class="alert-message" v-show="!isPasswordValid && password !== ''">
-          8,16자 사이의 영어, 숫자, 특수문자를 사용하여 생성해주세요.
+          8, 20자 사이의 영어, 숫자, 특수문자를 사용하여 생성해주세요.
         </div>
       </div>
       <div class="input-body">
         <div class="input-head"><b>비밀번호 확인</b></div>
-        <input type="password" placeholder="PASSWORD" v-model="password_check" />
-        <div class="alert-message" v-show="!isPasswordCheckValid && password_check !== ''">
+        <input type="password" placeholder="PASSWORD" v-model="passwordCheck" />
+        <div class="alert-message" v-show="!isPasswordCheckValid && passwordCheck !== ''">
           비밀번호가 일치하지 않습니다.
         </div>
       </div>
@@ -47,11 +47,11 @@
       <div class="input-body">
         <div class="input-head"><b>관심분야</b></div>
         <div class="checkbox-interest">
-          <input type="checkbox" v-model="preference_category" value="politics" />정치
-          <input type="checkbox" v-model="preference_category" value="economy" />경제
-          <input type="checkbox" v-model="preference_category" value="society" />사회
-          <input type="checkbox" v-model="preference_category" value="itscience" />IT/과학
-          <input type="checkbox" v-model="preference_category" value="world" />세계
+          <input type="checkbox" v-model="preferenceCategory" value="politics" />정치
+          <input type="checkbox" v-model="preferenceCategory" value="economy" />경제
+          <input type="checkbox" v-model="preferenceCategory" value="society" />사회
+          <input type="checkbox" v-model="preferenceCategory" value="itscience" />IT/과학
+          <input type="checkbox" v-model="preferenceCategory" value="world" />세계
         </div>
       </div>
       <button :disabled="!isValidSignUp" type="submit" class="signup-button">회원가입</button>
@@ -61,53 +61,47 @@
 
 <script>
 import { registerMember } from "@/api/userApi";
-// import { validateEmail, validateContact, validateName, validatePassword } from "@/utils/validation";     // 유효성 검사
+import { validateEmail, validateContact, validateName, validatePassword } from "@/utils/validation";     // 유효성 검사
 export default {
   name: "SignupView",
   data() {
     return {
       email: "",
       password: "",
-      password_check: "",
+      passwordCheck: "",
       name: "",
       birthday: "",
       contact: "",
-      preference_category: [],
+      preferenceCategory: [],
     };
   },
   computed: {
     // 유효성 검사
     isEmailValid() {
-      return true;
-      // return validateEmail(this.email);
+      return validateEmail(this.email);
     },
     isPasswordValid() {
-      return true;
-      // return validatePassword(this.password);
+      return validatePassword(this.password);
     },
     isNameValid() {
-      return true;
-      // return validateName(this.name);
+      return validateName(this.name);
     },
     isContactValid() {
-      return true;
-      // return validateContact(this.contact);
+      return validateContact(this.contact);
     },
     isPasswordCheckValid() {
-      return true;
-      // return this.password === this.password_check;
+      return this.password === this.passwordCheck;
     },
     isBirthdayValid() {
-      return true;
-      // return !!this.birthday;
+      return !!this.birthday;
     },
     isValidSignUp() {
-      if (this.email == '' || 
-          this.password == '' || 
-          this.password_check == '' || 
-          this.name == '' ||
-          this.birthday == '' || 
-          this.contact == '') return false; 
+      if (this.email == '' ||
+        this.password == '' ||
+        this.passwordCheck == '' ||
+        this.name == '' ||
+        this.birthday == '' ||
+        this.contact == '') return false;
       return (
         this.isEmailValid &&
         this.isPasswordValid &&
@@ -124,25 +118,28 @@ export default {
         const memberData = {
           email: this.email,
           password: this.password,
+          passwordCheck: this.passwordCheck,
           name: this.name,
           birthday: this.birthday,
           contact: this.contact,
-          preference_category: this.preference_category,
+          isSocial: false,
+          preferenceCategory: this.preferenceCategory,
         };
         try {
-          const { data } = await registerMember(memberData);
-          alert(`${data.username}님이 가입되었습니다`);
-          this.initSignUp();
+          await registerMember(memberData);
+          alert(`${this.name}님이 가입되었습니다`);
+
+          window.location.href = '/login';
         } catch (error) {
           alert("회원가입에 실패했습니다.");
-          console.error(error);
+          console.error(error.message);
         }
       }
     },
     initSignUp() {
       this.email = "";
       this.password = "";
-      this.password_check = "";
+      this.passwordCheck = "";
       this.name = "";
       this.birthday = "";
       this.contact = "";
@@ -160,6 +157,7 @@ export default {
   align-items: center;
   flex-direction: column;
 }
+
 .head {
   display: flex;
   width: 500px;
@@ -178,7 +176,7 @@ export default {
 }
 
 .input-body {
-  width: 400px;
+  width: 500px;
   height: 100px;
   justify-content: center;
   flex-shrink: 0;
@@ -195,6 +193,7 @@ export default {
   line-height: normal;
   letter-spacing: 2px;
 }
+
 input {
   padding: 23px 20px 22px 20px;
   width: 90%;
@@ -224,7 +223,7 @@ input {
   margin: auto;
 }
 
-.signup-button:disabled{
+.signup-button:disabled {
   background-color: #cccccc;
 }
 
@@ -241,12 +240,13 @@ input {
   font-style: normal;
   letter-spacing: 3.9px;
 }
+
 .checkbox-interest {
   display: inline-flex;
   margin-top: 1rem;
 }
 
-.checkbox-interest > input {
+.checkbox-interest>input {
   width: 20px;
   margin: 0px 10px 0px 14px;
   align-items: center;
@@ -263,5 +263,4 @@ input {
   margin-top: 5px;
   margin-left: 15px;
   color: red;
-}
-</style>
+}</style>

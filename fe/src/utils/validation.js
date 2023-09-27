@@ -1,21 +1,20 @@
 const validateEmail = (email) => {
   return !!String(email)
-    .toLowerCase()
     .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$/
     );
 };
 
 const validatePassword = (password) => {
   // 비밀번호 형식 검사
   return !!String(password).match(
-    /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
+    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/
   );
 };
 
 const validateName = (name) => {
   // 이름 형식 검사
-  return !!String(name).match(/^[A-Za-z가-힣]{1,6}$/);
+  return !!String(name).match(/^[a-zA-Zㄱ-ㅎ가-힣]*$/);
 };
 
 const validateContact = (contact) => {
