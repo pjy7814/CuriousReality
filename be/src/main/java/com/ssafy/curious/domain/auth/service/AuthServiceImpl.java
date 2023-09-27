@@ -2,12 +2,12 @@ package com.ssafy.curious.domain.auth.service;
 
 import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.LogoutDTO;
-import com.ssafy.curious.domain.auth.dto.RegisterDTO;
+import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
-import com.ssafy.curious.global.utils.JwtUtil;
 import com.ssafy.curious.global.utils.RegexUtil;
+import com.ssafy.curious.security.filter.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,14 +25,14 @@ import java.util.*;
 public class AuthServiceImpl implements AuthService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
+    private final JwtProvider jwtProvider;
 
     @Value("${jwt.secret}")
     private String secretKey;
     private Long expiredMs = 1000 * 60 * 60l;
     @Override
     @Transactional
-    public RegisterDTO.Response register(RegisterDTO.Request dto) {
-
+    public MemberRegisterDTO.Response register(MemberRegisterDTO.Request dto) {
         String email = dto.getEmail();
         String contact = dto.getContact();
 
@@ -70,7 +70,6 @@ public class AuthServiceImpl implements AuthService{
             throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
         log.info("password match test done");
 
-        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
         String password = encoder.encode(dto.getPassword());
         log.info("password : {}, encoded : {}", dto.getPassword(), password);
 
@@ -86,9 +85,8 @@ public class AuthServiceImpl implements AuthService{
 
         MemberEntity savedMember = memberRepository.save(member);
 
-        return RegisterDTO.Response.builder()
+        return MemberRegisterDTO.Response.builder()
                 .email(savedMember.getEmail())
-                .token(token)
                 .build();
     }
 
@@ -96,7 +94,6 @@ public class AuthServiceImpl implements AuthService{
     public LoginDTO.Response login(LoginDTO.Request dto) {
 
         String email = dto.getEmail();
-
 
         // [1] 유효성 검사
         // [1-1] 유저가 없음
@@ -109,11 +106,13 @@ public class AuthServiceImpl implements AuthService{
         }
 
         // [2] 로그인 처리
-        String token = JwtUtil.createJWT(email, secretKey, expiredMs);
+        String accessToken = jwtProvider.createAccessToken(email);
+        String refreshToken = jwtProvider.createRefreshToken();
 
         return LoginDTO.Response.builder()
                 .success(true)
-                .token(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 

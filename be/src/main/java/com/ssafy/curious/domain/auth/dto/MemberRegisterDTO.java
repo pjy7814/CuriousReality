@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
-public class RegisterDTO {
+public class MemberRegisterDTO {
 
     @Builder
     @Getter
@@ -30,6 +30,5 @@ public class RegisterDTO {
     @NoArgsConstructor
     public static class Response {
         private String email;
-        private String token;
     }
 }

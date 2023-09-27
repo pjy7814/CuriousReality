@@ -1,30 +1,43 @@
 package com.ssafy.curious.global.utils;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+
+import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+
+
+@Component
+@Slf4j
 public class JwtUtil {
-    public static String getEmail(String token, String secretKey){
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("email", String.class);
+    private final String secretKey;
 
+    private JwtUtil(@Value("${secret") String secretKey) {
+        this.secretKey = secretKey;
     }
-    public static boolean isExpired(String token, String secretKey){
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration().before(new Date()); // Date 형식
 
+    public void validateToken(String token){
+        try{
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        } catch (SignatureException e){
+            throw new BadCredentialsException("잘못된 비밀키", e);
+        } catch (ExpiredJwtException e){
+            throw new BadCredentialsException("만료된 토큰", e);
+        } catch (MalformedJwtException e){
+            throw new BadCredentialsException("유효하지 않은 토큰", e);
+        } catch (UnsupportedJwtException e){
+            throw new BadCredentialsException("지원되지 않는 형식의 토큰", e);
+        } catch (IllegalArgumentException e){
+            throw new BadCredentialsException("잘못된 입력값", e);
+        }
     }
-    public static String createJWT(String email, String secretKey, Long expiredMs) {
-        Claims claims = Jwts.claims(); // 일종의 map
-        claims.put("email", email); // key: email, value: email 값
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-
-
+    public Long getExpiration(String token){
+        Date tokenExpiration = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
+        Long now = new Date().getTime();
+        return tokenExpiration.getTime() - now;
     }
 }
