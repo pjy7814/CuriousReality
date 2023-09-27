@@ -1,8 +1,8 @@
 package com.ssafy.curious.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.curious.domain.article.dto.ArticleLikeDTO;
-import com.ssafy.curious.domain.article.repository.LikedArticleRepository;
+import com.ssafy.curious.domain.article.dto.ArticleBookmarkDTO;
+import com.ssafy.curious.domain.article.repository.BookmarkedArticleRepository;
 import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ public class ArticleTest {
     private ObjectMapper mapper;
 
     @Autowired
-    private LikedArticleRepository likedArticleRepository;
+    private BookmarkedArticleRepository bookmarkedArticleRepository;
 
     final String memberId = "membertest1@test.com";
     final String memberPw = "Qwer1234!";
@@ -76,8 +76,8 @@ public class ArticleTest {
     }
 
     @Nested
-    @DisplayName("like test")
-    public class LikeTest {
+    @DisplayName("bookmark test")
+    public class BookmarkTest {
         final String url = "https://test.com";
 
         @Nested
@@ -85,13 +85,13 @@ public class ArticleTest {
         public class Success {
             @BeforeEach
             public void createDummyUrl() throws Exception {
-                ArticleLikeDTO.Request requestDto = ArticleLikeDTO.Request
+                ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                         .builder()
                         .email(memberId)
                         .url(url)
                         .build();
 
-                mvc.perform(post("/article/like")
+                mvc.perform(post("/article/bookmark")
                                 .header("Authorization", "Bearer " + accessToken)
                                 .contentType("application/json;charset=utf-8")
                                 .content(mapper.writeValueAsString(requestDto)))
@@ -104,15 +104,15 @@ public class ArticleTest {
             @DisplayName("create")
             public void successCreateTest() throws Exception {
                 // given
-                int beforeSize = likedArticleRepository.findAll().size();
-                ArticleLikeDTO.Request requestDto = ArticleLikeDTO.Request
+                int beforeSize = bookmarkedArticleRepository.findAll().size();
+                ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                         .builder()
                         .email(memberId)
                         .url("https://naver.com")
                         .build();
 
                 // when
-                mvc.perform(post("/article/like")
+                mvc.perform(post("/article/bookmark")
                                 .contentType("application/json;charset=utf-8")
                                 .header("Authorization", "Bearer " + accessToken)
                                 .content(mapper.writeValueAsString(requestDto)))
@@ -121,7 +121,7 @@ public class ArticleTest {
                         .andReturn();
 
                 // DB 저장 검증
-                assertThat(likedArticleRepository.findAll().size()).isEqualTo(beforeSize + 1);
+                assertThat(bookmarkedArticleRepository.findAll().size()).isEqualTo(beforeSize + 1);
 
             }
 
@@ -129,15 +129,15 @@ public class ArticleTest {
             @DisplayName("delete")
             public void successDeleteTest() throws Exception {
                 // given
-                int beforeSize = likedArticleRepository.findAll().size();
-                ArticleLikeDTO.Request requestDto = ArticleLikeDTO.Request
+                int beforeSize = bookmarkedArticleRepository.findAll().size();
+                ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                         .builder()
                         .email(memberId)
                         .url(url)
                         .build();
 
                 // when
-                mvc.perform(post("/article/like")
+                mvc.perform(post("/article/bookmark")
                                 .contentType("application/json;charset=utf-8")
                                 .content(mapper.writeValueAsString(requestDto)))
                         // then
@@ -145,7 +145,7 @@ public class ArticleTest {
                         .andReturn();
 
                 // DB 저장 검증
-                assertThat(likedArticleRepository.findAll().size()).isEqualTo(beforeSize - 1);
+                assertThat(bookmarkedArticleRepository.findAll().size()).isEqualTo(beforeSize - 1);
 
             }
         }

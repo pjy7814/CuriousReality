@@ -1,7 +1,7 @@
 package com.ssafy.curious.domain.article.service;
 
-import com.ssafy.curious.domain.article.dto.ArticleLikeDTO;
+import com.ssafy.curious.domain.article.dto.ArticleBookmarkDTO;
 
 public interface ArticleService {
-    void like(ArticleLikeDTO.Request dto);
+    void bookmark(ArticleBookmarkDTO.Request dto);
 }

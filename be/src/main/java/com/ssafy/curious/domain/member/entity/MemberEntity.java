@@ -1,6 +1,6 @@
 package com.ssafy.curious.domain.member.entity;
 
-import com.ssafy.curious.domain.article.entity.LikedArticleEntity;
+import com.ssafy.curious.domain.article.entity.BookmarkedArticleEntity;
 import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.preference.entity.HistoryEntity;
 import com.ssafy.curious.domain.model.ArticlePress;
@@ -46,7 +46,7 @@ public class MemberEntity extends CUDEntity {
     private Boolean isSocial;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LikedArticleEntity> likedArticles;
+    private List<BookmarkedArticleEntity> bookmarkedArticles;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "category_preferences", joinColumns = @JoinColumn(name = "member_id"))

@@ -1,8 +1,8 @@
 package com.ssafy.curious.domain.article.service;
 
-import com.ssafy.curious.domain.article.dto.ArticleLikeDTO;
-import com.ssafy.curious.domain.article.entity.LikedArticleEntity;
-import com.ssafy.curious.domain.article.repository.LikedArticleRepository;
+import com.ssafy.curious.domain.article.dto.ArticleBookmarkDTO;
+import com.ssafy.curious.domain.article.entity.BookmarkedArticleEntity;
+import com.ssafy.curious.domain.article.repository.BookmarkedArticleRepository;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.ErrorCode;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
-    private final LikedArticleRepository likedArticleRepository;
+    private final BookmarkedArticleRepository bookmarkedArticleRepository;
     private final MemberRepository memberRepository;
 
     /**
@@ -26,22 +26,22 @@ public class ArticleServiceImpl implements ArticleService {
      * @param dto
      */
     @Override
-    public void like(ArticleLikeDTO.Request dto) {
+    public void bookmark(ArticleBookmarkDTO.Request dto) {
         String email = dto.getEmail(); // TODO: temp
 
         String url = dto.getUrl(); // TODO: 몽고디비에 url 있는지 검사해야하나?
 
         MemberEntity member = memberRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Optional<LikedArticleEntity> likedArticleEntityOptional = likedArticleRepository.findByUrl(url);
-        if(likedArticleEntityOptional.isPresent()) {
-            likedArticleRepository.delete(likedArticleEntityOptional.get());
+        Optional<BookmarkedArticleEntity> bookmarkedArticleEntityOptional = bookmarkedArticleRepository.findByUrl(url);
+        if(bookmarkedArticleEntityOptional.isPresent()) {
+            bookmarkedArticleRepository.delete(bookmarkedArticleEntityOptional.get());
         } else {
-            LikedArticleEntity likedArticle = LikedArticleEntity.builder()
+            BookmarkedArticleEntity bookmarkedArticle = BookmarkedArticleEntity.builder()
                     .member(member)
                     .url(url)
                     .build();
-            likedArticleRepository.save(likedArticle);
+            bookmarkedArticleRepository.save(bookmarkedArticle);
         }
     }
 }
