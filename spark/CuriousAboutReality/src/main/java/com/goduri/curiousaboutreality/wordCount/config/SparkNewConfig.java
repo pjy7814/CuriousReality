@@ -18,8 +18,5 @@ public class SparkNewConfig {
 		return new SparkConf().setAppName(appName).setMaster(masterUri);
 	}
 
-	@Bean
-	public JavaSparkContext sc() {
-		return new JavaSparkContext(conf());
-	}
+
 }

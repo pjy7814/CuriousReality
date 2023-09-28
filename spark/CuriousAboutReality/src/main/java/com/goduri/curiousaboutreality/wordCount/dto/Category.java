@@ -3,6 +3,8 @@ package com.goduri.curiousaboutreality.wordCount.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.goduri.curiousaboutreality.util.InputUtil;
+
 public class Category implements Serializable {
 	private String category1;
 	private String category2;
@@ -21,7 +23,7 @@ public class Category implements Serializable {
 	}
 
 	public void setCategory1(String category1) {
-		this.category1 = category1;
+		this.category1 = InputUtil.isNullOrBlank(category1)? InputUtil.DEFAULT_STRING: category1;
 	}
 
 	public String getCategory2() {
@@ -29,7 +31,7 @@ public class Category implements Serializable {
 	}
 
 	public void setCategory2(String category2) {
-		this.category2 = category2;
+		this.category2 = InputUtil.isNullOrBlank(category2)? InputUtil.DEFAULT_STRING: category2;
 	}
 
 	@Override

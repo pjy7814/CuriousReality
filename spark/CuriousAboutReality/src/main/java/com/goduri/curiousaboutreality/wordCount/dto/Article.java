@@ -1,29 +1,25 @@
 package com.goduri.curiousaboutreality.wordCount.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class ArticleResult implements Serializable {
-	private String id;
-	private String original_url;
+import org.apache.spark.sql.Row;
+
+public class Article implements Serializable {
 	private String category1;
 	private String category2;
 	private String title;
 	private String created_at;
+	private String original_url;
 	private String thumbnail;
 	private String company;
 	private String article;
-	private WordCount keywords;
-
-	private List<String> preprocessed;
+	private List<String> preprocessed= new ArrayList<>();
 
 
 	//=============== getter start==================
 
-	public String getId() {
-		return id;
-	}
 
 	public String getOriginal_url() {
 		return original_url;
@@ -57,20 +53,12 @@ public class ArticleResult implements Serializable {
 		return article;
 	}
 
-	public WordCount getKeywords() {
-		return keywords;
-	}
-
 	public List<String> getPreprocessed() {
 		return preprocessed;
 	}
 
 	//=============== setter start==================
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
+	
 	public void setOriginal_url(String original_url) {
 		this.original_url = original_url;
 	}
@@ -103,11 +91,49 @@ public class ArticleResult implements Serializable {
 		this.article = article;
 	}
 
-	public void setKeywords(WordCount keywords) {
-		this.keywords = keywords;
-	}
-
 	public void setPreprocessed(List<String> preprocessed) {
 		this.preprocessed = preprocessed;
 	}
+
+
+	public Article(){
+
+	}
+
+	//
+	// @Override
+	// public int length() {
+	// 	return 10;
+	// }
+	//
+	// @Override
+	// public Object get(int i) { // 1부터 시작한다 가정
+	// 	switch (i){
+	// 		case 1:
+	// 			return category1;
+	// 		case 2:
+	// 			return category2;
+	// 		case 3:
+	// 			return title;
+	// 		case 4:
+	// 			return created_at;
+	// 		case 5:
+	// 			return original_url;
+	// 		case 6:
+	// 			return thumbnail;
+	// 		case 7:
+	// 			return company;
+	// 		case 8:
+	// 			return article;
+	// 		case 9:
+	// 			return preprocessed;
+	// 		default:
+	// 			return null;
+	// 	}
+	// }
+	//
+	// @Override
+	// public Row copy() {
+	// 	return this;
+	// }
 }
