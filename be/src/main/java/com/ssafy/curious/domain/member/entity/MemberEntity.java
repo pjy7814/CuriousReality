@@ -1,6 +1,8 @@
 package com.ssafy.curious.domain.member.entity;
 
+import com.ssafy.curious.domain.article.entity.BookmarkedArticleEntity;
 import com.ssafy.curious.domain.model.ArticleCategory;
+import com.ssafy.curious.domain.preference.entity.HistoryEntity;
 import com.ssafy.curious.domain.model.ArticlePress;
 import com.ssafy.curious.global.entity.CUDEntity;
 import lombok.*;
@@ -8,7 +10,9 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -41,6 +45,9 @@ public class MemberEntity extends CUDEntity {
     @Column(name = "is_social", nullable = false)
     private Boolean isSocial;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookmarkedArticleEntity> bookmarkedArticles;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "category_preferences", joinColumns = @JoinColumn(name = "member_id"))
     @MapKeyEnumerated(EnumType.STRING)
@@ -50,6 +57,9 @@ public class MemberEntity extends CUDEntity {
     @CollectionTable(name = "press_preferences", joinColumns = @JoinColumn(name = "member_id"))
     @MapKeyEnumerated(EnumType.STRING)
     private Map<ArticlePress, Float> pressPreference;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HistoryEntity> articleHistory = new ArrayList<>();
 
     @Builder
     public MemberEntity(Long id, String email, String password,String name, LocalDate birthday, String contact, Boolean isSocial) {
