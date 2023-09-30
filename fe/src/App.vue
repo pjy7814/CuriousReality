@@ -1,10 +1,15 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
-    <NavigationBar class="navigation-bar" @mouseover="showSub = true" @openModal="openModal"/>
-    <SubNavigationBar class="sub-navigation-bar" v-if="showSub" @mouseover="showSub = true" @mouseleave="showSub = false"/>
-    <router-view class="body" @mouseover="showSub = false"/>
-    <ArticleCardComponent v-show="openArticleCard" @closeModal="closeModal"/>
+    <NavigationBar class="navigation-bar" @mouseover="showSub = true" @openModal="openModal" />
+    <SubNavigationBar
+      class="sub-navigation-bar"
+      v-if="showSub"
+      @mouseover="showSub = true"
+      @mouseleave="showSub = false"
+    />
+    <router-view class="body" @mouseover="showSub = false" />
+    <ArticleCardComponent v-show="openArticleCard" @closeModal="closeModal" />
   </div>
 </template>
 
@@ -17,12 +22,12 @@ export default {
   components: {
     NavigationBar,
     SubNavigationBar,
-    ArticleCardComponent
-},
+    ArticleCardComponent,
+  },
   data() {
     return {
       showSub: false,
-      openArticleCard: false
+      openArticleCard: false,
     };
   },
   methods: {
@@ -31,7 +36,7 @@ export default {
     },
     closeModal() {
       this.openArticleCard = false;
-    }
+    },
   },
 };
 </script>
@@ -42,7 +47,6 @@ export default {
   height: 100vh;
 }
 
-
 .body {
   margin: auto;
   width: 70%;
@@ -51,7 +55,11 @@ export default {
 }
 
 .navigation-bar {
+  width: 100%;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1;
 }
 

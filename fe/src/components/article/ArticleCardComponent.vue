@@ -114,7 +114,6 @@ export default {
 </script>
 
 <style scoped>
-/* 모달 스타일 */
 .modal {
   position: fixed;
   top: 0;
