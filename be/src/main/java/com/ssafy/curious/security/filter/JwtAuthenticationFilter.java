@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -24,6 +23,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // Jwt의 생성, 해독, 변환
     private final JwtProvider jwtProvider;
+
     // 인증 타입은 Bearer
     public static final String AUTHORIZATION_TYPE = "Bearer";
 
@@ -33,9 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰 가져오기
         String token = getToken(request);
-
+        log.info("========================== 토큰 있냐? : {}", token);
         // 토큰 유효성 검증
         if (token != null){
+            log.info("========================== 유효하다구 =======================");
             Authentication auth = jwtProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
