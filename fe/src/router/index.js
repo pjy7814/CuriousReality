@@ -9,6 +9,7 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+    props: (route) => ({ keyword: route.query.keyword }),
   },
   {
     path: "/login",
@@ -29,7 +30,8 @@ const routes = [
     path: "/:category",
     name: "Category",
     component: CategoryView,
-  }
+    props: (route) => ({ category: route.params.category, keyword: route.query.keyword }),
+  },
 ];
 
 const router = createRouter({

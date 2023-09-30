@@ -2,23 +2,22 @@
   <div class="content">
     <div class="content-1">
       <div class="search">
-        <input type="text" maxlength='10' placeholder="검색어를 입력해주세요">
-        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+        <input type="text" maxlength="10" placeholder="검색어를 입력해주세요" />
+        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" />
       </div>
     </div>
 
-    <div class="content-1"> <!-- 워드클라우드 + 실시간 키워드  -->
+    <div class="content-1">
+      <!-- 워드클라우드 + 실시간 키워드  -->
       <div class="word-cloud">
-        <vue-word-cloud :words="words" >
-          <template #default="{ text, weight, word }">
-            <div :title="weight" @click="onWordClick(word)" class="word-cloud-text">
+        <vue-word-cloud :words="words">
+          <template #default="{ text, weight }">
+            <div :title="weight" @click="onWordClick(text)" class="word-cloud-text">
               {{ text }}
             </div>
           </template>
         </vue-word-cloud>
-
       </div>
-      <VDatePicker v-model.range="range" mode="dateTime" />
       <div class="content-item2">
         <KeywordComponent />
       </div>
@@ -31,10 +30,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import KeywordComponent from '@/components/keyword/KeywordComponent.vue';
-import ArticleComponent from '@/components/article/ArticleComponent.vue';
-import VueWordCloud from 'vuewordcloud';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
+import ArticleComponent from "@/components/article/ArticleComponent.vue";
+import VueWordCloud from "vuewordcloud";
 export default {
   name: "HomeView",
   components: {
@@ -43,21 +43,33 @@ export default {
     [VueWordCloud.name]: VueWordCloud,
   },
   setup() {
+    const router = useRouter();
+
+    function onWordClick(word) {
+      router.push({
+        name: "Home", // 컴포넌트 이름
+        query: { keyword: word }, // 키워드 쿼리
+      });
+    }
     const range = ref({
       start: new Date(2020, 0, 6),
       end: new Date(2020, 0, 10),
     });
 
-    return { range };
+    return { range, onWordClick };
   },
-  data() { // 함수형태
+  data() {
     return {
-      words: [['남현실', 19], ['남현실논란', 3], ['남현실나이', 7], ['남현실충격발언', 3]],
-    }
-  }
+      words: [
+        ["남현실", 19],
+        ["남현실논란", 3],
+        ["남현실나이", 7],
+        ["남현실충격발언", 3],
+      ],
+    };
+  },
 };
 </script>
-
 
 <style scoped>
 .content {
