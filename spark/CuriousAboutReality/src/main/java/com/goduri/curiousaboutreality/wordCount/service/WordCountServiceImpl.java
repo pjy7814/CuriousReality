@@ -33,8 +33,7 @@ import com.goduri.curiousaboutreality.wordCount.dto.Category;
 import com.goduri.curiousaboutreality.wordCount.dto.WordCount;
 
 @Service
-@EnableConfigurationProperties(SparkConfig.class)
-public class WordCountServiceImpl implements WordCountService {
+public class WordCountServiceImpl {
 
 	// 커스텀 properties
 	private final JavaSparkContext javaSparkContext;
@@ -56,11 +55,10 @@ public class WordCountServiceImpl implements WordCountService {
 	 *
 	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
-	@Override
 	@KafkaListener(topics = "20230925_test", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(String fileLocation) {
 		System.out.println("들어왔어!!!!!");
-		String testFileLocation = "C:\\Users\\SSAFY\\Downloads\\example.json";
+		String testFileLocation = "/Users/namhyunsil/Documents/example.json";
 
 		try{
 			doWork(testFileLocation);
@@ -121,7 +119,7 @@ public class WordCountServiceImpl implements WordCountService {
 	private void categoryWordCount(Map<Category, List<String>> categoryToWords, Map<Category, WordCount> categoryToWordCount){
 		for(Map.Entry<Category,List<String>> entry : categoryToWords.entrySet()){
 			categoryToWordCount.put(entry.getKey(), wordCountWithSpark(entry.getValue()));
-			//TEST_WORDCOUNT_PRINT(categoryToWordCount.get(entry.getKey())); // test
+			TEST_WORDCOUNT_PRINT(categoryToWordCount.get(entry.getKey())); // test
 		}
 	}
 	private void newsWordCountAndCategoryClassification(JSONArray jsonArray, List<ArticleResult> articleResults, Map<Category, List<String>> categoryToWords) throws
@@ -177,3 +175,4 @@ public class WordCountServiceImpl implements WordCountService {
 	}
 
 }
+

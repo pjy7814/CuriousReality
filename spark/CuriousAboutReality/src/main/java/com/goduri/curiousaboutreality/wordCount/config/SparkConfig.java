@@ -1,71 +1,39 @@
 package com.goduri.curiousaboutreality.wordCount.config;
 
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix="spark.config")
-@Component
+@ConfigurationProperties(prefix = "spark.config")
+@Configuration
 public class SparkConfig {
 
+	@Value("${spark.config.javaHome}")
 	private String javaHome;
+	@Value("${spark.config.sparkHome}")
 	private String sparkHome;
+	@Value("${spark.config.mainClass}")
 	private String mainClass;
+	@Value("${spark.config.appResource}")
 	private String appResource;
-
+	@Value("${spark.config.master}")
 	private String master;
 
-	public void setJavaHome(String javaHome) {
-		this.javaHome = javaHome;
-	}
+    @Bean
+    public SparkConf sparkConf() {
+        return new SparkConf()
+			.setSparkHome(sparkHome)
+			.setMaster(master)
+			.setAppName("Spring Spark Application");
+    }
 
-	public void setSparkHome(String sparkHome) {
-		this.sparkHome = sparkHome;
-	}
-
-	public void setMainClass(String mainClass) {
-		this.mainClass = mainClass;
-	}
-
-	public void setAppResource(String appResource) {
-		this.appResource = appResource;
-	}
-
-	public void setMaster(String master) {
-		this.master = master;
-	}
-
-	/**
-	 *	aws서버의 java home path
-	 */
-	public String getJavaHome(){
-		return javaHome;
-	}
-
-	/**
-	 *	aws서버의 spark home path
-	 */
-	public String getSparkHome(){
-		return sparkHome;
-	}
-
-	/**
-	 *	스파크를 사용하는 파이썬 코드의 메인 클래스 이름
-	 */
-	public String getMainClass(){
-		return mainClass;
-	}
-
-	/**
-	 *	스파크를 사용하는 파이썬 코드의 파일 경로
-	 */
-	public String getAppResource(){
-		return appResource;
-	}
-
-	/**
-	 *	스파크 마스터 노드의 ip { spark://ip:port }
-	 */
-	public String getMaster(){
-		return master;
-	}
+    @Bean
+    public JavaSparkContext javaSparkContext() {
+        return new JavaSparkContext(sparkConf());
+    }
 }
+

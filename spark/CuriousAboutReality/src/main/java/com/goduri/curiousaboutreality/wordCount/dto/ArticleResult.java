@@ -110,4 +110,21 @@ public class ArticleResult implements Serializable {
 	public void setPreprocessed(List<String> preprocessed) {
 		this.preprocessed = preprocessed;
 	}
+
+	@Override
+	public String toString() {
+		return "ArticleResult{" +
+				"id='" + id + '\'' +
+				", original_url='" + original_url + '\'' +
+				", category1='" + category1 + '\'' +
+				", category2='" + category2 + '\'' +
+				", title='" + title + '\'' +
+				", created_at='" + created_at + '\'' +
+				", thumbnail='" + thumbnail + '\'' +
+				", company='" + company + '\'' +
+				", article='" + article + '\'' +
+				", keywords=" + keywords +
+				", preprocessed=" + preprocessed +
+				'}';
+	}
 }
