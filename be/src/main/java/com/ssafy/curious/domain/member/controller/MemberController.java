@@ -30,7 +30,7 @@ public class MemberController {
 
 
     @GetMapping("/article/bookmark")
-    public ResponseEntity<ArticleBookmarkListDTO.Response> getArticleBookmarkList( @RequestBody ArticleBookmarkListDTO.Request dto) {
+    public ResponseEntity<ArticleBookmarkListDTO.Response> getArticleBookmarkList(@RequestBody ArticleBookmarkListDTO.Request dto) {
         ArticleBookmarkListDTO.Response response = memberService.getArticleBookmarkList(dto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
