@@ -30,9 +30,11 @@ public class AuthServiceImpl implements AuthService{
     private final JwtProvider jwtProvider;
     private final RedisTemplate redisTemplate;
 
-    @Value("${jwt.secret}")
+    @Value("${secret}")
     private String secretKey;
-    private Long expiredMs = 1000 * 60 * 60l;
+
+    @Value("{expire}")
+    private String expire;
     @Override
     @Transactional
     public MemberRegisterDTO.Response register(MemberRegisterDTO.Request dto) {

@@ -9,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +22,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 30l; // 30mins
-    private static final long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60l; // 1H
+    @Value("${access-token-expire}")
+    private Long ACCESS_TOKEN_EXPIRATION_TIME;
 
+    @Value("${refresh-token-expire}")
+    private Long REFRESH_TOKEN_EXPIRATION_TIME;
 
-    @Value("${jwt.secret}")
+    @Value("${secret}")
     private String secretKey;
 
     public String createAccessToken(String email){
