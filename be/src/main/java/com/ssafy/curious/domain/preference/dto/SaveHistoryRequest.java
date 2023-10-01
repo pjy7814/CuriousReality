@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class SaveHistoryRequest {
 
     private String articleId;
-    private String category1;
-    private String category2;
-    private String company;
+    private String category1Code;
+    private String category2Code;
+    private String companyCode;
 }
