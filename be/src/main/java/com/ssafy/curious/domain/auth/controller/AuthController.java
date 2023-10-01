@@ -4,10 +4,13 @@ import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.LogoutDTO;
 import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.auth.service.AuthService;
+import com.ssafy.curious.security.dto.UserAuth;
+import com.ssafy.curious.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -30,8 +33,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<LogoutDTO.Response> logout(){
-//        @AuthenticationPrincipal JwtAuthentication auth
+    public ResponseEntity<LogoutDTO.Response> logout(
+            @AuthenticationPrincipal UserAuth auth){
         LogoutDTO.Response response = authService.logout();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

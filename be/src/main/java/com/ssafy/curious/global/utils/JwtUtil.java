@@ -18,8 +18,6 @@ public class JwtUtil {
     private JwtUtil(@Value("${secret}") String secretKey) {
         this.secretKey = secretKey;
     }
-//    @Value("${jwt.secret}")
-//    String secretKey;
 
     public void validateToken(String token){
         try{

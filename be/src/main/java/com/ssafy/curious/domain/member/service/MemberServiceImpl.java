@@ -11,6 +11,7 @@ import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.security.dto.UserAuth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -29,11 +30,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO.Response profile(UserAuth auth){
         String email = auth.getEmail();
-        log.info(" email : {} ",email);
 
         MemberEntity member = memberRepository.findMemberByEmail(email);
 
-        log.info ("member 꺼내오기 완료 =====");
         return MemberDTO.Response.builder()
                 .name(member.getName())
                 .contact(member.getContact())
@@ -48,8 +47,8 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
-    public ArticleBookmarkListDTO.Response getArticleBookmarkList(ArticleBookmarkListDTO.Request dto) {
-        String email = dto.getEmail();
+    public ArticleBookmarkListDTO.Response getArticleBookmarkList(UserAuth auth) {
+        String email = auth.getEmail();
 
         List<BookmarkedArticleEntity> bookmarkedArticles = bookmarkedArticleRepository.findAllByMember_Email(email).orElse(new ArrayList<BookmarkedArticleEntity>());
 
