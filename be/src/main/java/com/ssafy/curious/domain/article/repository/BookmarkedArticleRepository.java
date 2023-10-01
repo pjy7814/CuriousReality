@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface BookmarkedArticleRepository extends JpaRepository<BookmarkedArticleEntity, Long> {
     Optional<BookmarkedArticleEntity> findByUrl(String url);
     Optional<List<BookmarkedArticleEntity>> findAllByMember_Email(String email);
+    void removeAllByMember_Email(String email);
 }
