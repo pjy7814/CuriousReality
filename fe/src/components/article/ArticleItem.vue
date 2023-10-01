@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { articleClippings } from "@/api/articleApi";
 export default {
   name: "ArticleItem",
   props: {
@@ -27,9 +28,15 @@ export default {
     };
   },
   methods: {
-    bookmarked() {
+    async bookmarked() {
       this.articleCopy.bookmarked = !this.articleCopy.bookmarked;
-      // API 연동 필요
+
+      try {
+        const response = await articleClippings(this.articleCopy.originalUrl);
+        console.log("Article bookmarked:", response.data);
+      } catch (error) {
+        console.error("Error bookmarking article:", error);
+      }
     },
   },
 };
