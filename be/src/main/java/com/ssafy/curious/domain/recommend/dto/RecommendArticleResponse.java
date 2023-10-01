@@ -19,7 +19,7 @@ public class RecommendArticleResponse {
     private String title;
     private LocalDateTime createdAt;
     private String thumbnail;
-    private ArticlePress company;
+    private String company;
     private String article;
     private List<Keyword> keywords;
 

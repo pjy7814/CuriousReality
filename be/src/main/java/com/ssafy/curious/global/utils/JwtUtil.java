@@ -15,7 +15,7 @@ import java.util.Date;
 public class JwtUtil {
     private final String secretKey;
 
-    private JwtUtil(@Value("${secret") String secretKey) {
+    private JwtUtil(@Value("${secret}") String secretKey) {
         this.secretKey = secretKey;
     }
 

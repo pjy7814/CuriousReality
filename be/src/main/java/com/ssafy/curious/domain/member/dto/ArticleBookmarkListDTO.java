@@ -7,15 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ArticleBookmarkListDTO {
-
-    @Builder
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Request {
-        private String email; // TODO: Security 생기면 없애기
-    }
-
     @Builder
     @Getter
     @AllArgsConstructor
@@ -37,7 +28,7 @@ public class ArticleBookmarkListDTO {
             private String title;
             private LocalDateTime createdAt;
             private String thumbnail;
-            private ArticlePress company;
+            private String company;
             private String article;
             private boolean isBookmarked;
         }

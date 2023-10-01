@@ -35,7 +35,7 @@ class ArticleInfoEntityTest {
                 .title("인도네시아 동포 어쩌구")
                 .createdAt(LocalDateTime.parse("2023-09-05T22:43:46"))
                 .thumbnail("thumbnail")
-                .company(ArticlePress.CJB)
+                .company("중앙일보")
                 .article("블라블라")
                 .keywords(keywordList)
                 .build();

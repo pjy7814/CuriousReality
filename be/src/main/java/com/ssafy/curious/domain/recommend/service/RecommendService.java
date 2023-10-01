@@ -38,15 +38,15 @@ public class RecommendService {
 
         // 멤버의 카테고리, 언론사 선호도 가져오기
         Optional<MemberEntity> member = memberRepository.findById(memberId);
-        Map<ArticleCategory, Float> categoryPreference = member.get().getCategoryPreference();
-        Map<ArticlePress, Float> pressPreference = member.get().getPressPreference();
+        Map<ArticleCategory, Integer> categoryPreference = member.get().getCategoryPreference();
+        Map<ArticlePress, Integer> pressPreference = member.get().getPressPreference();
 
         // 추천 점수 계산
         List<RecommendScore> recommendScores = new ArrayList<>();
 
         for (ArticleMetadata article : articleList) {
-            Float categoryScore = categoryPreference.getOrDefault(article.getCategory1(), 5.0F);
-            Float pressScore = pressPreference.getOrDefault(article.getCompany(), 5.0F);
+            Integer categoryScore = categoryPreference.getOrDefault(article.getCategory1(), 0);
+            Integer pressScore = pressPreference.getOrDefault(article.getCompany(), 0);
             Float trendingScore = article.getClusterScale();
             Float totalScore = categoryScore + pressScore + trendingScore;
             recommendScores.add(new RecommendScore(article.getArticleId(), totalScore));

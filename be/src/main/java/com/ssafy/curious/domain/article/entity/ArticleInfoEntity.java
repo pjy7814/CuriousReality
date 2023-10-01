@@ -40,7 +40,7 @@ public class ArticleInfoEntity {
     private String thumbnail;
 
     @Field("company")
-    private ArticlePress company;
+    private String company;
 
     @Field("article")
     private String article;
@@ -50,7 +50,7 @@ public class ArticleInfoEntity {
 
     @Builder
     public ArticleInfoEntity(String id, String originalUrl, String category1, String category2, String title,
-                             LocalDateTime createdAt, String thumbnail, ArticlePress company, String article,
+                             LocalDateTime createdAt, String thumbnail, String company, String article,
                              List<Keyword> keywords) {
         this.id = id;
         this.originalUrl = originalUrl;
