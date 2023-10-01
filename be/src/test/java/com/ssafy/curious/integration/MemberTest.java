@@ -132,7 +132,6 @@ public class MemberTest {
                 for (int i = 0; i < 6; i++) {
                     ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                             .builder()
-                            .email(memberId)
                             .url("http://urltest" + i + ".com")
                             .build();
 
@@ -160,11 +159,7 @@ public class MemberTest {
                 // when
                 MvcResult result = mvc.perform(get("/member/article/bookmark")
                                 .contentType("application/json;charset=utf-8")
-                                .header("Authorization", "Bearer " + accessToken)
-                                .content(mapper.writeValueAsString(ArticleBookmarkListDTO.Request
-                                        .builder()
-                                        .email(memberId)
-                                        .build())))
+                                .header("Authorization", "Bearer " + accessToken))
                         // then
                         .andExpect(status().isOk())
                         .andReturn();

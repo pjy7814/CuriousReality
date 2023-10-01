@@ -186,7 +186,6 @@ public class InsertData {
                 }
                 ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                         .builder()
-                        .email(memberId)
                         .url(articleInfo.getOriginalUrl())
                         .build();
 
