@@ -119,7 +119,7 @@ public class MemberTest {
                             .title("테스트 제목" + i)
                             .createdAt(LocalDateTime.parse("2023-09-05T22:43:46"))
                             .thumbnail("test thumbnail" + i)
-                            .company(ArticlePress.CJB)
+                            .company("중앙일보")
                             .article("테스트 내용" + i)
                             .keywords(keywordList)
                             .build();

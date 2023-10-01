@@ -146,7 +146,6 @@ public class ArticleTest {
 
                 // DB 저장 검증
                 assertThat(bookmarkedArticleRepository.findAll().size()).isEqualTo(beforeSize - 1);
-
             }
         }
     }
