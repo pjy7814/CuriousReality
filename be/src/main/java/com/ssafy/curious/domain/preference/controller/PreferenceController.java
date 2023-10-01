@@ -2,9 +2,11 @@ package com.ssafy.curious.domain.preference.controller;
 
 import com.ssafy.curious.domain.preference.dto.SaveHistoryRequest;
 import com.ssafy.curious.domain.preference.service.HistoryService;
+import com.ssafy.curious.security.dto.UserAuth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,12 +20,10 @@ public class PreferenceController {
     /**
      * 특정 기사 클릭 시 시청 기록에 저장
      */
-    // Todo: JWT 적용 후 @AuthenticationPrincipal로 변경
-    @PostMapping("/history/{memberId}")
-    public ResponseEntity<Void> saveHistory(@PathVariable("member_id") Long memberId,
+    @PostMapping("/history")
+    public ResponseEntity<Void> saveHistory(@AuthenticationPrincipal UserAuth userAuth,
                                             @RequestBody SaveHistoryRequest request) {
-        historyService.saveHistory(memberId, request);
+        historyService.saveHistory(userAuth, request);
         return ResponseEntity.ok().body(null);
     }
-
 }
