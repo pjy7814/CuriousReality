@@ -7,12 +7,14 @@ import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
 import com.ssafy.curious.global.utils.RegexUtil;
+import com.ssafy.curious.security.dto.UserAuth;
 import com.ssafy.curious.security.filter.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -129,7 +131,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public LogoutDTO.Response logout() {
-
         // 컨텍스트에 있는 값 제거
         SecurityContextHolder.clearContext();
         return LogoutDTO.Response.builder()
