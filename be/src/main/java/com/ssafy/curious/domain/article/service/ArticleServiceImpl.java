@@ -7,6 +7,7 @@ import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.ErrorCode;
 import com.ssafy.curious.global.exception.NotFoundException;
+import com.ssafy.curious.security.dto.UserAuth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class ArticleServiceImpl implements ArticleService {
      * @param dto
      */
     @Override
-    public void bookmark(ArticleBookmarkDTO.Request dto) {
-        String email = dto.getEmail(); // TODO: temp
+    public void bookmark(ArticleBookmarkDTO.Request dto, UserAuth auth) {
+        String email = auth.getEmail();
 
         String url = dto.getUrl(); // TODO: 몽고디비에 url 있는지 검사해야하나?
 
