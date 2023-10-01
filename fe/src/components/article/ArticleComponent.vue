@@ -1,6 +1,6 @@
 <template>
   <div class="article">
-    <div class="title">최근 뉴스 기사</div>
+    <div class="title">{{ headName }}</div>
     <ArticleItem
       v-for="article in articles"
       :key="article.original_url"
@@ -12,42 +12,35 @@
 
 <script>
 import ArticleItem from "@/components/article/ArticleItem.vue";
-
+import { getBookmarkList } from "@/api/articleApi";
 export default {
+  props: {
+    title: Int16Array,
+  },
   data() {
     return {
-      articles: [
-        {
-          original_url: "https://www.yna.co.kr/view/PYH20230905237700013?input=1196m",
-          category1: "정치",
-          category2: "대통령실",
-          title: "인도네시아 동포 초청 만찬 간담회 참석한 윤 대통령",
-          created_at: "2023-09-05 22:43:46",
-          thumbnail:
-            "https://imgnews.pstatic.net/image/001/2023/09/05/PYH2023090523770001300_P4_20230905224429446.jpg?type=w647",
-          company: "연합뉴스",
-          article:
-            "(자카르타=연합뉴스) 임헌정 기자 = 동아시아국가연합(아세안·ASEAN) 정상회의 참석차 인도네시아를 방문 중인 윤석열 대통령이 5일(현지시간) 자카르타 시내 한 호텔에서 열린 인도네시아 동포 초청 만찬 간담회에서 격려사를 하고 있다. 2023.9.5    kane@yna.co.kr\n",
-          is_bookmarked: false,
-        },
-        {
-          original_url: "https://www.yna.co.kr/view/PYH20230905237700013?input=1196m",
-          category1: "정치",
-          category2: "대통령실",
-          title: "인도네시아 동포 초청 만찬 간담회 참석한 윤 대통령",
-          created_at: "2023-09-05 22:43:46",
-          thumbnail:
-            "https://imgnews.pstatic.net/image/001/2023/09/05/PYH2023090523770001300_P4_20230905224429446.jpg?type=w647",
-          company: "연합뉴스",
-          article:
-            "(자카르타=연합뉴스) 임헌정 기자 = 동아시아국가연합(아세안·ASEAN) 정상회의 참석차 인도네시아를 방문 중인 윤석열 대통령이 5일(현지시간) 자카르타 시내 한 호텔에서 열린 인도네시아 동포 초청 만찬 간담회에서 격려사를 하고 있다. 2023.9.5    kane@yna.co.kr\n",
-          is_bookmarked: true,
-        },
-      ],
+      headName: "",
+      articles: [],
     };
   },
   components: {
     ArticleItem,
+  },
+  methods: {
+    async getBookmarkList() {
+      try {
+        const { data } = await getBookmarkList();
+        this.articles = data.articleInfos;
+      } catch {
+        alert("저장된 기사 정보를 받아오는데 실패했습니다.");
+      }
+    },
+  },
+  created() {
+    if (this.title == 0) {
+      this.headName = "스크랩한 기사";
+      this.getBookmarkList();
+    }
   },
 };
 </script>

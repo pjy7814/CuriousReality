@@ -28,7 +28,7 @@
     </div>
 
     <div class="content-1">
-      <ArticleComponent />
+      <ArticleComponent :title="0" />
     </div>
   </div>
 </template>
@@ -74,6 +74,7 @@ export default {
         birthday: "2023-07-19T03:46:22.904", // [LocalDateTime] 팬 유저 생일
         contact: "010-0101-1111", // [String] 팬 유저 번호 (필수)
       },
+      articles: [],
     };
   },
   methods: {
@@ -81,8 +82,6 @@ export default {
       this.$router.push({ name: "EditProfile" });
     },
   },
-
-  mounted() {},
 };
 </script>
 
@@ -157,5 +156,10 @@ export default {
 
 .arrow:hover {
   opacity: 100%;
+}
+
+.aticle-body {
+  width: 80%;
+  justify-content: center;
 }
 </style>

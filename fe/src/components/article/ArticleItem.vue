@@ -3,13 +3,13 @@
     <img :src="article.thumbnail" />
 
     <div class="body">
-      <a :href="article.original_url" class="title">{{ article.title }}</a>
-      <div class="created-at">{{ article.created_at }}</div>
+      <a :href="article.originalUrl" class="title">{{ article.title }}</a>
+      <div class="created-at">{{ article.createdAt }}</div>
       <div class="article">{{ article.article }}</div>
     </div>
 
     <div class="bookmark">
-      <img :src="images[articleCopy.is_bookmarked ? 1 : 0]" @click="bookmarked" />
+      <img :src="images[articleCopy.bookmarked ? 1 : 0]" @click="bookmarked" />
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     bookmarked() {
-      this.articleCopy.is_bookmarked = !this.articleCopy.is_bookmarked;
+      this.articleCopy.bookmarked = !this.articleCopy.bookmarked;
       // API 연동 필요
     },
   },
