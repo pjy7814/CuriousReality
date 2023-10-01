@@ -6,7 +6,6 @@ import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
 import com.ssafy.curious.domain.auth.dto.ReissueDTO;
 import com.ssafy.curious.domain.auth.service.AuthService;
 import com.ssafy.curious.security.dto.UserAuth;
-import com.ssafy.curious.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
