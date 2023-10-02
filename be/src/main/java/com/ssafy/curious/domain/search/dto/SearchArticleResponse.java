@@ -16,7 +16,9 @@ import java.util.List;
 public class SearchArticleResponse {
     private String category1;
     private String category2;
-    private LocalDateTime startdate;
-    private LocalDateTime enddate;
+    private String title;
+    private LocalDateTime createdAt;
+    private String thumbnail;
+    private String article;
     private List<Keyword> keywords;
 }
