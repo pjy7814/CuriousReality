@@ -1,10 +1,19 @@
 package com.ssafy.curious.security.filter;
 
+import com.ssafy.curious.global.exception.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,6 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.SignatureException;
+import java.util.Objects;
 
 
 @Component
@@ -35,15 +46,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getToken(request);
         log.info("========================== 토큰 있냐? : {}", token);
         // 토큰 유효성 검증
-        if (token != null){
-            log.info("========================== 유효하다구 =======================");
-            Authentication auth = jwtProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        try {
+            if (token != null && jwtProvider.isValidToken(token)){
+                log.info("토큰 있음");
+                Authentication auth = jwtProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                filterChain.doFilter(request,response);
+            }
+        } catch (ExpiredJwtException e) {
+            setResponse(HttpStatus.UNAUTHORIZED, response, e);
+            log.info("만료된 토큰입니다");
+        } catch (MalformedJwtException e) {
+            setResponse(HttpStatus.UNAUTHORIZED, response, e);
+            log.info("유효하지 않은 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            setResponse(HttpStatus.UNAUTHORIZED, response, e);
+            log.info("지원되지 않는 형식의 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            setResponse(HttpStatus.UNAUTHORIZED, response, e);
+            log.info("잘못된 입력값입니다.");
+        } catch (UsernameNotFoundException e) {
+            setResponse(HttpStatus.UNAUTHORIZED, response, e);
+            log.info("찾을 수 없는 유저입니다.");
         }
 
-        filterChain.doFilter(request,response);
     }
-
+    public void setResponse(HttpStatus status, HttpServletResponse response, Throwable e) throws IOException {
+        response.setStatus(status.value());
+        response.setContentType("application/json; charset=UTF-8");
+        response.getWriter().write(e.getMessage());
+    }
     private String getToken(HttpServletRequest request) {
 
         // 헤더에서 토큰 분리
