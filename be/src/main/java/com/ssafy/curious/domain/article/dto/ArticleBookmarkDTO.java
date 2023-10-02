@@ -12,7 +12,6 @@ public class ArticleBookmarkDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Request {
-        private String email; // TODO: Security 생기면 없애기 
         private String url;
     }
 }

@@ -51,12 +51,12 @@ public class MemberEntity extends CUDEntity {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "category_preferences", joinColumns = @JoinColumn(name = "member_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    private Map<ArticleCategory, Float> categoryPreference;
+    private Map<ArticleCategory, Integer> categoryPreference;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "press_preferences", joinColumns = @JoinColumn(name = "member_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    private Map<ArticlePress, Float> pressPreference;
+    private Map<ArticlePress, Integer> pressPreference;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistoryEntity> articleHistory = new ArrayList<>();
@@ -77,12 +77,12 @@ public class MemberEntity extends CUDEntity {
     private void initializePreference() {
         this.categoryPreference = new HashMap<>();
         for (ArticleCategory category : ArticleCategory.values()) {
-            this.categoryPreference.put(category, 5.0f);
+            this.categoryPreference.put(category, 0);
         }
 
         this.pressPreference = new HashMap<>();
         for (ArticlePress press : ArticlePress.values()) {
-            this.pressPreference.put(press, 5.0f);
+            this.pressPreference.put(press, 0);
         }
     }
 

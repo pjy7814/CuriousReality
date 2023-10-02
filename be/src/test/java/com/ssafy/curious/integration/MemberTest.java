@@ -119,7 +119,7 @@ public class MemberTest {
                             .title("테스트 제목" + i)
                             .createdAt(LocalDateTime.parse("2023-09-05T22:43:46"))
                             .thumbnail("test thumbnail" + i)
-                            .company(ArticlePress.CJB)
+                            .company("중앙일보")
                             .article("테스트 내용" + i)
                             .keywords(keywordList)
                             .build();
@@ -132,7 +132,6 @@ public class MemberTest {
                 for (int i = 0; i < 6; i++) {
                     ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                             .builder()
-                            .email(memberId)
                             .url("http://urltest" + i + ".com")
                             .build();
 
@@ -160,11 +159,7 @@ public class MemberTest {
                 // when
                 MvcResult result = mvc.perform(get("/member/article/bookmark")
                                 .contentType("application/json;charset=utf-8")
-                                .header("Authorization", "Bearer " + accessToken)
-                                .content(mapper.writeValueAsString(ArticleBookmarkListDTO.Request
-                                        .builder()
-                                        .email(memberId)
-                                        .build())))
+                                .header("Authorization", "Bearer " + accessToken))
                         // then
                         .andExpect(status().isOk())
                         .andReturn();

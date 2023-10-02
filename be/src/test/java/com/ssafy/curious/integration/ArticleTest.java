@@ -87,7 +87,6 @@ public class ArticleTest {
             public void createDummyUrl() throws Exception {
                 ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                         .builder()
-                        .email(memberId)
                         .url(url)
                         .build();
 
@@ -107,7 +106,6 @@ public class ArticleTest {
                 int beforeSize = bookmarkedArticleRepository.findAll().size();
                 ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                         .builder()
-                        .email(memberId)
                         .url("https://naver.com")
                         .build();
 
@@ -132,13 +130,13 @@ public class ArticleTest {
                 int beforeSize = bookmarkedArticleRepository.findAll().size();
                 ArticleBookmarkDTO.Request requestDto = ArticleBookmarkDTO.Request
                         .builder()
-                        .email(memberId)
                         .url(url)
                         .build();
 
                 // when
                 mvc.perform(post("/article/bookmark")
                                 .contentType("application/json;charset=utf-8")
+                                .header("Authorization", "Bearer " + accessToken)
                                 .content(mapper.writeValueAsString(requestDto)))
                         // then
                         .andExpect(status().isOk())
@@ -146,7 +144,6 @@ public class ArticleTest {
 
                 // DB 저장 검증
                 assertThat(bookmarkedArticleRepository.findAll().size()).isEqualTo(beforeSize - 1);
-
             }
         }
     }

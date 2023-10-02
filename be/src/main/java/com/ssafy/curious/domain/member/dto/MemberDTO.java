@@ -13,6 +13,6 @@ public class MemberDTO {
         private String name;
         private LocalDate birthday;
         private String contact; // 000-0000-0000
-        private Map<ArticleCategory, Float> categoryPreference;
+        private Map<ArticleCategory, Integer> categoryPreference;
     }
 }
