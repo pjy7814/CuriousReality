@@ -3,7 +3,7 @@
     <div class="content-user">
       <div class="content-graph">
         <div class="title">가장 많이 본 뉴스는?</div>
-        <Pie :data="data" :options="options" />
+        <Pie :data="chartData" :options="options" />
       </div>
       <div class="user-info">
         <div class="user-body-data">
@@ -37,6 +37,7 @@
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "vue-chartjs";
+import { getPreference } from "@/api/articleApi";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -46,15 +47,27 @@ export default {
     ArticleComponent,
     Pie,
   },
-  data() {
-    // 함수형태
-    return {
-      data: {
-        labels: ["정치", "경제", "사회", "IT/과학", "세계"],
+  computed: {
+    chartData() {
+      return {
+        labels: this.data.labels,
         datasets: [
           {
             backgroundColor: ["#4A55A2", "#7895CB", "#A0BFE0", "#C5DFF8", "#C4E3FF"],
-            data: [40, 20, 80, 10, 30],
+            data: this.data.datasets[0].data,
+          },
+        ],
+      };
+    },
+  },
+  data() {
+    return {
+      data: {
+        labels: [],
+        datasets: [
+          {
+            backgroundColor: ["#4A55A2", "#7895CB", "#A0BFE0", "#C5DFF8", "#C4E3FF"],
+            data: [],
           },
         ],
       },
@@ -67,12 +80,11 @@ export default {
         },
       },
       userInfo: {
-        email: "ssafy@naver.com", // [String] 팬 유저 이메일 id (필수)
-        password: "thisispassword", // [String] 팬 유저 비밀번호 (필수)
-        name: "김싸피", //[String] 팬 유저 이름 (필수)
-        nickname: "hihello", // [String] 팬 유저 NICK NAME
-        birthday: "2023-07-19T03:46:22.904", // [LocalDateTime] 팬 유저 생일
-        contact: "010-0101-1111", // [String] 팬 유저 번호 (필수)
+        email: "ssafy@naver.com",
+        name: "김싸피",
+        nickname: "hihello",
+        birthday: "2023-07-19T03:46:22.904",
+        contact: "010-0101-1111",
       },
       articles: [],
     };
@@ -81,6 +93,20 @@ export default {
     routeMyPage() {
       this.$router.push({ name: "EditProfile" });
     },
+    async getPreference() {
+      try {
+        const { data } = await getPreference();
+        console.log(data.categoryPreference);
+        this.data.labels = Object.keys(data.categoryPreference);
+        this.data.datasets[0].data = Object.values(data.categoryPreference);
+      } catch (error) {
+        alert("선호도를 가져오는데 실패했습니다.");
+        console.error(error);
+      }
+    },
+  },
+  created() {
+    this.getPreference();
   },
 };
 </script>

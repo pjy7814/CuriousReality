@@ -23,4 +23,15 @@ function articleClippings(url) {
   return axios.post(`${BASE_URL}/article/bookmark`, { url }, { headers });
 }
 
-export { getBookmarkList, articleClippings };
+// 뉴스 선호도 가져오기
+function getPreference() {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+
+  const userToken = localStorage.getItem("userToken");
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  return axios.get(`${BASE_URL}/member/preference`, { headers });
+}
+
+export { getBookmarkList, articleClippings, getPreference };
