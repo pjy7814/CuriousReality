@@ -23,6 +23,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,8 @@ import com.goduri.curiousaboutreality.exception.RealityException;
 import com.goduri.curiousaboutreality.sparkUtil.SparkSessionUtil;
 import com.goduri.curiousaboutreality.wordCount.dto.Article;
 import com.goduri.curiousaboutreality.wordCount.dto.TF_IDF;
+import com.goduri.curiousaboutreality.wordCount.repository.ArticleRepository;
+import com.goduri.curiousaboutreality.wordCount.repository.TfidfRepository;
 
 import scala.MatchError;
 import scala.Tuple2;
@@ -39,11 +42,21 @@ public class WordCountService {
 	private final JSONParser parser; // file -> json 을 위한 객체
 	private final ObjectMapper objectMapper; // json -> Article로 만들기 위한 객체
 
+	private final ArticleRepository articleRepository;
+	private final TfidfRepository tfidfRepository;
 
+	// @Autowired
+	// public WordCountService(JSONParser parser, ObjectMapper objectMapper){
+	// 	this.parser = parser;
+	// 	this.objectMapper = objectMapper;
+	//
+	// }
 	@Autowired
-	public WordCountService(JSONParser parser, ObjectMapper objectMapper){
+	public WordCountService(JSONParser parser, ObjectMapper objectMapper, ArticleRepository articleRepository, TfidfRepository tfidfRepository){
 		this.parser = parser;
 		this.objectMapper = objectMapper;
+		this.articleRepository = articleRepository;
+		this.tfidfRepository = tfidfRepository;
 	}
 
 	/**
@@ -62,7 +75,7 @@ public class WordCountService {
 	 *
 	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
-	@KafkaListener(topics = "Reality", groupId = ConsumerConfig.GROUP_ID_CONFIG)
+	@KafkaListener(topics = "Reality_Test", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(String fileLocation) {
 		System.out.println("들어왔어!!!!!");
 		//String testFileLocation = "C:\\Users\\SSAFY\\Downloads\\20230901.json";
@@ -106,7 +119,8 @@ public class WordCountService {
 			}
 
 			// 4. db에 결과를 저장한다.
-
+			addArticlesToDB(articles);
+			addTfidfToDB(categoryToTfIdf,articles.get(0).getCreated_at());
 		}
 		catch (MatchError e){
 			throw new RealityException("ES-01 : sparkSession init error");
@@ -138,6 +152,7 @@ public class WordCountService {
 			System.out.println("========== end ==========");
 		}
 	}
+
 
 	private void parseJsonArrayToArticles(JSONArray jsonArray, List<Article> articles) throws JsonProcessingException {
 		for(Object object : jsonArray){
@@ -223,4 +238,13 @@ public class WordCountService {
 	}
 
 
+	@Transactional
+	public void addArticlesToDB(List<Article> articles) {
+		articleRepository.saveArticles(articles);
+	}
+
+	@Transactional
+	public void addTfidfToDB(Map<String, List<TF_IDF>> categoryToTfIdf, String created_at) {
+		tfidfRepository.saveCategoryPerTfidf(categoryToTfIdf, created_at);
+	}
 }

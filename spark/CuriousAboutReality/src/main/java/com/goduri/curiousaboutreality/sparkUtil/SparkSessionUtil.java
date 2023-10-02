@@ -10,8 +10,6 @@ import org.apache.spark.ml.feature.CountVectorizerModel;
 import org.apache.spark.ml.feature.IDFModel;
 import org.apache.spark.ml.feature.IDF;
 
-import org.apache.spark.SparkConf;
-
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
