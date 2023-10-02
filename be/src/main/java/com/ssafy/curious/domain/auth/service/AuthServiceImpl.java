@@ -58,24 +58,24 @@ public class AuthServiceImpl implements AuthService{
 
         // [2] 유효성 검사
         // [2-1] 이메일 형식 검사
-        if (!RegexUtil.checkEmailRegex(email))
-            throw new CustomValidationException(ErrorCode.INVALID_EMAIL_FORMAT);
+        if (!RegexUtil.checkEmailRegex(email)){
+            throw new CustomValidationException(ErrorCode.INVALID_EMAIL_FORMAT);}
         log.info("email format test done");
         // [2-2] 비밀번호 형식 검사
-        if (!RegexUtil.checkPasswordRegex(dto.getPassword()))
-            throw new CustomValidationException(ErrorCode.INVALID_PASSWORD_FORMAT);
+        if (!RegexUtil.checkPasswordRegex(dto.getPassword())){
+            throw new CustomValidationException(ErrorCode.INVALID_PASSWORD_FORMAT);}
         log.info("pw format test done");
         // [2-3] 이름 형식 검사
-        if (!RegexUtil.checkNameRegex(dto.getName()))
-            throw new CustomValidationException(ErrorCode.INVALID_NAME_FORMAT);
+        if (!RegexUtil.checkNameRegex(dto.getName())){
+            throw new CustomValidationException(ErrorCode.INVALID_NAME_FORMAT);}
         log.info("name format test done");
         // [2-4] 전화번호 형식 검사
-        if (!RegexUtil.checkContactRegex(dto.getContact()))
-            throw new CustomValidationException(ErrorCode.INVALID_CONTACT_FORMAT);
+        if (!RegexUtil.checkContactRegex(dto.getContact())){
+            throw new CustomValidationException(ErrorCode.INVALID_CONTACT_FORMAT);}
         log.info("contact format test done");
         // [2-5] 비밀번호 일치 검사
-        if (!Objects.equals(dto.getPassword(), dto.getPasswordCheck()))
-            throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
+        if (!Objects.equals(dto.getPassword(), dto.getPasswordCheck())){
+            throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);}
         log.info("password match test done");
 
         String password = encoder.encode(dto.getPassword());

@@ -85,4 +85,9 @@ public class MemberEntity extends CUDEntity {
             this.pressPreference.put(press, 5.0f);
         }
     }
+
+    public void updateProfile(String password, String contact){
+        this.password = password;
+        this.contact = contact;
+    }
 }
