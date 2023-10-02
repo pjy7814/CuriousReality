@@ -23,7 +23,7 @@ public class MemberEntityTest {
 
         // When & Then
         for (ArticleCategory category : ArticleCategory.values()) {
-            assertEquals(5.0f, member.getCategoryPreference().get(category));
+            assertEquals(5, member.getCategoryPreference().get(category));
         }
     }
 }
