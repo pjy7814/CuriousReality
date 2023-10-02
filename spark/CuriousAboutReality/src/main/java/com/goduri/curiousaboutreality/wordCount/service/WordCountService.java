@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.ml.feature.CountVectorizerModel;
 import org.apache.spark.ml.feature.IDFModel;
 import org.apache.spark.ml.linalg.Vector;
-
-
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.goduri.curiousaboutreality.exception.RealityException;
 import com.goduri.curiousaboutreality.sparkUtil.SparkSessionUtil;
-import com.goduri.curiousaboutreality.sparkUtil.SparkUtil;
 import com.goduri.curiousaboutreality.wordCount.dto.Article;
 import com.goduri.curiousaboutreality.wordCount.dto.Category;
 

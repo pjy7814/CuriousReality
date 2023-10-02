@@ -45,11 +45,6 @@ public class SparkSessionUtil {
 		sparkSession = SparkSession.builder().appName("jwSpark").master("local[2]").getOrCreate();
 	}
 
-	private SparkConf initSparkUtil(){
-		return new SparkConf().setMaster("local[2]").setAppName("SparkTFIDF");
-	}
-
-
 	public Dataset<Row> makeDataset(List<List<String>> wordsList){
 		JavaRDD<Row> rowRdd = javaSparkContext.parallelize(wordsList).map(words -> RowFactory.create((Object)words.toArray(new String[0])));
 		return sparkSession.createDataFrame(rowRdd, DataTypes.createStructType(new StructField[]{
