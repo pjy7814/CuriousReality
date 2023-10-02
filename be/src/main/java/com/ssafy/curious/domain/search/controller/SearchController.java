@@ -38,7 +38,7 @@ public class SearchController {
 //        System.out.println(startDate);
 //        System.out.println(endDate);
 //        System.out.println(keyword);
-        List<SearchEntity> result = searchService.searchArticles(category1,category2,startDate,endDate);
+        List<SearchEntity> result = searchService.searchArticles(category1,category2,startDate,endDate, keyword);
         for(SearchEntity arti:result){
             System.out.println(arti.getTitle());
         }
