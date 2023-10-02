@@ -29,9 +29,11 @@ public class SparkSessionUtil {
 	private final JavaSparkContext javaSparkContext;
 	private final SparkSession sparkSession;
 
-	/*
-		spark 연결을 끊고 연결하고 하는게 오버헤드라고 생각해서
-		그냥 싱글톤으로 만들고 계속 사용.
+	/**
+	 * spark 연결을 끊고 연결하고 하는게 오버헤드라고 생각해서
+	 * 그냥 싱글톤으로 만들고 계속 사용.
+	 * 
+	 * 또한 하나의 jvm에서는 하나의 스파크 세션이 존재하야 하므로 싱글톤으로 생성
 	 */
 	public static SparkSessionUtil getInstance(){
 		if(sparkUtil == null){
@@ -41,12 +43,14 @@ public class SparkSessionUtil {
 	}
 
 	private SparkSessionUtil(){
+		// 여기의 master:local[2]는 local에서 쓰레드 2개를 사용한다는 뜻.
 		javaSparkContext = new JavaSparkContext("local[2]","jwSpark");
 		sparkSession = SparkSession.builder().appName("jwSpark").master("local[2]").getOrCreate();
 	}
 
 	public Dataset<Row> makeDataset(List<List<String>> wordsList){
 		JavaRDD<Row> rowRdd = javaSparkContext.parallelize(wordsList).map(words -> RowFactory.create((Object)words.toArray(new String[0])));
+		// 메소드 이름은 createDataFrame인데 막상 리턴 타입은 DataSet;;
 		return sparkSession.createDataFrame(rowRdd, DataTypes.createStructType(new StructField[]{
 				DataTypes.createStructField("words", new ArrayType(DataTypes.StringType, true), false)
 			})
@@ -60,15 +64,15 @@ public class SparkSessionUtil {
 
 		CountVectorizerModel cvm = cv.fit(dataset);
 
-		Dataset<Row> featurizedData = cvm.transform(dataset);
+		Dataset<Row> featuredData = cvm.transform(dataset);
 
 		IDF idf = new IDF()
 			.setMinDocFreq(0)
 			.setInputCol("rawFeatures")
 			.setOutputCol("features");
 
-		IDFModel idfm = idf.fit(featurizedData);
+		IDFModel idfModel = idf.fit(featuredData);
 
-		return new Tuple2<>(cvm, idfm);
+		return new Tuple2<>(cvm, idfModel);
 	}
 }
