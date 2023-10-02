@@ -2,6 +2,7 @@ package com.ssafy.curious.domain.member.controller;
 
 import com.ssafy.curious.domain.member.dto.ArticleBookmarkListDTO;
 import com.ssafy.curious.domain.member.dto.MemberDTO;
+import com.ssafy.curious.domain.member.dto.MemberPreferenceDTO;
 import com.ssafy.curious.domain.member.service.MemberService;
 import com.ssafy.curious.security.dto.UserAuth;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,15 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @GetMapping("/article/bookmark")
     public ResponseEntity<ArticleBookmarkListDTO.Response> getArticleBookmarkList(@AuthenticationPrincipal UserAuth auth) {
         ArticleBookmarkListDTO.Response response = memberService.getArticleBookmarkList(auth);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/preference")
+    public ResponseEntity<MemberPreferenceDTO.Response> getPreference(@AuthenticationPrincipal UserAuth auth) {
+        MemberPreferenceDTO.Response response = memberService.getPreference(auth);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

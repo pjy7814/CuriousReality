@@ -6,16 +6,22 @@ import com.ssafy.curious.domain.article.repository.ArticleInfoRepository;
 import com.ssafy.curious.domain.article.repository.BookmarkedArticleRepository;
 import com.ssafy.curious.domain.member.dto.ArticleBookmarkListDTO;
 import com.ssafy.curious.domain.member.dto.MemberDTO;
+import com.ssafy.curious.domain.member.dto.MemberPreferenceDTO;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
+import com.ssafy.curious.domain.model.ArticleCategory;
+import com.ssafy.curious.global.exception.ErrorCode;
+import com.ssafy.curious.global.exception.MemberNotFoundException;
+import com.ssafy.curious.global.utils.ArticleCategoryConverter;
 import com.ssafy.curious.security.dto.UserAuth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -43,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 북마크한 기사 리스트 가져오기
-     * @param dto
+     * @param auth
      * @return
      */
     @Override
@@ -76,6 +82,26 @@ public class MemberServiceImpl implements MemberService {
 
         return ArticleBookmarkListDTO.Response.builder()
                 .articleInfos(responseDtos)
+                .build();
+    }
+
+    /**
+     * 멤버 선호 카테고리 리스트 가져오기
+     * @param auth
+     * @return
+     */
+    @Override
+    public MemberPreferenceDTO.Response getPreference(UserAuth auth) {
+        String email = auth.getEmail();
+        MemberEntity member = memberRepository.findByEmail(email).orElseThrow(() -> new MemberNotFoundException(ErrorCode.NO_SUCH_MEMBER));
+
+        Map<String, Integer> cateproyPreference = new HashMap<>();
+        for (Map.Entry<ArticleCategory, Integer> entry : member.getCategoryPreference().entrySet()) {
+            cateproyPreference.put(ArticleCategoryConverter.convertKrCategory(entry.getKey()), entry.getValue());
+        }
+
+        return MemberPreferenceDTO.Response.builder()
+                .categoryPreference(cateproyPreference)
                 .build();
     }
 
