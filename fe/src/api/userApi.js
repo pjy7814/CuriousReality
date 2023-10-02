@@ -12,4 +12,13 @@ function login(memberData) {
   return axios.post(`${BASE_URL}/auth/login`, memberData);
 }
 
-export { registerMember, login };
+// Access Token 연장
+function getNewAccessToken() {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+  const accessToken = localStorage.getItem("userToken");
+  const email = localStorage.getItem("userEmail");
+
+  return axios.post(`${BASE_URL}/auth/access-token/get`, { accessToken, email });
+}
+
+export { registerMember, login, getNewAccessToken };

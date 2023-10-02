@@ -13,6 +13,7 @@
 <script>
 import ArticleItem from "@/components/article/ArticleItem.vue";
 import { getBookmarkList } from "@/api/articleApi";
+import { getNewAccessToken } from "@/api/userApi";
 export default {
   props: {
     title: Int16Array,
@@ -31,8 +32,27 @@ export default {
       try {
         const { data } = await getBookmarkList();
         this.articles = data.articleInfos;
-      } catch {
-        alert("저장된 기사 정보를 받아오는데 실패했습니다.");
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          console.log("AccessToken 연장");
+          try {
+            const { data } = await getNewAccessToken();
+            localStorage.setItem("userToken", data.accessToken);
+            this.getBookmarkList();
+          } catch (error) {
+            if (error.response && error.response.status === 701) {
+              alert("로그인이 만료되었습니다.");
+              localStorage.removeItem("userEmail");
+              localStorage.removeItem("userToken");
+              window.location.href = "/";
+            }
+          }
+        } else {
+          alert("로그인 후 이용해주세요.");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
+        }
       }
     },
   },

@@ -16,30 +16,29 @@ export default {
   name: "LoginView",
   data() {
     return {
-      email: '',
-      password: ''
-    }
+      email: "",
+      password: "",
+    };
   },
   methods: {
     async submitForm() {
       const memberData = {
         email: this.email,
-        password: this.password
+        password: this.password,
       };
       try {
         const { data } = await login(memberData);
         console.log(data);
         localStorage.setItem("userEmail", this.email);
         localStorage.setItem("userToken", data.accessToken);
-        localStorage.setItem("userRefresh", data.refreshToken);
 
-        window.location.href = '/';
+        window.location.href = "/";
       } catch (error) {
         alert("로그인에 실패했습니다. 다시 로그인해주세요.");
         console.error(error);
       }
     },
-  }
+  },
 };
 </script>
 
@@ -60,7 +59,7 @@ input {
   align-items: center;
   flex-shrink: 0;
   border-radius: 1.5rem;
-  border: 1px solid #A8A8A8;
+  border: 1px solid #a8a8a8;
 }
 
 .login-button {
