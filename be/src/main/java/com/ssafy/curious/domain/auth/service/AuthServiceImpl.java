@@ -87,7 +87,7 @@ public class AuthServiceImpl implements AuthService{
                 .name(dto.getName())
                 .contact(dto.getContact())
                 .birthday(dto.getBirthday())
-                .isSocial(dto.getIsSocial())
+                .isSocial(false)
                 .build();
         log.info("member : " + member.toString());
 
@@ -108,6 +108,7 @@ public class AuthServiceImpl implements AuthService{
         MemberEntity member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.NO_SUCH_MEMBER));
 
+        log.info(encoder.encode(member.getPassword()));
         // [1-2] 비밀번호 틀림
         if(!encoder.matches(dto.getPassword(),member.getPassword())){
             throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
@@ -117,7 +118,7 @@ public class AuthServiceImpl implements AuthService{
         String accessToken = jwtProvider.createAccessToken(email);
         String refreshToken = jwtProvider.createRefreshToken();
 
-//        log.info("====로그인 처리중 ====");
+        log.info("====로그인 처리중 ====");
 
         redisService.save(email, refreshToken);
         return LoginDTO.Response.builder()
