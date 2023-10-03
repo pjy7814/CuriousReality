@@ -2,7 +2,9 @@ package com.ssafy.curious.domain.search.controller;
 
 import com.ssafy.curious.domain.article.entity.ArticleInfoEntity;
 import com.ssafy.curious.domain.search.dto.SearchArticleResponse;
+import com.ssafy.curious.domain.search.entity.HotkeyEntity;
 import com.ssafy.curious.domain.search.entity.SearchEntity;
+import com.ssafy.curious.domain.search.service.HotkeyService;
 import com.ssafy.curious.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import java.util.List;
 @RestController
 public class SearchController {
     private final SearchService searchService;
+    private final HotkeyService hotkeyService;
     @GetMapping("/search")
     public ResponseEntity<List<SearchEntity>> search(@RequestParam(name = "category1", required = false) String category1,
                                                               @RequestParam(name = "category2", required = false) String category2,
@@ -42,6 +45,13 @@ public class SearchController {
 
 
 
+    }
+    @GetMapping("/hotkeyword")
+    public ResponseEntity<List<HotkeyEntity>> hotkey(@RequestParam(name = "category1", required = false) String category1){
+        List<HotkeyEntity> result = hotkeyService.getHotkey(category1);
+
+
+        return ResponseEntity.ok(result);
     }
 
 
