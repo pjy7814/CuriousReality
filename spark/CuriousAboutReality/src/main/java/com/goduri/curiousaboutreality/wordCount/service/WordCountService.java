@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,17 +17,19 @@ import org.apache.spark.ml.feature.IDFModel;
 import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.goduri.curiousaboutreality.exception.RealityException;
 import com.goduri.curiousaboutreality.sparkUtil.SparkSessionUtil;
 import com.goduri.curiousaboutreality.wordCount.dto.Article;
@@ -69,15 +72,17 @@ public class WordCountService {
 	 *  		로컬에서 테스트 할 때  : topics = "Reality_Test"
 	 *  	    깃에 push 할 때      : topics = "Reality"
 	 *
-	 *          컨슈머가 여러 개 등록이 될 시 컨슈머가 서로 토픽을 나눠 가지는 문제 발생,
-	 *          그래서 배포서버에 올리면 카프카에서 보낸 요청을 배포서버의 이 코드가 받지 못하는
-	 *          경우가 생김
+	 *          컨슈머가 여러 개 등록이 될 시, 컨슈머가 서로 토픽을 나눠 가지는 문제가 생깁니다.
+	 *          그래서 배포서버에 올리면 카프카에서 보낸 요청을
+	 *          로컬에서 돌린 코드와 배포서버에서 돌린 코드가 요청을 나눠 가져
+	 *          배포서버에 요청이 전달되지 않는 문제가 생깁니다!
 	 *
 	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
-	@KafkaListener(topics = "Reality_Test", groupId = ConsumerConfig.GROUP_ID_CONFIG)
+	@KafkaListener(topics = "Reality", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(String fileLocation) {
 		System.out.println("들어왔어!!!!!");
+		long startTime = System.nanoTime();
 		//String testFileLocation = "C:\\Users\\SSAFY\\Downloads\\20230901.json";
 
 		try{
@@ -85,6 +90,17 @@ public class WordCountService {
 		}
 		catch(RealityException e){
 			System.err.println(e.getMessage());
+		}
+		finally {
+			long endTime = System.nanoTime();
+			long durationInNano = (endTime - startTime);
+			long durationInMillis = durationInNano / 1_000_000;
+
+			int minutes = (int) ((durationInMillis / (1000*60)) % 60);
+			int seconds = (int) ((durationInMillis / 1000) % 60);
+
+			System.out.println("실행 시간: " + minutes + "분 " + seconds + "초");
+			System.out.println("========== end ==========");
 		}
 	}
 
@@ -120,7 +136,7 @@ public class WordCountService {
 
 			// 4. db에 결과를 저장한다.
 			addArticlesToDB(articles);
-			addTfidfToDB(categoryToTfIdf,articles.get(0).getCreated_at());
+			addTfidfToDB(categoryToTfIdf, articles.get(0).getCreated_at());
 		}
 		catch (MatchError e){
 			throw new RealityException("ES-01 : sparkSession init error");
@@ -149,7 +165,6 @@ public class WordCountService {
 					throw new RealityException("EF-00 : reader is not close");
 				}
 			}
-			System.out.println("========== end ==========");
 		}
 	}
 
@@ -204,18 +219,38 @@ public class WordCountService {
 		Collections.sort(tfidfs);
 
 		List<TF_IDF> most20 = new ArrayList<>();
+		Map<String, Double> wordMap = new HashMap<>();
 
-		int count = 0;
+		int count = 1;
 		for(TF_IDF tfidf : tfidfs){
-			if(count++ > 20)
+			if(count > 20)
 				break;
-			most20.add(tfidf);
+
+			double tfidfValue = tfidf.getTf_idf();
+			if(wordMap.containsKey(tfidf.getWord())){
+				if(tfidfValue > wordMap.get(tfidf.getWord())){
+					wordMap.replace(tfidf.getWord(), tfidfValue);
+				}
+			}
+			else{
+				wordMap.put(tfidf.getWord(), tfidf.getTf_idf());
+				count += 1;
+			}
 		}
+
+
+		for(Map.Entry<String,Double> entry : wordMap.entrySet()){
+			most20.add(new TF_IDF(entry.getKey(), entry.getValue()));
+		}
+
+
+		Collections.sort(most20);
 		return most20;
 	}
 
 	private List<TF_IDF> getTfidf(List<List<String>> wordsList) {
 		List<TF_IDF> tfidfs = new ArrayList<>();
+
 		SparkSessionUtil sparkUtil = SparkSessionUtil.getInstance();
 		Dataset<Row> dataset = sparkUtil.makeDataset(wordsList);
 
@@ -238,12 +273,10 @@ public class WordCountService {
 	}
 
 
-	@Transactional
 	public void addArticlesToDB(List<Article> articles) {
 		articleRepository.saveArticles(articles);
 	}
 
-	@Transactional
 	public void addTfidfToDB(Map<String, List<TF_IDF>> categoryToTfIdf, String created_at) {
 		tfidfRepository.saveCategoryPerTfidf(categoryToTfIdf, created_at);
 	}

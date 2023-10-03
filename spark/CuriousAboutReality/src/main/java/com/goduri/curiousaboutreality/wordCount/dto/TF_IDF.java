@@ -19,6 +19,10 @@ public class TF_IDF implements Comparable<TF_IDF>{
 		return String.format("%.2f", tf_idf);
 	}
 
+	public double getTf_idf(){
+		return tf_idf;
+	}
+
 	@Override
 	public int compareTo(@NotNull TF_IDF o) {
 		// 정렬 시 내림차순으로 정렬되도록

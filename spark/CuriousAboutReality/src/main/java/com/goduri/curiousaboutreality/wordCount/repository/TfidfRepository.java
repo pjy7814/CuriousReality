@@ -1,11 +1,8 @@
 package com.goduri.curiousaboutreality.wordCount.repository;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.goduri.curiousaboutreality.wordCount.dto.Article;
 
 import com.goduri.curiousaboutreality.wordCount.dto.TF_IDF;
 import com.mongodb.ConnectionString;
@@ -17,6 +14,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class TfidfRepository {
@@ -32,6 +30,7 @@ public class TfidfRepository {
 		this.collection = database.getCollection(collectionName);
 	}
 
+	@Transactional
 	public void saveCategoryPerTfidf(Map<String, List<TF_IDF>> categoryToTfidf, String created_at) {
 		List<Document> documents = new ArrayList<>();
 
