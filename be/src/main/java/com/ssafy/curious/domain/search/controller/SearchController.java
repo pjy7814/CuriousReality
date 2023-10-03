@@ -1,11 +1,14 @@
 package com.ssafy.curious.domain.search.controller;
 
 import com.ssafy.curious.domain.article.entity.ArticleInfoEntity;
+import com.ssafy.curious.domain.model.ArticleCategory;
+import com.ssafy.curious.domain.model.Keyword;
 import com.ssafy.curious.domain.search.dto.SearchArticleResponse;
 import com.ssafy.curious.domain.search.entity.HotkeyEntity;
 import com.ssafy.curious.domain.search.entity.SearchEntity;
 import com.ssafy.curious.domain.search.service.HotkeyService;
 import com.ssafy.curious.domain.search.service.SearchService;
+import com.ssafy.curious.global.utils.ArticleCategoryConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,8 +51,18 @@ public class SearchController {
     }
     @GetMapping("/hotkeyword")
     public ResponseEntity<List<HotkeyEntity>> hotkey(@RequestParam(name = "category1", required = false) String category1){
-        List<HotkeyEntity> result = hotkeyService.getHotkey(category1);
+        System.out.println("일단 여기 들어옴");
+        ArticleCategory articleCategory = ArticleCategoryConverter.convertEnumCategory(category1);
+        String koreanCategory = ArticleCategoryConverter.convertKrCategory(articleCategory);
 
+        System.out.println(koreanCategory);
+        List<HotkeyEntity> result = hotkeyService.getHotkey(koreanCategory);
+//        for(HotkeyEntity arti:result){
+//            System.out.println(arti.getTfidfResult().get(0).getKeyword());
+//        }
+        for(int i=0;i<20;i++){
+            System.out.println(result.get(0).getTfidfResult().get(i).getKeyword());
+        }
 
         return ResponseEntity.ok(result);
     }
