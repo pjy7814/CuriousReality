@@ -3,9 +3,9 @@ package com.ssafy.curious.domain.auth.controller;
 import com.ssafy.curious.domain.auth.dto.LoginDTO;
 import com.ssafy.curious.domain.auth.dto.LogoutDTO;
 import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
+import com.ssafy.curious.domain.auth.dto.ReissueDTO;
 import com.ssafy.curious.domain.auth.service.AuthService;
 import com.ssafy.curious.security.dto.UserAuth;
-import com.ssafy.curious.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,5 +39,18 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/reissue")
+    public ResponseEntity<ReissueDTO.Response> reissue(
+            ReissueDTO.Request dto){
+            ReissueDTO.Response response = authService.reissue(dto.getEmail(), dto.getAccessToken());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
+    // reissue test
+//    @PostMapping("/reissue")
+//    public ResponseEntity<ReissueDTO.Response> reissue(
+//            @AuthenticationPrincipal UserAuth auth){
+//        ReissueDTO.Response response = authService.reissue(auth.getEmail());
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 }

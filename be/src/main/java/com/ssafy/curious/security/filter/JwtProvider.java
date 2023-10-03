@@ -60,13 +60,16 @@ public class JwtProvider {
 
     // 토큰 기반 Authentication 구현체 생성
     public Authentication getAuthentication(String token){
+        log.info("넘어왔어!!!!");
 //        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmail(token));
         UserAuth userDetails = new UserAuth(getUserEmail(token));
-
+        log.info("user Details : {}", userDetails);
         List<String> roles = Arrays.asList("USER");
+        log.info("roles : {}", roles);
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role))
                 .collect(Collectors.toList());
+        log.info("authorities : {}", authorities);
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
@@ -78,21 +81,24 @@ public class JwtProvider {
     // 토큰에서 Claims 추출
     public Claims getClaims (String token){
         Claims claims;
-        try {
-            claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        } catch (SignatureException e){
-            throw new BadCredentialsException("잘못된 비밀키", e);
-        } catch (ExpiredJwtException e){
-            throw new BadCredentialsException("토큰 만료", e);
-        } catch (MalformedJwtException e){
-            throw new BadCredentialsException("유효하지 않은 토큰", e);
-        } catch (UnsupportedJwtException e){
-            throw new BadCredentialsException("지원되지 않는 형식의 토큰", e);
-        } catch (IllegalArgumentException e){
-            throw new BadCredentialsException("잘못된 입력값", e);
-        } catch (UsernameNotFoundException e){
-            throw new BadCredentialsException("찾을 수 없는 유저", e);
-        }
+        claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+//        Claims claims;
+//        try {
+//            claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+//        } catch (SignatureException e){
+//            throw new BadCredentialsException("잘못된 비밀키", e);
+//        } catch (ExpiredJwtException e){
+//            log.info("e: {}", e.getMessage());
+//            throw new BadCredentialsException("토큰 만료", e);
+//        } catch (MalformedJwtException e){
+//            throw new BadCredentialsException("유효하지 않은 토큰", e);
+//        } catch (UnsupportedJwtException e){
+//            throw new BadCredentialsException("지원되지 않는 형식의 토큰", e);
+//        } catch (IllegalArgumentException e){
+//            throw new BadCredentialsException("잘못된 입력값", e);
+//        } catch (UsernameNotFoundException e){
+//            throw new BadCredentialsException("찾을 수 없는 유저", e);
+//        }
         return claims;
     }
 
@@ -105,5 +111,6 @@ public class JwtProvider {
                 .setExpiration(refreshTokenExpiresAt)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+
     }
 }

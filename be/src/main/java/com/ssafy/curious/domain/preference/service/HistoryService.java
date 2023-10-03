@@ -33,7 +33,7 @@ public class HistoryService {
         Map<ArticlePress, Integer> pressPreference = member.getPressPreference();
 
         // pressPreference, categoryPreference 업데이트
-        ArticleCategory category = ArticleCategoryConverter.convertRawCategory(request.getCategory1Code());
+        ArticleCategory category = ArticleCategoryConverter.convertEnumCategory(request.getCategory1Code());
         ArticlePress company = ArticlePressConverter.convertRawPress(request.getCompanyCode());
 
         Integer categoryCount = categoryPreference.get(category);
@@ -44,7 +44,7 @@ public class HistoryService {
         // history 저장
         HistoryEntity historyEntity = HistoryEntity.builder()
                 .articleId(request.getArticleId())
-                .category1(ArticleCategoryConverter.convertRawCategory(request.getCategory1Code()))
+                .category1(ArticleCategoryConverter.convertEnumCategory(request.getCategory1Code()))
                 .company(ArticlePressConverter.convertRawPress(request.getCompanyCode()))
                 .member(member)
                 .build();
