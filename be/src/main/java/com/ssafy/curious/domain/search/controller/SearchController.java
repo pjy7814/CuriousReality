@@ -26,25 +26,19 @@ import java.util.List;
 public class SearchController {
     private final SearchService searchService;
     @GetMapping("/search")
-    public ResponseEntity<List<SearchArticleResponse>> search(@RequestParam(name = "category1", required = false) String category1,
+    public ResponseEntity<List<SearchEntity>> search(@RequestParam(name = "category1", required = false) String category1,
                                                               @RequestParam(name = "category2", required = false) String category2,
                                                               @RequestParam(name = "startDate", required = false) String startDate,
                                                               @RequestParam(name = "endDate", required = false) String endDate,
                                                               @RequestParam(name = "keyword", required = false) String keyword){
         //stringQuery니까 전부 string으로 받는다고 생각
-//        System.out.println("여기 실행됨1");
-//        System.out.println(category1);
-//        System.out.println(category2);
-//        System.out.println(startDate);
-//        System.out.println(endDate);
-//        System.out.println(keyword);
         List<SearchEntity> result = searchService.searchArticles(category1,category2,startDate,endDate, keyword);
         for(SearchEntity arti:result){
             System.out.println(arti.getTitle());
         }
-        List<SearchArticleResponse> searchArticleList = new ArrayList<>();
 
-        return ResponseEntity.ok(searchArticleList);
+
+        return ResponseEntity.ok(result);
 
 
 
