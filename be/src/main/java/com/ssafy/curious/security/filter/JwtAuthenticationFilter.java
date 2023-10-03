@@ -1,5 +1,6 @@
 package com.ssafy.curious.security.filter;
 
+import com.ssafy.curious.global.exception.CustomValidationException;
 import com.ssafy.curious.global.exception.ErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -44,34 +45,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰 가져오기
         String token = getToken(request);
-        log.info("========================== 토큰 있냐? : {}", token);
+        log.info("token info : {}", token);
+
         // 토큰 유효성 검증
         try {
             if (token != null && jwtProvider.isValidToken(token)){
-                log.info("토큰 있음");
                 Authentication auth = jwtProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                filterChain.doFilter(request,response);
             }
+            filterChain.doFilter(request,response);
         } catch (ExpiredJwtException e) {
-            setResponse(HttpStatus.UNAUTHORIZED, response, e);
-            log.info("만료된 토큰입니다");
+            setResponse(HttpStatus.UNAUTHORIZED, response, ErrorCode.TOKEN_EXPIRED);
         } catch (MalformedJwtException e) {
-            setResponse(HttpStatus.UNAUTHORIZED, response, e);
-            log.info("유효하지 않은 토큰입니다.");
+            setResponse(HttpStatus.UNAUTHORIZED, response, ErrorCode.TOKEN_MALFORMED);
         } catch (UnsupportedJwtException e) {
-            setResponse(HttpStatus.UNAUTHORIZED, response, e);
-            log.info("지원되지 않는 형식의 토큰입니다.");
+            setResponse(HttpStatus.UNAUTHORIZED, response, ErrorCode.TOKEN_INVALID);
         } catch (IllegalArgumentException e) {
-            setResponse(HttpStatus.UNAUTHORIZED, response, e);
-            log.info("잘못된 입력값입니다.");
+            setResponse(HttpStatus.UNAUTHORIZED, response, ErrorCode.INVALID_INPUT_VALUE);
         } catch (UsernameNotFoundException e) {
-            setResponse(HttpStatus.UNAUTHORIZED, response, e);
-            log.info("찾을 수 없는 유저입니다.");
+            setResponse(HttpStatus.UNAUTHORIZED, response, ErrorCode.MEMBER_NOT_FOUND);
         }
 
     }
-    public void setResponse(HttpStatus status, HttpServletResponse response, Throwable e) throws IOException {
+    public void setResponse(HttpStatus status, HttpServletResponse response, ErrorCode e) throws IOException {
         response.setStatus(status.value());
         response.setContentType("application/json; charset=UTF-8");
         response.getWriter().write(e.getMessage());
@@ -80,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 헤더에서 토큰 분리
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("token : {}", token);
+        log.info("get token from header: {}", token);
         if (token != null && token.startsWith(AUTHORIZATION_TYPE)) {
             return token.substring(AUTHORIZATION_TYPE.length());
         }

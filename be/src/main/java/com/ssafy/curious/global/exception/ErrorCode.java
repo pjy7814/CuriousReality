@@ -22,6 +22,7 @@ public enum ErrorCode {
     UNAUTHENTICATED_MEMBER(HttpStatus.UNAUTHORIZED,"A003","인증되지 않은 사용자입니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A004", "토큰이 만료되었습니다."),
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "A005", "유효하지 않은 토큰입니다."),
+    TOKEN_MALFORMED(HttpStatus.UNAUTHORIZED,"A006","잘못된 토큰 형식입니다."),
 
     // 유저 Member
     MEMBER_EMAIL_EXISTS(HttpStatus.BAD_REQUEST, "M001", "이미 존재하는 이메일입니다."),
