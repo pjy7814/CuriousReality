@@ -34,4 +34,15 @@ function getPreference() {
   return axios.get(`${BASE_URL}/member/preference`, { headers });
 }
 
-export { getBookmarkList, articleClippings, getPreference };
+// 사용자 Log 기록
+function addHistory(history) {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+
+  const userToken = localStorage.getItem("userToken");
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  return axios.post(`${BASE_URL}/history`, history, { headers });
+}
+
+export { getBookmarkList, articleClippings, getPreference, addHistory };

@@ -3,7 +3,7 @@
     <img :src="article.thumbnail" />
 
     <div class="body">
-      <a :href="article.originalUrl" class="title">{{ article.title }}</a>
+      <a :href="article.originalUrl" target="_blank" class="title" @click="addHistory">{{ article.title }}</a>
       <div class="created-at">{{ article.createdAt }}</div>
       <div class="article">{{ article.article }}</div>
     </div>
@@ -15,7 +15,10 @@
 </template>
 
 <script>
-import { articleClippings } from "@/api/articleApi";
+import { articleClippings, addHistory } from "@/api/articleApi";
+import mediaCompanyData from '@/assets/media_company_data.json';
+import categoryDataReverse from '@/assets/category_data_reverse.json';
+
 export default {
   name: "ArticleItem",
   props: {
@@ -38,6 +41,20 @@ export default {
         console.error("Error bookmarking article:", error);
       }
     },
+    async addHistory() {
+      try {
+        const history = {
+          "articleId": this.articleCopy.originalUrl,
+          "category1Code": categoryDataReverse[this.articleCopy.category1],
+          "category2Code": categoryDataReverse[this.articleCopy.category2],
+          "companyCode": mediaCompanyData[this.articleCopy.company]
+        }
+        const response = await addHistory(history);
+        console.log("Article log:", response.data, history);
+      } catch (error) {
+        console.error("Error logging article:", error);
+      }
+    }
   },
 };
 </script>
