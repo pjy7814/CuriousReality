@@ -153,8 +153,8 @@ public class InsertData {
     public class BookmarkListTest {
         @BeforeEach
         public void init() throws Exception {
-            deleteArticle();
-            createArticle();
+//            deleteArticle();
+//            createArticle();
             deleteBookmark();
         }
 
