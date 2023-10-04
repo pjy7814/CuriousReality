@@ -17,7 +17,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HotkeyService {
-    private final SearchRepository searchRepository;
+
     private final HotkeyRepository hotkeyRepository;
 //    public List<SearchEntity> searchArticles(String category1, String category2,String startDateStr, String endDateStr,String keyword){
 //        //SearchRepository를 사용하여 검색 데이터를 조회
@@ -32,8 +32,8 @@ public class HotkeyService {
 //        }
 //        return searchRepository.findByCategory1AndCategory2(category1,category2);
 //    }
-    public List<HotkeyEntity>getHotkey(String category1){
-        return hotkeyRepository.findCustomByCategory(category1);
+    public List<HotkeyEntity>getHotkey(String category1,String category2){
+        return hotkeyRepository.findCustomByCategory(category1,category2);
     }
 
 

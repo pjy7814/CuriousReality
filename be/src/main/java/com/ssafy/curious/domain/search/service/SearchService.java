@@ -38,7 +38,7 @@ public class SearchService {
         if(startDate!=null && endDate!=null){
             return searchRepository.findCustomByCategoryAndCreatedAtAndKeyword(category1, category2, startDate, endDate,keyword);
         }
-        return searchRepository.findByCategory1AndCategory2(category1,category2);
+        return searchRepository.findCustomByCategoryAndKeyword(category1,category2,keyword);
     }
 
 

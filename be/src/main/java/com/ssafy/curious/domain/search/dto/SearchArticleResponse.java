@@ -14,11 +14,10 @@ import java.util.List;
 @AllArgsConstructor // 모든 매개변수를 가지는 생성자
 @NoArgsConstructor // 아무 매개변수가 없는 기본 생성자 추가
 public class SearchArticleResponse {
+    private String originalUrl;
     private String category1;
     private String category2;
     private String title;
-    private LocalDateTime createdAt;
     private String thumbnail;
-    private String article;
     private List<Keyword> keywords;
 }

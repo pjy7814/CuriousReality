@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface HotkeyRepository extends MongoRepository<HotkeyEntity,String> {
 
-    @Query("{ 'category1' : ?0}")
-    List<HotkeyEntity> findCustomByCategory(String category1);
+    @Query("{ 'category1' : ?0, 'category2' : ?1 }")
+    List<HotkeyEntity> findCustomByCategory(String category1,String category2);
 
 
 }
