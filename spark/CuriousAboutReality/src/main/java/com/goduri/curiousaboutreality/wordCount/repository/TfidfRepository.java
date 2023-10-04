@@ -1,5 +1,6 @@
 package com.goduri.curiousaboutreality.wordCount.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class TfidfRepository {
 	}
 
 	@Transactional
-	public void saveCategoryPerTfidf(Map<String, List<TF_IDF>> categoryToTfidf, String created_at) {
+	public void saveCategoryPerTfidf(Map<String, List<TF_IDF>> categoryToTfidf, LocalDateTime created_at) {
 		List<Document> documents = new ArrayList<>();
 
 		for (Map.Entry<String,List<TF_IDF>> entry : categoryToTfidf.entrySet()) {

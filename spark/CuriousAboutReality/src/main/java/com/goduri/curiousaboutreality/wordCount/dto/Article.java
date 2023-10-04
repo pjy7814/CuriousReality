@@ -1,16 +1,15 @@
 package com.goduri.curiousaboutreality.wordCount.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.spark.sql.Row;
 
 public class Article implements Serializable {
 	private String category1;
 	private String category2;
 	private String title;
-	private String created_at;
+	private LocalDateTime created_at;
 	private String original_url;
 	private String thumbnail;
 	private String company;
@@ -37,7 +36,7 @@ public class Article implements Serializable {
 		return title;
 	}
 
-	public String getCreated_at() {
+	public LocalDateTime getCreated_at() {
 		return created_at;
 	}
 
@@ -75,7 +74,7 @@ public class Article implements Serializable {
 		this.title = title;
 	}
 
-	public void setCreated_at(String created_at) {
+	public void setCreated_at(LocalDateTime created_at) {
 		this.created_at = created_at;
 	}
 
@@ -100,40 +99,4 @@ public class Article implements Serializable {
 
 	}
 
-	//
-	// @Override
-	// public int length() {
-	// 	return 10;
-	// }
-	//
-	// @Override
-	// public Object get(int i) { // 1부터 시작한다 가정
-	// 	switch (i){
-	// 		case 1:
-	// 			return category1;
-	// 		case 2:
-	// 			return category2;
-	// 		case 3:
-	// 			return title;
-	// 		case 4:
-	// 			return created_at;
-	// 		case 5:
-	// 			return original_url;
-	// 		case 6:
-	// 			return thumbnail;
-	// 		case 7:
-	// 			return company;
-	// 		case 8:
-	// 			return article;
-	// 		case 9:
-	// 			return preprocessed;
-	// 		default:
-	// 			return null;
-	// 	}
-	// }
-	//
-	// @Override
-	// public Row copy() {
-	// 	return this;
-	// }
 }

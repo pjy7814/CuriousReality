@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -277,7 +278,7 @@ public class WordCountService {
 		articleRepository.saveArticles(articles);
 	}
 
-	public void addTfidfToDB(Map<String, List<TF_IDF>> categoryToTfIdf, String created_at) {
+	public void addTfidfToDB(Map<String, List<TF_IDF>> categoryToTfIdf, LocalDateTime created_at) {
 		tfidfRepository.saveCategoryPerTfidf(categoryToTfIdf, created_at);
 	}
 }
