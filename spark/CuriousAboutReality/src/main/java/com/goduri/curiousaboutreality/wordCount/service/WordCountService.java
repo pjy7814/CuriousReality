@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -80,7 +81,7 @@ public class WordCountService {
 	 *
 	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
-	@KafkaListener(topics = "Reality", groupId = ConsumerConfig.GROUP_ID_CONFIG)
+	@KafkaListener(topics = "Reality_Test", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(String fileLocation) {
 		System.out.println("들어왔어!!!!!");
 		long startTime = System.nanoTime();
@@ -137,7 +138,7 @@ public class WordCountService {
 
 			// 4. db에 결과를 저장한다.
 			addArticlesToDB(articles);
-			addTfidfToDB(categoryToTfIdf, articles.get(0).getCreated_at());
+			addTfidfToDB(categoryToTfIdf, articles.get(0).getCreated_at_LocalDateTime());
 		}
 		catch (MatchError e){
 			throw new RealityException("ES-01 : sparkSession init error");
@@ -151,10 +152,10 @@ public class WordCountService {
 		catch (FileNotFoundException e) {
 			throw new RealityException("EF-01 : file path is not available");
 		}
-		catch (IOException e) {
-			throw new RealityException("EF-02 : file io exception");
+		catch (JacksonException e) {
+			throw new RealityException("EF-02 : jackson exception");
 		}
-		catch (ParseException e) {
+		catch (ParseException | IOException e) {
 			throw new RealityException("EF-03 : json parse error");
 		}
 		finally {

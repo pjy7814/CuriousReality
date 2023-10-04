@@ -1,5 +1,7 @@
 package com.goduri.curiousaboutreality.wordCount.repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class ArticleRepository {
 				.append("category1", article.getCategory1())
 				.append("category2", article.getCategory2())
 				.append("title", article.getTitle())
-				.append("created_at", article.getCreated_at())
+				.append("created_at", article.getCreated_at_LocalDateTime())
 				.append("thumbnail", article.getThumbnail())
 				.append("company", article.getCompany())
 				.append("article", article.getArticle())
