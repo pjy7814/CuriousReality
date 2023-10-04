@@ -1,9 +1,6 @@
 package com.ssafy.curious.domain.auth.service;
 
-import com.ssafy.curious.domain.auth.dto.LoginDTO;
-import com.ssafy.curious.domain.auth.dto.LogoutDTO;
-import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
-import com.ssafy.curious.domain.auth.dto.ReissueDTO;
+import com.ssafy.curious.domain.auth.dto.*;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
@@ -153,24 +150,46 @@ public class AuthServiceImpl implements AuthService{
             jwtUtil.validateToken(refreshToken);
         }
 
-        // 유효시간 확인
-//        Long expiration = jwtUtil.getExpiration(refreshToken);
-//        log.info("time left until expiration : {}", expiration);
-//        if (expiration > 0){
-//            // 유효성 검사
-//            try{
-//                jwtUtil.validateToken(refreshToken);
-//            } catch (Exception e){
-//                log.info("exception : {}", e);
-//            }
-//        }
-
         // 유효 시 access token 재발급
         String newAccessToken = jwtProvider.createAccessToken(email);
 
         return ReissueDTO.Response.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Override
+    public MemberDeleteDTO.Response delete(UserAuth auth, MemberDeleteDTO.Request dto){
+        log.info("회원 탈퇴");
+        String email = auth.getEmail();
+        String password = dto.getPassword();
+        MemberEntity member = null;
+
+        // [1] 유효성 검사
+        // [1-1] 회원 여부 확인
+        log.info("회원 여부 확인 시작");
+        if (memberRepository.findMemberByEmail(email) == null){
+            log.info("회원 없음");
+            throw new CustomValidationException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        else {
+            member = memberRepository.findMemberByEmail(email);
+        }
+        log.info("회원 있음 {}",member.getEmail());
+
+        log.info("비밀번호 일치 확인 시작");
+        // [1-2] 비밀번호 일치 확인
+        if (!encoder.matches(password,member.getPassword())){
+            log.info("비밀번호 불일치");
+            throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+        log.info("비밀번호 일치 확인 완료");
+
+        memberRepository.delete(member);
+
+        return MemberDeleteDTO.Response.builder()
+                .success(true)
                 .build();
     }
 }
