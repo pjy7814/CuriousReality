@@ -77,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
             throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
         }
         // 새 비밀번호가 있는 경우
-        if (dto.getNewPassword() != null){
+        if (dto.getNewPassword() != null && dto.getCheckNewPassword() != null){
             // [2-2] 새 비밀번호 형식 검사
             if (!RegexUtil.checkPasswordRegex(dto.getNewPassword())){
                 throw new CustomValidationException(ErrorCode.INVALID_PASSWORD_FORMAT);
@@ -86,11 +86,13 @@ public class MemberServiceImpl implements MemberService {
             if (!Objects.equals(dto.getNewPassword(), dto.getCheckNewPassword())){
                 throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
             }
-            password = dto.getNewPassword();
+            password = encoder.encode(dto.getNewPassword());
         }
         else {
-            password = dto.getPassword();
+            password = encoder.encode(dto.getPassword());
         }
+
+        log.info("password: {}", password);
 
 
         member.updateProfile(password, dto.getContact());
