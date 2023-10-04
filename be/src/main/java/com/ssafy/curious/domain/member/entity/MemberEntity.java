@@ -7,6 +7,9 @@ import com.ssafy.curious.domain.model.ArticlePress;
 import com.ssafy.curious.global.entity.CUDEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -18,7 +21,11 @@ import java.util.Map;
 @Entity
 @Getter
 @Table(name = "member")
+@SQLDelete(sql = "UPDATE member SET deleted_at = now() WHERE member_id = ?")
+@Where(clause = "deleted_at is null")
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class MemberEntity extends CUDEntity {
 
     @Id
