@@ -43,7 +43,7 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
+    @PutMapping("/delete")
     public ResponseEntity<MemberDeleteDTO.Response> delete(
             @AuthenticationPrincipal UserAuth auth,
             @RequestBody MemberDeleteDTO.Request dto){

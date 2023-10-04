@@ -10,6 +10,7 @@ public class MemberDTO {
     @Getter
     @Builder
     public static class Response {
+        private String email;
         private String name;
         private LocalDate birthday;
         private String contact; // 000-0000-0000
