@@ -16,6 +16,10 @@
             <div class="user-body-Info-data">{{ userInfo.name }}</div>
           </div>
           <div class="user-body-data">
+            <div class="user-body-Info-title">이메일</div>
+            <div class="user-body-Info-data">{{ userInfo.email }}</div>
+          </div>
+          <div class="user-body-data">
             <div class="user-body-Info-title">생년월일</div>
             <div class="user-body-Info-data">{{ userInfo.birthday }}</div>
           </div>
