@@ -81,7 +81,7 @@ public class WordCountService {
 	 *
 	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
-	@KafkaListener(topics = "Reality", groupId = ConsumerConfig.GROUP_ID_CONFIG)
+	@KafkaListener(topics = "Reality_Test", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(String fileLocation) {
 		System.out.println("들어왔어!!!!!");
 		long startTime = System.nanoTime();

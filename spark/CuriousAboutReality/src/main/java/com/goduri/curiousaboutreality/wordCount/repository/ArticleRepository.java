@@ -47,7 +47,6 @@ public class ArticleRepository {
 				);
 			}
 
-
 			documents.add(new Document()
 				.append("original_url", article.getOriginal_url())
 				.append("category1", article.getCategory1())
@@ -57,6 +56,7 @@ public class ArticleRepository {
 				.append("thumbnail", article.getThumbnail())
 				.append("company", article.getCompany())
 				.append("article", article.getArticle())
+				.append("preprocessed", article.getPreprocessed())
 				.append("keywords", keywords)
 			);
 
