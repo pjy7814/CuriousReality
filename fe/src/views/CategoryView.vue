@@ -5,7 +5,7 @@
     </div>
 
     <div class="content-1">
-      <!-- 워드클라우드 -->
+      <!-- 워드클라우드 + 실시간 키워드  -->
       <div class="word-cloud">
         <vue-word-cloud :words="words">
           <template #default="{ text, weight }">
@@ -15,7 +15,7 @@
           </template>
         </vue-word-cloud>
       </div>
-      <div class="content-item2">
+       <div class="content-item2">
         <KeywordComponent />
       </div>
     </div>
@@ -104,6 +104,11 @@ export default {
 .word-cloud {
   width: 60%;
   height: 400px;
+  margin: 50px;
+}
+.content-item2 {
+  width: 15%;
+  height: 300px;
   margin: 50px;
 }
 
