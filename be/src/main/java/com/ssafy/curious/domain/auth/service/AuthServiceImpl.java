@@ -76,7 +76,8 @@ public class AuthServiceImpl implements AuthService{
         log.info("password match test done");
 
         String password = encoder.encode(dto.getPassword());
-        log.info("password : {}, encoded : {}", dto.getPassword(), password);
+//        log.info("password : {}, encoded : {}", dto.getPassword(), password);
+        List<Preference> preferenceList = dto.getPreferenceList();
 
         MemberEntity member = MemberEntity.builder()
                 .email(dto.getEmail())
@@ -136,12 +137,18 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ReissueDTO.Response reissue(String email, String accessToken){
+
+        // [1] 유저 검사
+        if (memberRepository.findMemberByEmail(email) == null){
+            throw new CustomValidationException(ErrorCode.UNAUTHENTICATED_MEMBER);
+        }
+
         log.info("email : {}, accessToken: {} ", email, accessToken);
         log.info("email : {}", email);
 //         refresh token redis 에서 꺼내오기
         String  refreshToken = redisService.getValues(email);
 
-        // 토큰 만료 여부 확인
+        // [2] 토큰 만료 여부 확인
         try {
             log.info("access Token 만료 여부");
             jwtUtil.validateToken(accessToken);
