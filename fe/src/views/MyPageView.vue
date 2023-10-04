@@ -8,7 +8,7 @@
       <div class="user-info">
         <div class="user-body-data">
           <div class="title">내 정보</div>
-          <img class="arrow" src="@/assets/right_button.png" @click="routeMyPage" />
+          <img class="arrow" src="@/assets/right_button.png" @click="routeEditPage"/>
         </div>
         <div class="user-body">
           <div class="user-body-data">
@@ -85,15 +85,25 @@ export default {
     };
   },
   methods: {
-    routeMyPage() {
-      this.$router.push({ name: "EditProfile" });
-    },
+    routeEditPage() {
+    this.$router.push({ 
+      name: "EditProfile"
+    });
+  },
     async getPreference() {
       try {
         const { data } = await getPreference();
         this.data.labels = Object.keys(data.categoryPreference);
         this.data.datasets[0].data = Object.values(data.categoryPreference);
+        console.log(data);
       } catch (error) {
+        console.error(error);
+      }
+      try{
+        const {data} = await getProfile();
+        console.log(data);
+        this.userInfo = data;
+      } catch(error) {
         console.error(error);
       }
     },

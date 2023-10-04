@@ -6,6 +6,17 @@ function registerMember(memberData) {
   return axios.post(`${BASE_URL}/auth/register`, memberData);
 }
 
+// 회원정보 수정
+function editUserProfile(memberData) {
+  console.log(memberData);
+  const BASE_URL = process.env.VUE_APP_API_URL;
+  const userToken = localStorage.getItem("userToken");
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  return axios.put(`${BASE_URL}/member/profile/edit`, memberData, { headers });
+}
+
 // 로그인
 function login(memberData) {
   const BASE_URL = process.env.VUE_APP_API_URL;
@@ -21,6 +32,7 @@ function getNewAccessToken() {
   return axios.post(`${BASE_URL}/auth/access-token/get`, { accessToken, email });
 }
 
+// 프로필 가져오기
 function getProfile() {
   const BASE_URL = process.env.VUE_APP_API_URL;
   const userToken = localStorage.getItem("userToken");
@@ -30,4 +42,4 @@ function getProfile() {
   return axios.get(`${BASE_URL}/member/profile`, { headers });
 }
 
-export { registerMember, login, getNewAccessToken, getProfile };
+export { registerMember, login, getNewAccessToken, getProfile, editUserProfile };

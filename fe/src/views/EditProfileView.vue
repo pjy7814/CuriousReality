@@ -3,55 +3,28 @@
     <div class="head">회원정보 수정</div>
     <form @submit.prevent="submitForm">
       <div class="input-body">
-        <div class="input-head"><b>이메일</b></div>
-        <div class="input-email">
-          <input type="text" placeholder="EMAIL" v-model="email" />
-        </div>
-        <div class="alert-message" v-show="!isEmailValid && email !== ''">
-          올바른 이메일 형식이 아닙니다.
-        </div>
-      </div>
-      <div class="input-body">
         <div class="input-head"><b>비밀번호</b></div>
-        <input type="password" placeholder="PASSWORD" v-model="password" />
+        <input type="password" placeholder="PASSWORD" v-model="userInfo.password" />
         <div class="alert-message" v-show="!isPasswordValid && password !== ''">
           8, 20자 사이의 영어, 숫자, 특수문자를 사용하여 생성해주세요.
         </div>
       </div>
       <div class="input-body">
         <div class="input-head"><b>비밀번호 확인</b></div>
-        <input type="password" placeholder="PASSWORD" v-model="passwordCheck" />
+        <input type="password" placeholder="PASSWORD" v-model="userInfo.passwordCheck" />
         <div class="alert-message" v-show="!isPasswordCheckValid && passwordCheck !== ''">
           비밀번호가 일치하지 않습니다.
         </div>
       </div>
       <div class="input-body">
         <div class="input-head"><b>이름</b></div>
-        <input type="text" placeholder="NAME" v-model="name" />
-        <div class="alert-message" v-show="!isNameValid && name !== ''">
-          올바른 이름 형식이 아닙니다.
-        </div>
-      </div>
-      <div class="input-body">
-        <div class="input-head"><b>생년월일</b></div>
-        <input type="date" placeholder="BIRTH" v-model="birthday" />
-        <div class="alert-message" v-show="!isBirthdayValid">생년월일을 입력해주세요</div>
+        <input type="text" placeholder="NAME" v-model="userInfo.name" disabled/>
       </div>
       <div class="input-body">
         <div class="input-head"><b>전화번호</b></div>
-        <input type="text" placeholder="CONTACT" v-model="contact" />
+        <input type="text" placeholder="CONTACT" v-model="userInfo.contact" />
         <div class="alert-message" v-show="!isContactValid && contact !== ''">
           올바른 전화번호 형식이 아닙니다. 010-0000-0000
-        </div>
-      </div>
-      <div class="input-body">
-        <div class="input-head"><b>관심분야</b></div>
-        <div class="checkbox-interest">
-          <input type="checkbox" v-model="preferenceCategory" value="politics" />정치
-          <input type="checkbox" v-model="preferenceCategory" value="economy" />경제
-          <input type="checkbox" v-model="preferenceCategory" value="society" />사회
-          <input type="checkbox" v-model="preferenceCategory" value="itscience" />IT/과학
-          <input type="checkbox" v-model="preferenceCategory" value="world" />세계
         </div>
       </div>
       <button :disabled="!isValidSignUp" type="submit" class="signup-button">수정완료</button>
@@ -60,94 +33,70 @@
 </template>
 
 <script>
-import { registerMember } from "@/api/userApi";
-import { validateEmail, validateContact, validateName, validatePassword } from "@/utils/validation"; // 유효성 검사
+import { editUserProfile, getProfile } from "@/api/userApi";
+import {validateContact, validatePassword } from "@/utils/validation"; // 유효성 검사
 export default {
-  name: "SignupView",
+  name: "EditProfileView",
   data() {
     return {
-      email: "",
-      password: "",
-      passwordCheck: "",
-      name: "",
-      birthday: "",
-      contact: "",
-      preferenceCategory: [],
+      userInfo: {}
     };
   },
   computed: {
     // 유효성 검사
-    isEmailValid() {
-      return validateEmail(this.email);
+    isContactValid() {
+      return validateContact(this.userInfo.contact);
     },
     isPasswordValid() {
-      return validatePassword(this.password);
-    },
-    isNameValid() {
-      return validateName(this.name);
-    },
-    isContactValid() {
-      return validateContact(this.contact);
+      return validatePassword(this.userInfo.password);
     },
     isPasswordCheckValid() {
-      return this.password === this.passwordCheck;
-    },
-    isBirthdayValid() {
-      return !!this.birthday;
+      return this.userInfo.password === this.userInfo.passwordCheck;
     },
     isValidSignUp() {
       if (
-        this.email == "" ||
-        this.password == "" ||
-        this.passwordCheck == "" ||
-        this.name == "" ||
-        this.birthday == "" ||
-        this.contact == ""
+        this.userInfo.password == "" ||
+        this.userInfo.passwordCheck == "" ||
+        this.userInfo.contact == ""
       )
         return false;
       return (
-        this.isEmailValid &&
         this.isPasswordValid &&
-        this.isNameValid &&
         this.isContactValid &&
-        this.isPasswordCheckValid &&
-        this.isBirthdayValid
+        this.isPasswordCheckValid
       );
     },
+  },
+  created() {
+    this.getProfile();
   },
   methods: {
     async submitForm() {
       if (this.isValidSignUp) {
         const memberData = {
-          email: this.email,
-          password: this.password,
-          passwordCheck: this.passwordCheck,
-          name: this.name,
-          birthday: this.birthday,
-          contact: this.contact,
-          isSocial: false,
-          preferenceCategory: this.preferenceCategory,
+          password: this.userInfo.password,
+          contact: this.userInfo.contact,
         };
         try {
-          await registerMember(memberData);
-          alert(`${this.name}님이 가입되었습니다`);
+          await editUserProfile(memberData);
+          alert(`수정되었습니다`);
 
-          window.location.href = "/login";
+          window.location.href = "/";
         } catch (error) {
-          alert("회원가입에 실패했습니다.");
+          alert("수정에 실패했습니다.");
           console.error(error.message);
         }
       }
     },
-    initSignUp() {
-      this.email = "";
-      this.password = "";
-      this.passwordCheck = "";
-      this.name = "";
-      this.birthday = "";
-      this.contact = "";
-      this.preference_category = [];
-    },
+    async getProfile() {
+      try{
+        const {data} = await getProfile();
+        console.log(data);
+        this.userInfo = data;
+      } catch(error) {
+        console.error(error);
+      }
+    }
   },
 };
 </script>
