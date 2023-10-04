@@ -137,12 +137,18 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ReissueDTO.Response reissue(String email, String accessToken){
+
+        // [1] 유저 검사
+        if (memberRepository.findMemberByEmail(email) == null){
+            throw new CustomValidationException(ErrorCode.UNAUTHENTICATED_MEMBER);
+        }
+
         log.info("email : {}, accessToken: {} ", email, accessToken);
         log.info("email : {}", email);
 //         refresh token redis 에서 꺼내오기
         String  refreshToken = redisService.getValues(email);
 
-        // 토큰 만료 여부 확인
+        // [2] 토큰 만료 여부 확인
         try {
             log.info("access Token 만료 여부");
             jwtUtil.validateToken(accessToken);
