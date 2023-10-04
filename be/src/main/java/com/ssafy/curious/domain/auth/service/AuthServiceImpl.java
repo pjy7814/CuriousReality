@@ -76,7 +76,8 @@ public class AuthServiceImpl implements AuthService{
         log.info("password match test done");
 
         String password = encoder.encode(dto.getPassword());
-        log.info("password : {}, encoded : {}", dto.getPassword(), password);
+//        log.info("password : {}, encoded : {}", dto.getPassword(), password);
+        List<Preference> preferenceList = dto.getPreferenceList();
 
         MemberEntity member = MemberEntity.builder()
                 .email(dto.getEmail())
