@@ -48,6 +48,7 @@ public class MemberServiceImpl implements MemberService {
         MemberEntity member = memberRepository.findMemberByEmail(email);
 
         return MemberDTO.Response.builder()
+                .email(member.getEmail())
                 .name(member.getName())
                 .contact(member.getContact())
                 .categoryPreference(member.getCategoryPreference())

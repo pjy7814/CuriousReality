@@ -1,9 +1,6 @@
 package com.ssafy.curious.domain.auth.service;
 
-import com.ssafy.curious.domain.auth.dto.LoginDTO;
-import com.ssafy.curious.domain.auth.dto.LogoutDTO;
-import com.ssafy.curious.domain.auth.dto.MemberRegisterDTO;
-import com.ssafy.curious.domain.auth.dto.ReissueDTO;
+import com.ssafy.curious.domain.auth.dto.*;
 import com.ssafy.curious.domain.member.entity.MemberEntity;
 import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.global.exception.*;
@@ -79,7 +76,8 @@ public class AuthServiceImpl implements AuthService{
         log.info("password match test done");
 
         String password = encoder.encode(dto.getPassword());
-        log.info("password : {}, encoded : {}", dto.getPassword(), password);
+//        log.info("password : {}, encoded : {}", dto.getPassword(), password);
+        List<Preference> preferenceList = dto.getPreferenceList();
 
         MemberEntity member = MemberEntity.builder()
                 .email(dto.getEmail())
@@ -139,12 +137,18 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ReissueDTO.Response reissue(String email, String accessToken){
+
+        // [1] 유저 검사
+        if (memberRepository.findMemberByEmail(email) == null){
+            throw new CustomValidationException(ErrorCode.UNAUTHENTICATED_MEMBER);
+        }
+
         log.info("email : {}, accessToken: {} ", email, accessToken);
         log.info("email : {}", email);
 //         refresh token redis 에서 꺼내오기
         String  refreshToken = redisService.getValues(email);
 
-        // 토큰 만료 여부 확인
+        // [2] 토큰 만료 여부 확인
         try {
             log.info("access Token 만료 여부");
             jwtUtil.validateToken(accessToken);
@@ -153,24 +157,46 @@ public class AuthServiceImpl implements AuthService{
             jwtUtil.validateToken(refreshToken);
         }
 
-        // 유효시간 확인
-//        Long expiration = jwtUtil.getExpiration(refreshToken);
-//        log.info("time left until expiration : {}", expiration);
-//        if (expiration > 0){
-//            // 유효성 검사
-//            try{
-//                jwtUtil.validateToken(refreshToken);
-//            } catch (Exception e){
-//                log.info("exception : {}", e);
-//            }
-//        }
-
         // 유효 시 access token 재발급
         String newAccessToken = jwtProvider.createAccessToken(email);
 
         return ReissueDTO.Response.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Override
+    public MemberDeleteDTO.Response delete(UserAuth auth, MemberDeleteDTO.Request dto){
+        log.info("회원 탈퇴");
+        String email = auth.getEmail();
+        String password = dto.getPassword();
+        MemberEntity member = null;
+
+        // [1] 유효성 검사
+        // [1-1] 회원 여부 확인
+        log.info("회원 여부 확인 시작");
+        if (memberRepository.findMemberByEmail(email) == null){
+            log.info("회원 없음");
+            throw new CustomValidationException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        else {
+            member = memberRepository.findMemberByEmail(email);
+        }
+        log.info("회원 있음 {}",member.getEmail());
+
+        log.info("비밀번호 일치 확인 시작");
+        // [1-2] 비밀번호 일치 확인
+        if (!encoder.matches(password,member.getPassword())){
+            log.info("비밀번호 불일치");
+            throw new CustomValidationException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+        log.info("비밀번호 일치 확인 완료");
+
+        memberRepository.delete(member);
+
+        return MemberDeleteDTO.Response.builder()
+                .success(true)
                 .build();
     }
 }
