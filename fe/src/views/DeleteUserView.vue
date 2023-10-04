@@ -59,7 +59,7 @@ export default {
             }
         },
         checkLogin() {
-            const email = localStorage.getItem("email");
+            const email = localStorage.getItem("userEmail");
             if (!email) {
                 alert("로그인 후 이용해주세요!");
                 window.location.href = "/";
