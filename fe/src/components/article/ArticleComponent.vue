@@ -49,9 +49,9 @@ export default {
           }
         } else {
           alert("로그인 후 이용해주세요.");
-          localStorage.removeItem("userEmail");
-          localStorage.removeItem("userToken");
-          window.location.href = "/";
+          // localStorage.removeItem("userEmail");
+          // localStorage.removeItem("userToken");
+          // window.location.href = "/";
         }
       }
     },

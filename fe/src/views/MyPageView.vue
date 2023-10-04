@@ -16,8 +16,8 @@
             <div class="user-body-Info-data">{{ userInfo.name }}</div>
           </div>
           <div class="user-body-data">
-            <div class="user-body-Info-title">Email</div>
-            <div class="user-body-Info-data">{{ userInfo.email }}</div>
+            <div class="user-body-Info-title">생년월일</div>
+            <div class="user-body-Info-data">{{ userInfo.birthday }}</div>
           </div>
           <div class="user-body-data">
             <div class="user-body-Info-title">전화번호</div>
@@ -38,6 +38,7 @@ import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "vue-chartjs";
 import { getPreference } from "@/api/articleApi";
+import { getProfile } from "@/api/userApi";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -79,13 +80,7 @@ export default {
           },
         },
       },
-      userInfo: {
-        email: "ssafy@naver.com",
-        name: "김싸피",
-        nickname: "hihello",
-        birthday: "2023-07-19T03:46:22.904",
-        contact: "010-0101-1111",
-      },
+      userInfo: {},
       articles: [],
     };
   },
@@ -96,17 +91,25 @@ export default {
     async getPreference() {
       try {
         const { data } = await getPreference();
-        console.log(data.categoryPreference);
         this.data.labels = Object.keys(data.categoryPreference);
         this.data.datasets[0].data = Object.values(data.categoryPreference);
       } catch (error) {
-        alert("선호도를 가져오는데 실패했습니다.");
         console.error(error);
       }
     },
+    async getProfile() {
+      try{
+        const {data} = await getProfile();
+        console.log(data);
+        this.userInfo = data;
+      } catch(error) {
+        console.error(error);
+      }
+    }
   },
   created() {
     this.getPreference();
+    this.getProfile();
   },
 };
 </script>

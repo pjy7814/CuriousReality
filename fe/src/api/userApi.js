@@ -21,4 +21,13 @@ function getNewAccessToken() {
   return axios.post(`${BASE_URL}/auth/access-token/get`, { accessToken, email });
 }
 
-export { registerMember, login, getNewAccessToken };
+function getProfile() {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+  const userToken = localStorage.getItem("userToken");
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  return axios.get(`${BASE_URL}/member/profile`, { headers });
+}
+
+export { registerMember, login, getNewAccessToken, getProfile };

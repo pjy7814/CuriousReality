@@ -18,7 +18,7 @@
           </template>
         </vue-word-cloud>
       </div>
-      <div class="content-item2">
+       <div class="content-item2">
         <KeywordComponent />
       </div>
     </div>
@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import { useRouter } from "vue-router";
 import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import VueWordCloud from "vuewordcloud";
+
 export default {
   name: "HomeView",
   components: {
@@ -42,6 +42,7 @@ export default {
     ArticleComponent,
     [VueWordCloud.name]: VueWordCloud,
   },
+
   setup() {
     const router = useRouter();
 
@@ -51,12 +52,8 @@ export default {
         query: { keyword: word }, // 키워드 쿼리
       });
     }
-    const range = ref({
-      start: new Date(2020, 0, 6),
-      end: new Date(2020, 0, 10),
-    });
 
-    return { range, onWordClick };
+    return {onWordClick };
   },
   data() {
     return {
@@ -66,6 +63,7 @@ export default {
         ["남현실나이", 7],
         ["남현실충격발언", 3],
       ],
+      date: null,
     };
   },
 };
