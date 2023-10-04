@@ -17,5 +17,6 @@ public interface SearchRepository extends MongoRepository<SearchEntity,String> {
 
     @Query("{ 'category1' : ?0, 'category2' : ?1, 'createdAt' : { $gte: ?2, $lte: ?3 } }")
     List<SearchEntity> findCustomByCategoryAndCreatedAt(String category1, String category2, LocalDateTime startDate, LocalDateTime endDate);
-    List<SearchEntity> findByCategory1AndCategory2(String category1, String category2);
+    @Query("{ 'category1' : ?0, 'category2' : ?1, 'keywords': { $elemMatch: { 'keyword': ?2 } } }")
+    List<SearchEntity> findCustomByCategoryAndKeyword(String category1, String category2,String keyword);
 }
