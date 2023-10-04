@@ -58,15 +58,15 @@ public class SparkSessionUtil {
 	public Tuple2<CountVectorizerModel, IDFModel> fitModels(Dataset<Row> dataset){
 		CountVectorizer cv = new CountVectorizer()
 			.setInputCol("words")
-			.setOutputCol("rawFeatures")
-		    .setMinDF(5);
+			.setOutputCol("rawFeatures");
+		   // .setMinDF(5);
 
 		CountVectorizerModel cvm = cv.fit(dataset);
 
 		Dataset<Row> featuredData = cvm.transform(dataset);
 
 		IDF idf = new IDF()
-			.setMinDocFreq(2)
+			//.setMinDocFreq(2)
 			.setInputCol("rawFeatures")
 			.setOutputCol("features");
 

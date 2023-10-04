@@ -7,7 +7,6 @@ import java.io.Reader;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goduri.curiousaboutreality.exception.RealityException;
 import com.goduri.curiousaboutreality.sparkUtil.SparkSessionUtil;
 import com.goduri.curiousaboutreality.wordCount.dto.Article;
+import com.goduri.curiousaboutreality.wordCount.dto.Category;
 import com.goduri.curiousaboutreality.wordCount.dto.TF_IDF;
 import com.goduri.curiousaboutreality.wordCount.repository.ArticleRepository;
 import com.goduri.curiousaboutreality.wordCount.repository.TfidfRepository;
@@ -81,7 +81,7 @@ public class WordCountService {
 	 *
 	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
-	@KafkaListener(topics = "Reality_Test", groupId = ConsumerConfig.GROUP_ID_CONFIG)
+	@KafkaListener(topics = "Reality", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(String fileLocation) {
 		System.out.println("들어왔어!!!!!");
 		long startTime = System.nanoTime();
@@ -113,11 +113,10 @@ public class WordCountService {
 		List<Article> articles = new ArrayList<>();
 
 		// 카테고리 : 단어 리스트의 리스트
-		Map<String,List<List<String>>> categoryToWordsList = new HashMap<>();
+		Map<Category,List<List<String>>> categoryToWordsList = new HashMap<>();
 		
 		// 카테고리 : (단어 : tf-idf)
-		Map<String, List<TF_IDF>> categoryToTfIdf = new HashMap<>();
-
+		Map<Category, Map<String, Double>> categoryToTfIdf = new HashMap<>();
 
 		try{
 			reader = new FileReader(filePath);
@@ -130,11 +129,13 @@ public class WordCountService {
 			articleClassification(articles, categoryToWordsList);
 
 			// 3. 각 카테고리에 대해 tf-idf를 구한다. 
-			for(Map.Entry<String, List<List<String>>> entry : categoryToWordsList.entrySet()){
-				//categoryToTfIdf.put(entry.getKey(), tf_idf_dataset(entry.getValue()));
-				List<TF_IDF> most20 = getMost20Tfidf(entry.getValue());
-				categoryToTfIdf.put(entry.getKey(), most20);
+			for(Map.Entry<Category, List<List<String>>> entry : categoryToWordsList.entrySet()){
+				Map<String, Double> wordToTfidf = calculateTfidf(entry.getValue());
+				categoryToTfIdf.put(entry.getKey(), wordToTfidf);
 			}
+
+			// 4. 각 카테고리 뉴스의 단어에 대해 tf_idf를 매칭한다.
+			addKeyWordsToArticles(articles, categoryToTfIdf);
 
 			// 4. db에 결과를 저장한다.
 			addArticlesToDB(articles);
@@ -144,6 +145,7 @@ public class WordCountService {
 			throw new RealityException("ES-01 : sparkSession init error");
 		}
 		catch (NullPointerException e){
+			e.printStackTrace();
 			throw new RealityException(e.getMessage());
 		}
 		catch (UnsupportedOperationException e){
@@ -170,7 +172,6 @@ public class WordCountService {
 		}
 	}
 
-
 	private void parseJsonArrayToArticles(JSONArray jsonArray, List<Article> articles) throws JsonProcessingException {
 		for(Object object : jsonArray){
 			Article articleResult = parseObjectToArticle(object);
@@ -190,14 +191,14 @@ public class WordCountService {
 	 * @param categoryToWordsList : category별 뉴스 당 단어 리스트를 가진 리스트 (이중 리스트)
 	 * @throws JsonProcessingException
 	 */
-	private void articleClassification(List<Article> articles, Map<String, List<List<String>>> categoryToWordsList) throws
+	private void articleClassification(List<Article> articles, Map<Category, List<List<String>>> categoryToWordsList) throws
 		JsonProcessingException {
 		for(Article article : articles){
 			addWordsToMap(article,categoryToWordsList);
 		}
 	}
-	private void addWordsToMap(Article article, Map<String, List<List<String>>> categoryToWordsList) {
-		String currentCategory = article.getCategory1();
+	private void addWordsToMap(Article article, Map<Category, List<List<String>>> categoryToWordsList) {
+		Category currentCategory = new Category(article.getCategory1(), article.getCategory2());
 
 		if(categoryToWordsList.containsKey(currentCategory)){
 			List<List<String>> wordsList = categoryToWordsList.get(currentCategory);
@@ -210,48 +211,11 @@ public class WordCountService {
 		}
 	}
 
-	/**
-	 * tf-idf 리스트에서 값이 가장 큰 단어 20개를 뽑아 리턴.
-	 *
-	 * @param wordsList : [ [word... ]... ]
-	 * @return List<단어:tf_idf값>
-	 */
-	private List<TF_IDF> getMost20Tfidf(List<List<String>> wordsList) {
-		List<TF_IDF> tfidfs = getTfidf(wordsList);
-		Collections.sort(tfidfs);
-
-		List<TF_IDF> most20 = new ArrayList<>();
-		Map<String, Double> wordMap = new HashMap<>();
-
-		int count = 1;
-		for(TF_IDF tfidf : tfidfs){
-			if(count > 20)
-				break;
-
-			double tfidfValue = tfidf.getTf_idf();
-			if(wordMap.containsKey(tfidf.getWord())){
-				if(tfidfValue > wordMap.get(tfidf.getWord())){
-					wordMap.replace(tfidf.getWord(), tfidfValue);
-				}
-			}
-			else{
-				wordMap.put(tfidf.getWord(), tfidf.getTf_idf());
-				count += 1;
-			}
-		}
 
 
-		for(Map.Entry<String,Double> entry : wordMap.entrySet()){
-			most20.add(new TF_IDF(entry.getKey(), entry.getValue()));
-		}
 
-
-		Collections.sort(most20);
-		return most20;
-	}
-
-	private List<TF_IDF> getTfidf(List<List<String>> wordsList) {
-		List<TF_IDF> tfidfs = new ArrayList<>();
+	private Map<String,Double> calculateTfidf(List<List<String>> wordsList) {
+		Map<String,Double> wordToTfidf = new HashMap<>();
 
 		SparkSessionUtil sparkUtil = SparkSessionUtil.getInstance();
 		Dataset<Row> dataset = sparkUtil.makeDataset(wordsList);
@@ -268,10 +232,37 @@ public class WordCountService {
 		for (Row r : rescaledData.select("features").collectAsList()) {
 			Vector features = r.getAs("features");
 			for (int i=0; i<features.size(); i++) {
-				tfidfs.add(new TF_IDF(vocabulary[i], features.apply(i)));
+				String word = vocabulary[i];
+				double tfidf = features.apply(i);
+				addToFullMap(word, tfidf, wordToTfidf);
 			}
 		}
-		return tfidfs;
+		return wordToTfidf;
+	}
+
+	private void addToFullMap(String word, double tfidf, Map<String, Double> wordToTfidf) {
+		if(wordToTfidf.containsKey(word)){
+			if(tfidf > wordToTfidf.get(word)){
+				wordToTfidf.replace(word, tfidf);
+			}
+		}
+		else{
+			wordToTfidf.put(word, tfidf);
+		}
+	}
+
+	private void addKeyWordsToArticles(List<Article> articles, Map<Category, Map<String, Double>> categoryToTfIdf) {
+		for(Article article : articles){
+			Map<String, Double> wordToTfidf = categoryToTfIdf.get(new Category(article.getCategory1(), article.getCategory2()));
+			// System.out.println("=========================");
+			// System.out.println(wordToTfidf == null);
+			// System.out.println("=========================");
+			List<TF_IDF> keywords = new ArrayList<>();
+			for(String word : article.getPreprocessed()){
+				keywords.add(new TF_IDF(word, wordToTfidf.get(word)));
+			}
+			article.setKeywords(keywords);
+		}
 	}
 
 
@@ -279,7 +270,9 @@ public class WordCountService {
 		articleRepository.saveArticles(articles);
 	}
 
-	public void addTfidfToDB(Map<String, List<TF_IDF>> categoryToTfIdf, LocalDateTime created_at) {
+	public void addTfidfToDB(Map<Category, Map<String, Double>> categoryToTfIdf, LocalDateTime created_at) {
 		tfidfRepository.saveCategoryPerTfidf(categoryToTfIdf, created_at);
 	}
+
+
 }

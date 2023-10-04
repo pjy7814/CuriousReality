@@ -1,5 +1,7 @@
 package com.goduri.curiousaboutreality.wordCount.dto;
 
+import java.text.DecimalFormat;
+
 import org.jetbrains.annotations.NotNull;
 
 public class TF_IDF implements Comparable<TF_IDF>{
@@ -17,6 +19,11 @@ public class TF_IDF implements Comparable<TF_IDF>{
 
 	public String getTf_idfString(){
 		return String.format("%.2f", tf_idf);
+	}
+
+	public float getTfidf_Float(){
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+		return Float.parseFloat(twoDForm.format(tf_idf));
 	}
 
 	public double getTf_idf(){

@@ -1,12 +1,12 @@
 package com.goduri.curiousaboutreality.wordCount.repository;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.goduri.curiousaboutreality.wordCount.dto.Article;
 
+import com.goduri.curiousaboutreality.wordCount.dto.TF_IDF;
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoClient;
@@ -37,6 +37,17 @@ public class ArticleRepository {
 		List<Document> documents = new ArrayList<>();
 
 		for (Article article : articles) {
+
+			List<Document> keywords = new ArrayList<>();
+
+			for (TF_IDF keyword : article.getKeywords()) {
+				keywords.add(new Document()
+					.append("keyword", keyword.getWord())
+					.append("tf_idf", keyword.getTfidf_Float())
+				);
+			}
+
+
 			documents.add(new Document()
 				.append("original_url", article.getOriginal_url())
 				.append("category1", article.getCategory1())
@@ -46,8 +57,11 @@ public class ArticleRepository {
 				.append("thumbnail", article.getThumbnail())
 				.append("company", article.getCompany())
 				.append("article", article.getArticle())
+				.append("keywords", keywords)
 			);
+
 		}
 		collection.insertMany(documents);
 	}
+
 }

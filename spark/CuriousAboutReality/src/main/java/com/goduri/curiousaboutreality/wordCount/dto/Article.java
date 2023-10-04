@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.goduri.curiousaboutreality.util.InputUtil;
 
@@ -19,9 +21,13 @@ public class Article implements Serializable {
 	private String article;
 	private List<String> preprocessed= new ArrayList<>();
 
+	private List<TF_IDF> keywords = new ArrayList<>();
 
 	//=============== getter start==================
 
+	public List<TF_IDF> getKeywords() {
+		return keywords;
+	}
 
 	public String getOriginal_url() {
 		return original_url;
@@ -64,7 +70,11 @@ public class Article implements Serializable {
 	}
 
 	//=============== setter start==================
-	
+
+	public void setKeywords(List<TF_IDF> keywords) {
+		this.keywords = keywords;
+	}
+
 	public void setOriginal_url(String original_url) {
 		this.original_url = original_url;
 	}
