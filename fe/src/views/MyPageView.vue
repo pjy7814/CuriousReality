@@ -115,9 +115,17 @@ export default {
       } catch(error) {
         console.error(error);
       }
+    },
+    checkLogin() {
+      const email = localStorage.getItem("email");
+      if (!email) {
+        alert("로그인 후 이용해주세요!");
+        window.location.href = "/";
+      }
     }
   },
   created() {
+    this.checkLogin();
     this.getPreference();
     this.getProfile();
   },

@@ -35,26 +35,29 @@ export default {
       } catch (error) {
         if (error.response && error.response.status === 401) {
           console.log("AccessToken 연장");
-          try {
-            const { data } = await getNewAccessToken();
-            localStorage.setItem("userToken", data.accessToken);
-            this.getBookmarkList();
-          } catch (error) {
-            if (error.response && error.response.status === 701) {
-              alert("로그인이 만료되었습니다.");
-              localStorage.removeItem("userEmail");
-              localStorage.removeItem("userToken");
-              window.location.href = "/";
-            }
-          }
+          getNewAccessToken();
         } else {
           alert("로그인 후 이용해주세요.");
-          // localStorage.removeItem("userEmail");
-          // localStorage.removeItem("userToken");
-          // window.location.href = "/";
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
         }
       }
     },
+    async getNewAccessToken() {
+            try {
+                const { data } = await getNewAccessToken();
+                console.log(data);
+                localStorage.setItem("userToken", data.accessToken);
+            } catch (error) {
+                if (error.response && error.response.status === 601) {
+                    alert("로그인이 만료되었습니다.");
+                    localStorage.removeItem("userEmail");
+                    localStorage.removeItem("userToken");
+                    window.location.href = "/";
+                }
+            }
+        }
   },
   created() {
     if (this.title == 0) {

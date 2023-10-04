@@ -5,6 +5,7 @@ import SignupView from "../views/SignupView.vue";
 import MyPageView from "../views/MyPageView.vue";
 import CategoryView from "../views/CategoryView.vue";
 import EditProfileView from "../views/EditProfileView.vue";
+import DeleteUserView from "../views/DeleteUserView.vue";
 const routes = [
   {
     path: "/",
@@ -37,6 +38,11 @@ const routes = [
     path: "/editProfile",
     name: "EditProfile",
     component: EditProfileView,
+  },
+  {
+    path: "/deleteUser",
+    name: "DeleteUser",
+    component: DeleteUserView,
   },
 ];
 

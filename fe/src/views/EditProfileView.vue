@@ -18,7 +18,7 @@
       </div>
       <div class="input-body">
         <div class="input-head"><b>이름</b></div>
-        <input type="text" placeholder="NAME" v-model="userInfo.name" disabled/>
+        <input type="text" placeholder="NAME" v-model="userInfo.name" disabled />
       </div>
       <div class="input-body">
         <div class="input-head"><b>전화번호</b></div>
@@ -29,12 +29,14 @@
       </div>
       <button :disabled="!isValidSignUp" type="submit" class="signup-button">수정완료</button>
     </form>
+
+    <a href="/deleteUser" class="delete-user">회원탈퇴</a>
   </div>
 </template>
 
 <script>
-import { editUserProfile, getProfile } from "@/api/userApi";
-import {validateContact, validatePassword } from "@/utils/validation"; // 유효성 검사
+import { editUserProfile, getProfile, getNewAccessToken } from "@/api/userApi";
+import { validateContact, validatePassword } from "@/utils/validation"; // 유효성 검사
 export default {
   name: "EditProfileView",
   data() {
@@ -68,6 +70,7 @@ export default {
     },
   },
   created() {
+    this.checkLogin();
     this.getProfile();
   },
   methods: {
@@ -89,12 +92,46 @@ export default {
       }
     },
     async getProfile() {
-      try{
-        const {data} = await getProfile();
+      try {
+        const { data } = await getProfile();
         console.log(data);
         this.userInfo = data;
-      } catch(error) {
-        console.error(error);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          console.log("AccessToken 연장");
+          this.getNewAccessToken();
+          // 다시 보내기
+          await getProfile(this.password);
+
+          alert("다음에 또 만나요~~~")
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
+        } else {
+          alert("비밀번호가 맞지 않습니다.")
+          console.error(error);
+        }
+      }
+    },
+    async getNewAccessToken() {
+      try {
+        const { data } = await getNewAccessToken();
+        console.log(data);
+        localStorage.setItem("userToken", data.accessToken);
+      } catch (error) {
+        if (error.response && error.response.status === 601) {
+          alert("로그인이 만료되었습니다.");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
+        }
+      }
+    },
+    checkLogin() {
+      const email = localStorage.getItem("email");
+      if (!email) {
+        alert("로그인 후 이용해주세요!");
+        window.location.href = "/";
       }
     }
   },
@@ -198,7 +235,7 @@ input {
   margin-top: 1rem;
 }
 
-.checkbox-interest > input {
+.checkbox-interest>input {
   width: 20px;
   margin: 0px 10px 0px 14px;
   align-items: center;
@@ -215,5 +252,12 @@ input {
   margin-top: 5px;
   margin-left: 15px;
   color: red;
+}
+
+.delete-user {
+  cursor: pointer;
+  color: red;
+  text-decoration: underline;
+  display: inline-block;
 }
 </style>

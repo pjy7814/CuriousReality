@@ -8,7 +8,6 @@ function registerMember(memberData) {
 
 // 회원정보 수정
 function editUserProfile(memberData) {
-  console.log(memberData);
   const BASE_URL = process.env.VUE_APP_API_URL;
   const userToken = localStorage.getItem("userToken");
   const headers = {
@@ -29,7 +28,20 @@ function getNewAccessToken() {
   const accessToken = localStorage.getItem("userToken");
   const email = localStorage.getItem("userEmail");
 
-  return axios.post(`${BASE_URL}/auth/access-token/get`, { accessToken, email });
+  return axios.post(`${BASE_URL}/auth/reissue`, { accessToken, email });
+}
+
+// 회원 탈퇴
+function deleteUser(password) {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+  const userToken = localStorage.getItem("userToken");
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  
+  const data = { password }; 
+  
+  return axios.put(`${BASE_URL}/auth/delete`, data, { headers });
 }
 
 // 프로필 가져오기
@@ -42,4 +54,4 @@ function getProfile() {
   return axios.get(`${BASE_URL}/member/profile`, { headers });
 }
 
-export { registerMember, login, getNewAccessToken, getProfile, editUserProfile };
+export { registerMember, login, getNewAccessToken, getProfile, editUserProfile, deleteUser };
