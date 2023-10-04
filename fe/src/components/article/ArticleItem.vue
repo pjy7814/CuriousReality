@@ -16,8 +16,6 @@
 
 <script>
 import { articleClippings, addHistory } from "@/api/articleApi";
-import mediaCompanyData from '@/assets/media_company_data.json';
-import categoryDataReverse from '@/assets/category_data_reverse.json';
 
 export default {
   name: "ArticleItem",
@@ -44,10 +42,7 @@ export default {
     async addHistory() {
       try {
         const history = {
-          "articleId": this.articleCopy.originalUrl,
-          "category1Code": categoryDataReverse[this.articleCopy.category1],
-          "category2Code": categoryDataReverse[this.articleCopy.category2],
-          "companyCode": mediaCompanyData[this.articleCopy.company]
+          "articleId": this.articleCopy.originalUrl
         }
         const response = await addHistory(history);
         console.log("Article log:", response.data, history);
