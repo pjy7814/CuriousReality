@@ -26,7 +26,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
-@Builder
 public class MemberEntity extends CUDEntity {
 
     @Id
