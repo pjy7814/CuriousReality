@@ -15,6 +15,7 @@ import java.util.Map;
 public class ArticleCategoryConverter {
     private static final Map<String, ArticleCategory> categoryNumToEnumMap = new HashMap<>();
     private static final Map<ArticleCategory, String> categoryEnumToKrMap = new HashMap<>();
+    private static final Map<String, ArticleCategory> categoryKrToEnum = new HashMap<>();
 
     static {
         categoryNumToEnumMap.put("100", ArticleCategory.POLITICS);
@@ -115,13 +116,28 @@ public class ArticleCategoryConverter {
         categoryEnumToKrMap.put(ArticleCategory.HUMAN_RIGHTS_WELFARE_WORLD, "인권/복지");
         categoryEnumToKrMap.put(ArticleCategory.FOOD_MEDICINE_WORLD, "식품의료");
         categoryEnumToKrMap.put(ArticleCategory.WORLD_GENERAL, "사회일반");
+
+
+        // kr to enum
+        categoryKrToEnum.put("정치", ArticleCategory.POLITICS);  // 정치
+        categoryKrToEnum.put("경제", ArticleCategory.ECONOMICS);  // 경제
+        categoryKrToEnum.put("사회", ArticleCategory.SOCIAL);  // 사회
+        categoryKrToEnum.put("IT/과학", ArticleCategory.SCIENCE);  // 과학
+        categoryKrToEnum.put("국제", ArticleCategory.WORLD);  // 국제
     }
 
     public static ArticleCategory convertEnumCategory(String rawCategory) {
         return categoryNumToEnumMap.get(rawCategory);
     }
-
+    public static ArticleCategory convertKrToEnumCategory(String rawCategory) {
+        return categoryKrToEnum.get(rawCategory);
+    }
     public static String convertKrCategory(ArticleCategory rawCategory) {
         return categoryEnumToKrMap.get(rawCategory);
     }
+
+    public static boolean isKrCategoryContains(String rawCategory) {
+        return categoryKrToEnum.containsKey(rawCategory);
+    }
+
 }
