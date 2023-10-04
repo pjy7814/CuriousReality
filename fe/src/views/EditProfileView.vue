@@ -3,31 +3,31 @@
     <div class="head">회원정보 수정</div>
     <form @submit.prevent="submitForm">
       <div class="input-body">
+        <div class="input-head"><b>기존 비밀번호</b></div>
+        <input type="password" placeholder="PASSWORD" v-model="this.userInfo.password" />
+      </div>
+      <div class="input-body">
         <div class="input-head"><b>비밀번호</b></div>
-        <input type="password" placeholder="PASSWORD" v-model="userInfo.password" />
-        <div class="alert-message" v-show="!isPasswordValid && password !== ''">
+        <input type="password" placeholder="PASSWORD" v-model="this.userInfo.newPassword" />
+        <div class="alert-message" v-show="!isPasswordValid && this.userInfo.newPassword !== ''">
           8, 20자 사이의 영어, 숫자, 특수문자를 사용하여 생성해주세요.
         </div>
       </div>
       <div class="input-body">
         <div class="input-head"><b>비밀번호 확인</b></div>
-        <input type="password" placeholder="PASSWORD" v-model="userInfo.passwordCheck" />
-        <div class="alert-message" v-show="!isPasswordCheckValid && passwordCheck !== ''">
+        <input type="password" placeholder="PASSWORD" v-model="this.userInfo.newPasswordCheck" />
+        <div class="alert-message" v-show="!isPasswordCheckValid && this.userInfo.newPasswordCheck !== ''">
           비밀번호가 일치하지 않습니다.
         </div>
       </div>
       <div class="input-body">
-        <div class="input-head"><b>이름</b></div>
-        <input type="text" placeholder="NAME" v-model="userInfo.name" disabled />
-      </div>
-      <div class="input-body">
         <div class="input-head"><b>전화번호</b></div>
-        <input type="text" placeholder="CONTACT" v-model="userInfo.contact" />
-        <div class="alert-message" v-show="!isContactValid && contact !== ''">
+        <input type="text" placeholder="CONTACT" v-model="this.userInfo.contact" />
+        <div class="alert-message" v-show="!isContactValid && this.userInfo.contact !== ''">
           올바른 전화번호 형식이 아닙니다. 010-0000-0000
         </div>
       </div>
-      <button :disabled="!isValidSignUp" type="submit" class="signup-button">수정완료</button>
+      <button :disabled="!isValidEdit" type="submit" class="signup-button">수정완료</button>
     </form>
 
     <a href="/deleteUser" class="delete-user">회원탈퇴</a>
@@ -35,13 +35,18 @@
 </template>
 
 <script>
-import { editUserProfile, getProfile, getNewAccessToken } from "@/api/userApi";
+import { editUserProfile, getNewAccessToken } from "@/api/userApi";
 import { validateContact, validatePassword } from "@/utils/validation"; // 유효성 검사
 export default {
   name: "EditProfileView",
   data() {
     return {
-      userInfo: {}
+      userInfo: {
+        password: '',
+        newPassword: null,
+        newPasswordCheck: null,
+        contact: null
+      }
     };
   },
   computed: {
@@ -50,34 +55,30 @@ export default {
       return validateContact(this.userInfo.contact);
     },
     isPasswordValid() {
-      return validatePassword(this.userInfo.password);
+      return validatePassword(this.userInfo.newPassword);
     },
     isPasswordCheckValid() {
-      return this.userInfo.password === this.userInfo.passwordCheck;
+      return this.userInfo.newPassword === this.userInfo.newPasswordCheck;
     },
-    isValidSignUp() {
-      if (
-        this.userInfo.password == "" ||
-        this.userInfo.passwordCheck == "" ||
-        this.userInfo.contact == ""
-      )
-        return false;
+    isValidEdit() {
+      if (this.userInfo.password == "") return false;
       return (
-        this.isPasswordValid &&
-        this.isContactValid &&
-        this.isPasswordCheckValid
+        (this.isPasswordValid &&
+        this.isPasswordCheckValid) ||
+        this.isContactValid
       );
     },
   },
   created() {
     this.checkLogin();
-    this.getProfile();
   },
   methods: {
     async submitForm() {
-      if (this.isValidSignUp) {
+      if (this.isValidEdit) {
         const memberData = {
           password: this.userInfo.password,
+          newPassword: this.userInfo.newPassword,
+          newPasswordCheck: this.userInfo.newPasswordCheck,
           contact: this.userInfo.contact,
         };
         try {
@@ -88,28 +89,6 @@ export default {
         } catch (error) {
           alert("수정에 실패했습니다.");
           console.error(error.message);
-        }
-      }
-    },
-    async getProfile() {
-      try {
-        const { data } = await getProfile();
-        console.log(data);
-        this.userInfo = data;
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          console.log("AccessToken 연장");
-          this.getNewAccessToken();
-          // 다시 보내기
-          await getProfile(this.password);
-
-          alert("다음에 또 만나요~~~")
-          localStorage.removeItem("userEmail");
-          localStorage.removeItem("userToken");
-          window.location.href = "/";
-        } else {
-          alert("비밀번호가 맞지 않습니다.")
-          console.error(error);
         }
       }
     },
