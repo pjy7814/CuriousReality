@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="header">
-      {{ category }}
+      {{ category.name }}
     </div>
 
     <div class="content-1">
@@ -15,6 +15,9 @@
           </template>
         </vue-word-cloud>
       </div>
+      <div class="content-item2">
+        <KeywordComponent />
+      </div>
     </div>
 
     <div class="content-1">
@@ -26,12 +29,14 @@
 <script>
 import { useRouter } from "vue-router";
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
+import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
 import VueWordCloud from "vuewordcloud";
 import Categories from "@/assets/category_data.json";
 export default {
   components: {
     ArticleComponent,
     [VueWordCloud.name]: VueWordCloud,
+    KeywordComponent
   },
   created() {
     this.category = Categories[this.$route.params.category];

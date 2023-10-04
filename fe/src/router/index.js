@@ -4,7 +4,7 @@ import Login from "../views/LoginView.vue";
 import SignupView from "../views/SignupView.vue";
 import MyPageView from "../views/MyPageView.vue";
 import CategoryView from "../views/CategoryView.vue";
-import EditProfileView from "../views/EditProfileView";
+import EditProfileView from "../views/EditProfileView.vue";
 const routes = [
   {
     path: "/",

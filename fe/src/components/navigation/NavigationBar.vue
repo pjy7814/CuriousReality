@@ -1,11 +1,11 @@
 <template>
   <div class="navigation-bar" @mouseover="showSubMenu" @mouseleave="hideSubMenu">
     <router-link class="logo" to="/"><img src="@/assets/logo.png"></router-link>
-    <router-link class="category" to="/">정치</router-link>
-    <router-link class="category" to="/">경제</router-link>
-    <router-link class="category" to="/">사회</router-link>
-    <router-link class="category" to="/">IT/과학</router-link>
-    <router-link class="category" to="/">세계</router-link>
+    <div class="category">정치</div>
+    <div class="category">경제</div>
+    <div class="category">사회</div>
+    <div class="category">IT/과학</div>
+    <div class="category">세계</div>
     <div class="recommend-news" @click="openModal">추천뉴스</div>
     <router-link v-if="userEmail" class="mypage" to="/mypage">마이페이지</router-link>
     <router-link v-else class="login" to="/login">로그인</router-link>
