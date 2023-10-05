@@ -24,7 +24,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,7 +35,6 @@ public class MailServiceImpl implements MailService {
     private final MemberRepository memberRepository;
     private final RecommendService recommendService;
     private final TemplateEngine templateEngine;
-    private static final String FROM_ADDRESS = "no_repy@boki.com";
 
     @Override
     @Async
@@ -71,8 +69,8 @@ public class MailServiceImpl implements MailService {
         log.info("member : {}", member.getEmail());
         Long memberId = member.getId();
 
-        List<Optional<ArticleInfoEntity>> recommendList = recommendService.recommendClusterArticle(memberId);
-        for (Optional<ArticleInfoEntity> articleInfoEntity : recommendList) {
+        List<ArticleInfoEntity> recommendList = recommendService.recommendClusterArticle(memberId);
+        for (ArticleInfoEntity articleInfoEntity : recommendList) {
             log.info(articleInfoEntity.toString());
         }
 
@@ -98,7 +96,7 @@ public class MailServiceImpl implements MailService {
                 .build();
     }
 
-    public String setData(List<Optional<ArticleInfoEntity>> data){
+    public String setData(List<ArticleInfoEntity> data){
         Context context = new Context();
         context.setVariable("data",data);
         return templateEngine.process("mail", context);
