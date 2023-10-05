@@ -1,6 +1,5 @@
 package com.ssafy.curious.domain.recommend.entity;
 
-import com.ssafy.curious.domain.model.ArticleMetadata;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
