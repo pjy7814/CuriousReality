@@ -18,13 +18,13 @@
           </template>
         </vue-word-cloud>
       </div>
-       <div class="content-item2">
-        <KeywordComponent />
+      <div class="content-item2">
+        <KeywordComponent :keywords="keywords" />
       </div>
     </div>
 
     <div class="content-1">
-      <ArticleComponent />
+      <ArticleComponent :title="'관련 기사'" :articles="articles" />
     </div>
   </div>
 </template>
@@ -34,7 +34,7 @@ import { useRouter } from "vue-router";
 import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import VueWordCloud from "vuewordcloud";
-
+import { getMainWordCloud } from "@/api/categoryApi";
 export default {
   name: "HomeView",
   components: {
@@ -48,28 +48,53 @@ export default {
 
     function onWordClick(word) {
       router.push({
-        name: "Home", // 컴포넌트 이름
-        query: { keyword: word }, // 키워드 쿼리
+        name: "Home",
+        query: { keyword: word },
       });
     }
 
-    return {onWordClick };
+    return { onWordClick };
   },
   data() {
     return {
-      words: [
-        ["남현실", 19],
-        ["남현실논란", 3],
-        ["남현실나이", 7],
-        ["남현실충격발언", 3],
-      ],
+      words : [],
+      articles : {},
+      keywords: [],
       date: null,
     };
   },
+  methods: {
+    async getMainWordCloud() {
+
+      try {
+        const { data } = await getMainWordCloud();
+        this.makeWordCloudHotKeyword(data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    makeWordCloudHotKeyword(data) {
+      const wordCloudData = [];
+      const hotKeywordData = [];
+      data.forEach((item, index) => {
+        const keyword = item.keyword;
+        wordCloudData.push([keyword, 10 - index / 1.1]);
+        hotKeywordData.push(keyword);
+      });
+      this.words = wordCloudData;
+      this.keywords  = hotKeywordData
+    }
+  },
+  created() {
+    this.getMainWordCloud();
+  }
 };
 </script>
 
 <style scoped>
+@import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
+
 .content {
   width: 100%;
   margin: auto;
@@ -115,11 +140,11 @@ img {
 
 .word-cloud-text {
   cursor: pointer;
-  font-family: Noto Sans KR;
+  font-family: 'Jeju Gothic', sans-serif;
 }
+
 .content-item2 {
   width: 15%;
   height: 300px;
-  margin: 50px;
 }
 </style>

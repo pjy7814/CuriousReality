@@ -119,7 +119,7 @@ export default {
         getWords(dataArray);
         getArticleArray(dataArray);
       } catch (error) {
-        words.value.push(["준비중입니다", 100]);
+        words.value=["준비중입니다", 100];
         console.error(error);
       }
     }
@@ -143,21 +143,12 @@ export default {
         console.error(error);
       }
     },
-    async getWordCloud(category1, category2, keyword) {
-      try {
-        console.log("asdf");
-        const { data } = await getWordCloud(category1, category2, keyword);
-
-        return data.data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
   }
 };
 </script>
 
 <style scoped>
+@import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
 .content {
   width: 100%;
   margin: auto;
@@ -197,6 +188,6 @@ export default {
 
 .word-cloud-text {
   cursor: pointer;
-  font-family: Noto Sans KR;
+  font-family: 'Jeju Gothic', sans-serif;
 }
 </style>
