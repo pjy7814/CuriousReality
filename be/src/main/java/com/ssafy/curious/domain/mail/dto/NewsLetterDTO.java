@@ -24,7 +24,7 @@ public class NewsLetterDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response {
-        private List<Optional<ArticleInfoEntity>> recommendList;
+        private List<ArticleInfoEntity> recommendList;
         private Boolean success;
     }
 }
