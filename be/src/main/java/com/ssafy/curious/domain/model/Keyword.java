@@ -11,5 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Keyword {
     private String keyword;
-    private Double tfidf;
+    private Double tf_idf;
 }
