@@ -97,7 +97,19 @@ export default {
       console.log(wordCloudData);
       this.words = wordCloudData;
     },
-    
+
+    getArticleArray(data) {
+      const articleData = [];
+
+      data.forEach((item) => {
+        if (item.originalUrl) {
+          articleData.push(item);
+        }
+      })
+
+      this.articles = articleData;
+    },
+
     async onWordClick(keyword) {
       try {
         const category2 = this.route.currentRoute.value.params.category;
@@ -106,7 +118,8 @@ export default {
         const dataArray = response.data;
         console.log(dataArray);
         this.getWords(dataArray);
-        this.articles = dataArray;
+        this.getArticleArray(dataArray);
+        // this.articles = dataArray;
       } catch (error) {
         this.words =["준비중입니다", 100];
         console.error(error);
