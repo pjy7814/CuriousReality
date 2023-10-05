@@ -58,13 +58,15 @@ export default {
       const category2 = to.params.category;
 
       this.getHotKeyword(category1, category2);
+      this.onWordClick(null);
     },
   },
   setup() {
     const route = useRouter();
-    const words = ref([]);
+    const words = ref(["준비중입니다", 100]);
 
     function getWords(data) {
+      words.value = ref(["준비중입니다", 100]);
       const wordCloudData = [];
 
       data.forEach((item, index) => {
