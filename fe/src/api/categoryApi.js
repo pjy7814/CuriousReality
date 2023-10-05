@@ -11,6 +11,7 @@ function getHotKeyword(category1, category2) {
   });
 }
 
+
 function getWordCloud(category1, category2, keyword) {
   const BASE_URL = process.env.VUE_APP_API_URL;
   return axios.get(`${BASE_URL}/article/search`, {
@@ -22,4 +23,10 @@ function getWordCloud(category1, category2, keyword) {
   });
 }
 
-export {getHotKeyword, getWordCloud};
+
+function getMainWordCloud() {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+  return axios.get(`${BASE_URL}/article/main`);
+}
+
+export {getHotKeyword, getWordCloud, getMainWordCloud};

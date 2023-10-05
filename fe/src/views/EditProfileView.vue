@@ -64,7 +64,7 @@ export default {
       if (this.userInfo.password == "") return false;
       return (
         (this.isPasswordValid &&
-        this.isPasswordCheckValid) ||
+          this.isPasswordCheckValid) ||
         this.isContactValid
       );
     },
@@ -98,7 +98,12 @@ export default {
         console.log(data);
         localStorage.setItem("userToken", data.accessToken);
       } catch (error) {
-        if (error.response && error.response.status === 601) {
+        if (error.response && error.response.status === 401) {
+          alert("로그인 후 이용해주세요.");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
+        } else if (error.response && error.response.status === 601) {
           alert("로그인이 만료되었습니다.");
           localStorage.removeItem("userEmail");
           localStorage.removeItem("userToken");

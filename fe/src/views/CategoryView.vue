@@ -21,7 +21,7 @@
     </div>
 
     <div class="content-1">
-      <ArticleComponent :title="1" :articles="articles" />
+      <ArticleComponent :title="'관련 기사'" :articles="articles" />
     </div>
   </div>
 </template>
@@ -64,17 +64,50 @@ export default {
   setup() {
     const route = useRouter();
     const words = ref(["준비중입니다", 100]);
+    const articles = {};
 
     function getWords(data) {
       const wordCloudData = [];
 
       data.forEach((item, index) => {
         const keyword = item.keywords[0].keyword;
-        wordCloudData.push([keyword, 20 - index/1.1]);
+        wordCloudData.push([keyword, 20 - index / 1.1]);
       });
 
       console.log(wordCloudData);
-      words.value = wordCloudData; 
+      words.value = wordCloudData;
+    }
+
+    function getArticleArray(data) {
+      const articleData = [];
+
+      data.forEach(item => {
+        if (
+          item.originalUrl !== null &&
+          item.category1 !== null &&
+          item.category2 !== null &&
+          item.title !== null &&
+          item.thumbnail !== null
+        ) {
+          const article = getArticle(item);
+          articleData.push(article);
+        }
+      });
+
+      this.articles = articleData;
+    }
+
+    function getArticle(data) {
+      const articleData = data.map(item => {
+        return {
+          thumbnail: item.thumbnail,
+          title: item.title,
+          createAt: item.createAt, 
+          article: item.article 
+        };
+      });
+
+      return articleData;
     }
 
     async function onWordClick(keyword) {
@@ -84,20 +117,20 @@ export default {
         const response = await getWordCloud(category1, category2, keyword);
         const dataArray = response.data;
         getWords(dataArray);
+        getArticleArray(dataArray);
       } catch (error) {
         words.value.push(["준비중입니다", 100]);
         console.error(error);
       }
     }
 
-    return { onWordClick, words };
+    return { onWordClick, words, articles };
   },
   data() {
     return {
       categories: Categories,
       category: "",
       keywords: ["준비중입니다"],
-      articles: []
     };
   },
   methods: {

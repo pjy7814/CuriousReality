@@ -53,7 +53,6 @@ export default {
 
 .nav-item {
   cursor: pointer;
-  /* padding-left: 4%; */
   flex-direction: row;
   display: flex;
 }

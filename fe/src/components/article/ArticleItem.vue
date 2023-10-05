@@ -4,7 +4,7 @@
 
     <div class="body">
       <a :href="article.originalUrl" target="_blank" class="title" @click="addHistory">{{ article.title }}</a>
-      <div class="created-at">{{ article.createdAt }}</div>
+      <div class="created-at">{{ formatDate(article.createdAt) }}</div>
       <div class="article">{{ article.article }}</div>
     </div>
 
@@ -49,6 +49,10 @@ export default {
       } catch (error) {
         console.error("Error logging article:", error);
       }
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
     }
   },
 };
