@@ -1,17 +1,33 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import DBSCAN
 from pymongo import MongoClient
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import json
 
-
 ### Todo: 파일 경로명 서버에 맞게, 날짜에 맞게 수정 ###
-with open('C:/Users/SSAFY/heuristic/cluster/articles/20230902.json', 'r', encoding='utf-8') as file:
-    data = json.load(file)
 
-df = pd.DataFrame(data, columns=['title', 'category1', 'company', 'original_url', 'thumbnail', 'article'])
+# 어제 08:00 시간과 오늘 08:00 시간을 계산합니다.
+now = datetime.now()
+yesterday_8am = datetime(now.year, now.month, now.day - 1, 8, 0, 0)
+today_8am = datetime(now.year, now.month, now.day + 1, 8, 0, 0)
+
+# MongoDB에서 created_at이 어제 08:00부터 오늘 08:00까지인 document들을 조회합니다.
+query = {
+    "created_at": {"$gte": yesterday_8am, "$lt": today_8am}
+}
+
+# Mongo DB 연결
+client = MongoClient("mongodb://root:reality@j9a303.p.ssafy.io:27017/?authMechanism=DEFAULT")
+db = client['curious']
+collection_name = 'article_info'
+collection = db[collection_name]
+data = list(collection.find(query))
+
+df = pd.DataFrame(data, columns=['title', 'category1', 'company', 'original_url'])
 text = [" ".join(article["preprocessed"]) for article in data]
+
 total_article_cnt = len(text)
 print("기사 총 개수: ", total_article_cnt)
 
@@ -64,13 +80,13 @@ print(recommend_df)
 # 데이터 리스트를 하나의 도큐먼트로 묶기
 aggregated_document = {
     "article_list": total_recommend_list,
-    "created_at": "1988-09-21T01:37:16.176Z"  # 생성일자 설정
+    "created_at": datetime.now()  # 생성일자 설정
 }
 
 # Mongo DB에 저장
 client = MongoClient("mongodb://root:reality@j9a303.p.ssafy.io:27017/?authMechanism=DEFAULT")
 db = client['curious']
-collection_name = 'recommend_pool_cluster'  # name of your collection
+collection_name = 'recommend_pool_cluster'
 collection = db[collection_name]
 collection.insert_one(aggregated_document)
 client.close()
