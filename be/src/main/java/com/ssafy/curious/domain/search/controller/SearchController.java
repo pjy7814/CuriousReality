@@ -35,7 +35,7 @@ public class SearchController {
     @GetMapping("/search")
     public ResponseEntity<List<SearchArticleResponse>> search(@RequestParam(name = "category1", required = true) String category1,
                                                               @RequestParam(name = "category2", required = true) String category2,
-                                                              @RequestParam(name = "keyword", required = true) String keyword){
+                                                              @RequestParam(name = "keyword", required = false) String keyword){
 
         // category1, category2는 숫자로 받기에 변환 과정을 거쳐야 한다.
         ArticleCategory bigCategory = ArticleCategoryConverter.convertEnumCategory(category1);
@@ -43,6 +43,7 @@ public class SearchController {
 
         ArticleCategory smallCategory = ArticleCategoryConverter.convertEnumCategory(category2);
         String smallCat = ArticleCategoryConverter.convertKrCategory(smallCategory);
+
 
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime yesterday = currentTime.minusDays(1);
@@ -114,7 +115,7 @@ public class SearchController {
         String smallCat = ArticleCategoryConverter.convertKrCategory(smallCategory);
 
 
-        
+
         List<HotkeyEntity> result = hotkeyService.getHotkey(bigCat,smallCat);
         List<String> answer= new ArrayList<>();
 
