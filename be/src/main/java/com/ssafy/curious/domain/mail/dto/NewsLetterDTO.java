@@ -11,20 +11,13 @@ import java.util.Optional;
 
 
 public class NewsLetterDTO {
-    @Builder
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Request {
-        private String email;
-    }
 
     @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response {
-        private List<ArticleInfoEntity> recommendList;
+        private List<NewsLetterArticle> articles;
         private Boolean success;
     }
 }

@@ -6,6 +6,6 @@ import com.ssafy.curious.security.dto.UserAuth;
 
 public interface MailService {
     String mailSimpleSend(MailDTO mailDto);
-    NewsLetterDTO.Response sendNewsLetter(UserAuth auth);
+    NewsLetterDTO.Response sendNewsLetter(String email);
 
 }

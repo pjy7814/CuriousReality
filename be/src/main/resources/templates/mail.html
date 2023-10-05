@@ -12,21 +12,55 @@
     <p><span th:text="${name}"></span>님만을 위한 오늘의 추천 뉴스를 보내드립니다.</p>
   </div>
   <br>
+  <hr>
   <div>
-<!--    <img th:src = "{data.thumbnail}">-->
-<!--    <a th:href="${data.url}">뉴스 바로가기</a>-->
+    <br>
+    <br>
+    <h2 th:text="${articles[0].getTitle()}"></h2>
+    <img th:src ="${articles[0].getThumbnail()}" th:alt = "${articles[0].getTitle()}">
+    <br>
+    <p th:text="${articles[0].getArticle()}"></p>
+    <a th:href="${articles[0].getOriginalUrl()}">기사 바로 읽기</a>
+    <br>
+    <br>
   </div>
+  <hr>
   <div>
-<!--    <img th:src = "{data.thumbnail}">-->
+    <br>
+    <br>
+    <h2 th:text="${articles[1].getTitle()}"></h2>
+    <img th:src ="${articles[1].getThumbnail()}" th:alt = "${articles[1].getTitle()}">
+    <br>
+    <p th:text="${articles[1].getArticle()}"></p>
+    <a th:href="${articles[1].getOriginalUrl()}">기사 바로 읽기</a>
+    <br>
+    <br>
   </div>
+  <hr>
   <div>
-<!--    <img th:src = "{data.thumbnail}">-->
+    <br>
+    <br>
+    <h2 th:text="${articles[2].getTitle()}"></h2>
+    <img th:src ="${articles[2].getThumbnail()}" th:alt = "${articles[2].getTitle()}">
+    <br>
+    <p th:text="${articles[2].getArticle()}"></p>
+    <a th:href="${articles[2].getOriginalUrl()}">기사 바로 읽기</a>
+    <br>
+    <br>
   </div>
+  <hr>
   <div>
-<!--    <img th:src = "{data.thumbnail}">-->
+    <br>
+    <br>
+    <h2 th:text="${articles[3].getTitle()}"></h2>
+    <img th:src ="${articles[3].getThumbnail()}" th:alt = "${articles[3].getTitle()}">
+    <br>
+    <p th:text="${articles[3].getArticle()}"></p>
+    <a th:href="${articles[3].getOriginalUrl()}">기사 바로 읽기</a>
+    <br>
+    <br>
   </div>
-  <div>
-<!--    <img th:src = "{data.thumbnail}">-->
-  </div>
+  <hr>
+
 </body>
 </html>

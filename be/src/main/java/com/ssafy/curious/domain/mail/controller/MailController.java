@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -38,8 +39,8 @@ public class MailController {
     }
 
     @PostMapping("/newsletter")
-    public ResponseEntity<NewsLetterDTO.Response> sendNewsLetter(@AuthenticationPrincipal UserAuth auth){
-        NewsLetterDTO.Response response = mailService.sendNewsLetter(auth);
+    public ResponseEntity<NewsLetterDTO.Response> sendNewsLetter(String email){
+        NewsLetterDTO.Response response = mailService.sendNewsLetter(email);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
