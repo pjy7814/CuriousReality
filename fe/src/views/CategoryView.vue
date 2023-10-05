@@ -66,7 +66,6 @@ export default {
     const words = ref(["준비중입니다", 100]);
 
     function getWords(data) {
-      words.value = ref(["준비중입니다", 100]);
       const wordCloudData = [];
 
       data.forEach((item, index) => {
@@ -82,12 +81,11 @@ export default {
       try {
         const category2 = route.currentRoute.value.params.category;
         const category1 = CategoryDataReverse[Categories[category2].main];
-        console.log(keyword);
         const response = await getWordCloud(category1, category2, keyword);
         const dataArray = response.data;
-        console.log(dataArray);
         getWords(dataArray);
       } catch (error) {
+        words.value.push(["준비중입니다", 100]);
         console.error(error);
       }
     }
