@@ -7,7 +7,10 @@
     <div class="content-1">
       <!-- 워드클라우드 + 실시간 키워드  -->
       <div class="word-cloud">
-        <vue-word-cloud :words="words">
+        <vue-word-cloud :words="words" 
+        spacing=0.2
+        :color="([, weight]) => weight >= 15 ? 'DeepPink' : weight >= 10 ? 'Yellow' : weight >= 5 ? 'RoyalBlue' : 'Indigo'" 
+        font-family='Jeju Gothic'>
           <template #default="{ text, weight }">
             <div :title="weight" @click="onWordClick(text)" class="word-cloud-text">
               {{ text }}
@@ -27,7 +30,6 @@
 </template>
 
 <script>
-// import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
@@ -170,6 +172,10 @@ export default {
 
 .word-cloud-text {
   cursor: pointer;
-  font-family: 'Jeju Gothic', sans-serif;
+}
+
+.word-cloud-text:hover {
+  cursor: pointer;
+  font-size: larger;
 }
 </style>
