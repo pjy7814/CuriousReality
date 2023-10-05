@@ -44,16 +44,6 @@
           올바른 전화번호 형식이 아닙니다. 010-0000-0000
         </div>
       </div>
-      <div class="input-body">
-        <div class="input-head"><b>관심분야</b></div>
-        <div class="checkbox-interest">
-          <input type="checkbox" v-model="preferenceCategory" value="politics" />정치
-          <input type="checkbox" v-model="preferenceCategory" value="economy" />경제
-          <input type="checkbox" v-model="preferenceCategory" value="society" />사회
-          <input type="checkbox" v-model="preferenceCategory" value="itscience" />IT/과학
-          <input type="checkbox" v-model="preferenceCategory" value="world" />세계
-        </div>
-      </div>
       <button :disabled="!isValidSignUp" type="submit" class="signup-button">회원가입</button>
     </form>
   </div>
@@ -61,7 +51,7 @@
 
 <script>
 import { registerMember } from "@/api/userApi";
-import { validateEmail, validateContact, validateName, validatePassword } from "@/utils/validation";     // 유효성 검사
+import { validateEmail, validateContact, validateName, validatePassword } from "@/utils/validation"; // 유효성 검사
 export default {
   name: "SignupView",
   data() {
@@ -72,7 +62,6 @@ export default {
       name: "",
       birthday: "",
       contact: "",
-      preferenceCategory: [],
     };
   },
   computed: {
@@ -96,12 +85,15 @@ export default {
       return !!this.birthday;
     },
     isValidSignUp() {
-      if (this.email == '' ||
-        this.password == '' ||
-        this.passwordCheck == '' ||
-        this.name == '' ||
-        this.birthday == '' ||
-        this.contact == '') return false;
+      if (
+        this.email == "" ||
+        this.password == "" ||
+        this.passwordCheck == "" ||
+        this.name == "" ||
+        this.birthday == "" ||
+        this.contact == ""
+      )
+        return false;
       return (
         this.isEmailValid &&
         this.isPasswordValid &&
@@ -123,13 +115,12 @@ export default {
           birthday: this.birthday,
           contact: this.contact,
           isSocial: false,
-          preferenceCategory: this.preferenceCategory,
         };
         try {
           await registerMember(memberData);
           alert(`${this.name}님이 가입되었습니다`);
 
-          window.location.href = '/login';
+          window.location.href = "/login";
         } catch (error) {
           alert("회원가입에 실패했습니다.");
           console.error(error.message);
@@ -143,7 +134,6 @@ export default {
       this.name = "";
       this.birthday = "";
       this.contact = "";
-      this.preference_category = [];
     },
   },
 };
@@ -246,7 +236,7 @@ input {
   margin-top: 1rem;
 }
 
-.checkbox-interest>input {
+.checkbox-interest > input {
   width: 20px;
   margin: 0px 10px 0px 14px;
   align-items: center;
@@ -263,4 +253,5 @@ input {
   margin-top: 5px;
   margin-left: 15px;
   color: red;
-}</style>
+}
+</style>
