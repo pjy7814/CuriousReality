@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import javax.naming.directory.SearchResult;
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -144,11 +145,26 @@ public class SearchController {
             answer.add(keyword);
         }
 
-        
-        return ResponseEntity.ok(answer);
 
+        return ResponseEntity.ok(answer);
     }
 
+    @GetMapping("/main/news")
+    public ResponseEntity<List<SearchEntity>> mainNews(@RequestParam(name = "keyword", required = true) String keyword){
+        // 메인 페이지에서 단어를 눌렀을 때 해당 키워드에 맞는 기사 정보들을 반환
 
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime yesterday = currentTime.minusDays(1);
+        // DateTimeFormatter를 사용하여 원하는 형식으로 포맷팅
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+        String endDate = currentTime.format(formatter); // 현재시간(기준점의 끝이라 endDate)
+        String startDate = yesterday.format(formatter); // 현재 시간 -24시간, 즉 하루 전 (기준점 -하루)
+
+
+        List<SearchEntity> result  = searchService.mainSearch(startDate,endDate,keyword);
+        
+        return ResponseEntity.ok(result);
+    }
 
 }
