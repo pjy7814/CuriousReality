@@ -33,7 +33,6 @@ public class SearchService {
         //SearchRepository를 사용하여 검색 데이터를 조회
         LocalDateTime startDate = (startDateStr != null) ? LocalDateTime.parse(startDateStr) : null;
         LocalDateTime endDate = (endDateStr != null) ? LocalDateTime.parse(endDateStr) : null;
-
         if(keyword==null){
             return searchRepository.findCustomByCategoryAndCreatedAt(category1,category2,startDate,endDate);
         }

@@ -19,3 +19,4 @@ public interface SearchRepository extends MongoRepository<SearchEntity,String> {
     @Query("{ 'createdAt': { $gte: ?0, $lte: ?1 }, 'keywords': { $elemMatch: { 'keyword': ?2 } } }")
     List<SearchEntity> findCustomByCreatedAtAndKeyword(LocalDateTime startDate, LocalDateTime endDate, String keyword, Pageable pageable);
 }
+
