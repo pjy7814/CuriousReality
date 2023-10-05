@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ArticleInfoRepository extends MongoRepository<ArticleInfoEntity, String> {
     Optional<List<ArticleInfoEntity>> findAllByOriginalUrl(String originalUrl);
     void deleteAllByOriginalUrl(String originUrl);
+    Optional<ArticleInfoEntity> findByOriginalUrl(String originalUrl);
 }
