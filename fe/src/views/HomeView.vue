@@ -6,7 +6,7 @@
     <div class="content-1">
       <!-- 워드클라우드 + 실시간 키워드  -->
       <div class="word-cloud">
-        <vue-word-cloud :words="words">
+        <vue-word-cloud :words="words" :color="([, weight]) => weight >= 10 ? 'DeepPink' : weight >= 5 ? 'RoyalBlue' : 'Indigo'">
           <template #default="{ text, weight }">
             <div :title="weight" @click="onWordClick(text)" class="word-cloud-text">
               {{ text }}

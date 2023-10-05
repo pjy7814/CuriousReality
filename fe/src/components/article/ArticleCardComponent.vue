@@ -52,6 +52,7 @@ export default {
   },
   created() {
     if (this.checkLogin()) {
+      console.log(localStorage.getItem("userEmail"));
       this.getRecommend();
     }
   },
@@ -74,10 +75,7 @@ export default {
           this.getNewAccessToken();
           this.getRecommend();
         } else {
-          alert("로그인 후 이용해주세요.");
-          localStorage.removeItem("userEmail");
-          localStorage.removeItem("userToken");
-          window.location.href = "/";
+          console.log("server Error", error)
         }
       }
     },
@@ -88,7 +86,7 @@ export default {
       } catch (error) {
         if (error.response && error.response.status === 401) {
 
-          alert("로그인 후 이용해주세요.");
+          alert("로그인 후 이용해주세요.11");
           localStorage.removeItem("userEmail");
           localStorage.removeItem("userToken");
           window.location.href = "/";
