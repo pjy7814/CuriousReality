@@ -41,7 +41,7 @@ export default {
         "originalUrl": "",
         "category1": "",
         "category2": "",
-        "title": "",
+        "title": "알 수 없는 에러가 발생했습니다.",
         "createdAt": "",
         "thumbnail": "",
         "company": "",
@@ -61,7 +61,12 @@ export default {
 
       try {
         const { data } = await getRecommend();
-        this.article = [...data];
+        if (Array.isArray(data) && data.length > 0) {
+          this.article = [...data];
+          console.log(data);
+        } else {
+          console.error("Received empty or non-array data from API.");
+        }
         console.log(data);
       } catch (error) {
         if (error.response && error.response.status === 401) {

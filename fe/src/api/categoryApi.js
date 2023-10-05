@@ -23,10 +23,19 @@ function getWordCloud(category1, category2, keyword) {
   });
 }
 
+function getMainArticle(keyword) {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+  return axios.get(`${BASE_URL}/article/main/news`, {
+    params: {
+      keyword: keyword
+    }
+  });
+}
+
 // main page
 function getMainWordCloud() {
   const BASE_URL = process.env.VUE_APP_API_URL;
   return axios.get(`${BASE_URL}/article/main`);
 }
 
-export {getHotKeyword, getWordCloud, getMainWordCloud};
+export {getHotKeyword, getWordCloud, getMainWordCloud, getMainArticle};
