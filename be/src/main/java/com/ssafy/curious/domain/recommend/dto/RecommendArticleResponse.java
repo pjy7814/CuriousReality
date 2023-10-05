@@ -34,7 +34,6 @@ public class RecommendArticleResponse {
         recommendArticleResponse.thumbnail = articleInfo.get().getThumbnail();
         recommendArticleResponse.company = articleInfo.get().getCompany();
         recommendArticleResponse.article = articleInfo.get().getArticle();
-        recommendArticleResponse.keywords = articleInfo.get().getKeywords();
 
         return recommendArticleResponse;
     }

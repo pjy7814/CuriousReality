@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter // Getter 메서드 자동 생성
 @NoArgsConstructor(access = AccessLevel.PUBLIC) // 인자 없는 생성자 자동 생성
-@Document(collection = "searchTest") // 해당 클래스가 MongoDB의 'article_info'에 매핑
+@Document(collection = "article_info") // 해당 클래스가 MongoDB의 'article_info'에 매핑
 public class SearchEntity {
     @Id
     private String id;
