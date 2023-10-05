@@ -47,8 +47,6 @@ public class SearchController {
 
         ArticleCategory smallCategory = ArticleCategoryConverter.convertEnumCategory(category2);
         String smallCat = ArticleCategoryConverter.convertKrCategory(smallCategory);
-
-
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime yesterday = currentTime.minusDays(1);
         // DateTimeFormatter를 사용하여 원하는 형식으로 포맷팅
@@ -57,13 +55,14 @@ public class SearchController {
         String endDate = currentTime.format(formatter); // 현재시간(기준점의 끝이라 endDate)
         String startDate = yesterday.format(formatter); // 현재 시간 -24시간, 즉 하루 전 (기준점 -하루)
         List<SearchEntity> result = searchService.searchArticles(bigCat,smallCat,startDate,endDate, keyword);
-        Map<String,Float> keywordMap = new HashMap<>(); // 중복된 키워드와 해당 TF-IDF 값을 저장하기 위해서
+        Map<String,Double> keywordMap = new HashMap<>(); // 중복된 키워드와 해당 TF-IDF 값을 저장하기 위해서
         List<SearchArticleResponse> responseList = new ArrayList<>();
         for(SearchEntity arti:result){ // 가져온 모든 result 덩어리에 대해서 실행
             List<Keyword> keywords = arti.getKeywords();
+
             for (Keyword kw : keywords) {
                 String keywordText = kw.getKeyword();
-                float tfidf = kw.getTfidf();
+                double tfidf = kw.getTf_idf();
                 // 이미 해당 키워드가 맵에 존재하는 경우 그냥 넘어감(TF_IDF 값은 모두 동일하기에)
                 if (keywordMap.containsKey(keywordText)) {
                     continue;
@@ -73,9 +72,9 @@ public class SearchController {
             }
         }
 
-        List<Entry<String, Float>> entryList = new ArrayList<>(keywordMap.entrySet());
+        List<Entry<String, Double>> entryList = new ArrayList<>(keywordMap.entrySet());
         // Entry (키와 값의 쌍)을 TF-IDF 값에 따라 내림차순으로 정렬
-        entryList.sort((entry1, entry2) -> Float.compare(entry2.getValue(), entry1.getValue()));
+        entryList.sort((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()));
         int maxValue = Math.min(20,result.size());
         // 최대 20개를 받아온다.
         for(int i=0;i<20;i++){
@@ -93,14 +92,14 @@ public class SearchController {
                 response.setOriginalUrl(result.get(i).getOriginalUrl());
                 response.setThumbnail(result.get(i).getThumbnail());
             }
-            Entry<String, Float> entry1 = entryList.get(i);
+            Entry<String, Double> entry1 = entryList.get(i);
             String keywordText = entry1.getKey();
-            float tfidf = entry1.getValue();
+            double tfidf = entry1.getValue();
 
             List<Keyword> keywords = new ArrayList<>();
             Keyword keyword1 = new Keyword();
             keyword1.setKeyword(keywordText);
-            keyword1.setTfidf(tfidf);
+            keyword1.setTf_idf(tfidf);
             keywords.add(keyword1);
             response.setKeywords(keywords);
 
@@ -141,7 +140,7 @@ public class SearchController {
         for(int i=0;i<10;i++){
             Keyword keyword = new Keyword();
             keyword.setKeyword(result.get(0).getTfidfResult().get(i).getKeyword());
-            keyword.setTfidf(result.get(0).getTfidfResult().get(i).getTfidf());
+            keyword.setTf_idf(result.get(0).getTfidfResult().get(i).getTf_idf());
             answer.add(keyword);
         }
 
@@ -163,7 +162,7 @@ public class SearchController {
 
 
         List<SearchEntity> result  = searchService.mainSearch(startDate,endDate,keyword);
-        
+
         return ResponseEntity.ok(result);
     }
 
