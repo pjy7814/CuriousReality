@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.goduri.curiousaboutreality.exception.RealityException;
 import com.goduri.curiousaboutreality.sparkUtil.SparkSessionUtil;
+import com.goduri.curiousaboutreality.util.BareunUtil;
 import com.goduri.curiousaboutreality.wordCount.dto.Article;
 import com.goduri.curiousaboutreality.wordCount.dto.Category;
 import com.goduri.curiousaboutreality.wordCount.dto.TF_IDF;
@@ -46,22 +47,21 @@ import scala.Tuple2;
 public class WordCountService {
 	private final JSONParser parser; // file -> json 을 위한 객체
 	private final ObjectMapper objectMapper; // json -> Article로 만들기 위한 객체
-
 	private final ArticleRepository articleRepository;
 	private final TfidfRepository tfidfRepository;
+	private final BareunUtil bareunUtil;
 
-	// @Autowired
-	// public WordCountService(JSONParser parser, ObjectMapper objectMapper){
-	// 	this.parser = parser;
-	// 	this.objectMapper = objectMapper;
-	//
-	// }
 	@Autowired
-	public WordCountService(JSONParser parser, ObjectMapper objectMapper, ArticleRepository articleRepository, TfidfRepository tfidfRepository){
+	public WordCountService(JSONParser parser
+		, ObjectMapper objectMapper
+		, ArticleRepository articleRepository
+		, TfidfRepository tfidfRepository
+		, BareunUtil bareunUtil){
 		this.parser = parser;
 		this.objectMapper = objectMapper;
 		this.articleRepository = articleRepository;
 		this.tfidfRepository = tfidfRepository;
+		this.bareunUtil = bareunUtil;
 	}
 
 	/**
@@ -81,11 +81,11 @@ public class WordCountService {
 	 *
 	 * @param fileLocation : 크롤링 한 뉴스 파일의 위치
 	 */
-	@KafkaListener(topics = "Reality", groupId = ConsumerConfig.GROUP_ID_CONFIG)
+	@KafkaListener(topics = "Reality_Test", groupId = ConsumerConfig.GROUP_ID_CONFIG)
 	public void consume(String fileLocation) {
 		System.out.println("들어왔어!!!!!");
 		long startTime = System.nanoTime();
-		//String testFileLocation = "C:\\Users\\SSAFY\\Downloads\\20230901.json";
+		//String testFileLocation = "C:\\Users\\SSAFY\\Downloads\\202310051000.json";
 
 		try{
 			doWork(fileLocation);
@@ -175,9 +175,22 @@ public class WordCountService {
 	private void parseJsonArrayToArticles(JSONArray jsonArray, List<Article> articles) throws JsonProcessingException {
 		for(Object object : jsonArray){
 			Article articleResult = parseObjectToArticle(object);
+			getNouns(articleResult);
 			articles.add(articleResult);
 		}
 	}
+
+	/**
+	 * 바름 라이브러리를 사용하여 "체언" 만 추출하여 article의 preprocessed에 저장.
+	 *
+	 * @param articleResult : 뉴스 데이터
+	 */
+	private void getNouns(Article articleResult) {
+		String mainText = articleResult.getArticle();
+		List<String> nounsList = bareunUtil.getMorphologicalAnalysis(mainText);
+		articleResult.setPreprocessed(nounsList);
+	}
+
 	private Article parseObjectToArticle(Object object) throws JsonProcessingException {
 		JSONObject jsonObject = (JSONObject)object;
 		String jsonStr = jsonObject.toString();

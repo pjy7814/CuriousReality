@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goduri.curiousaboutreality.util.BareunUtil;
 
 @Configuration
 public class AppConfig {
@@ -19,5 +20,6 @@ public class AppConfig {
 		return new JSONParser();
 	}
 
-
+	@Bean
+	public BareunUtil bareunUtil() { return new BareunUtil(); }
 }
