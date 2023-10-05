@@ -15,8 +15,8 @@
           </template>
         </vue-word-cloud>
       </div>
-       <div class="content-item2">
-        <KeywordComponent />
+      <div class="content-item2">
+        <KeywordComponent :keywords="keywords" />
       </div>
     </div>
 
@@ -32,6 +32,9 @@ import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
 import VueWordCloud from "vuewordcloud";
 import Categories from "@/assets/category_data.json";
+import CategoryDataReverse from "@/assets/category_data_reverse.json";
+import { getHotKeyword } from "@/api/categoryApi";
+
 export default {
   components: {
     ArticleComponent,
@@ -40,10 +43,19 @@ export default {
   },
   created() {
     this.category = Categories[this.$route.params.category];
+    const category1 = CategoryDataReverse[Categories[this.$route.params.category].main];
+      const category2 = this.$route.params.category;
+
+      this.getHotKeyword(category1, category2);
   },
   watch: {
     $route(to) {
       this.category = Categories[to.params.category];
+
+      const category1 = CategoryDataReverse[Categories[to.params.category].main];
+      const category2 = to.params.category;
+
+      this.getHotKeyword(category1, category2);
     },
   },
   setup() {
@@ -70,8 +82,20 @@ export default {
         ["남현실나이", 7],
         ["남현실충격발언", 3],
       ],
+      keywords: ["준비중입니다"],
     };
   },
+  methods: {
+    async getHotKeyword(category1, category2) {
+
+      try {
+        const { data } = await getHotKeyword(category1, category2);
+        this.keywords = data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  }
 };
 </script>
 
@@ -106,6 +130,7 @@ export default {
   height: 400px;
   margin: 50px;
 }
+
 .content-item2 {
   width: 15%;
   height: 300px;

@@ -1,7 +1,7 @@
 <template>
     <div class="item">
-        <div class="rank">{{ keyword.rank }}</div>
-        <div class="keyword">{{ keyword.keyword }}</div>
+        <div class="rank">{{ rank+1 }}</div>
+        <div class="keyword">{{ keyword }}</div>
     </div>
     
 </template>
@@ -10,7 +10,8 @@
 export default {
     name: "KeywordItem",
     props: {
-        keyword: Object
+        rank: Number,
+        keyword: String
     }
 };
 </script>
