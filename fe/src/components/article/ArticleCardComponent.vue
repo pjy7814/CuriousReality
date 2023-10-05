@@ -36,18 +36,20 @@ export default {
   data() {
     return {
       index: 0,
-      article: [{
-        "id": "",
-        "originalUrl": "",
-        "category1": "",
-        "category2": "",
-        "title": "알 수 없는 에러가 발생했습니다.",
-        "createdAt": "",
-        "thumbnail": "",
-        "company": "",
-        "article": "",
-        "keywords": null
-      }],
+      article: [
+        {
+          id: "",
+          originalUrl: "",
+          category1: "",
+          category2: "",
+          title: "알 수 없는 에러가 발생했습니다.",
+          createdAt: "",
+          thumbnail: "",
+          company: "",
+          article: "",
+          keywords: null,
+        },
+      ],
     };
   },
   created() {
@@ -59,7 +61,6 @@ export default {
   methods: {
     // 통신
     async getRecommend() {
-
       try {
         const { data } = await getRecommend();
         if (Array.isArray(data) && data.length > 0) {
@@ -75,7 +76,7 @@ export default {
           this.getNewAccessToken();
           this.getRecommend();
         } else {
-          console.log("server Error", error)
+          console.log("server Error", error);
         }
       }
     },
@@ -85,8 +86,7 @@ export default {
         localStorage.setItem("userToken", data.accessToken);
       } catch (error) {
         if (error.response && error.response.status === 401) {
-
-          alert("로그인 후 이용해주세요.11");
+          alert("로그인 후 이용해주세요.");
           localStorage.removeItem("userEmail");
           localStorage.removeItem("userToken");
           window.location.href = "/";
@@ -117,7 +117,14 @@ export default {
       }
     },
     formatDate(dateString) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      };
       return new Date(dateString).toLocaleDateString(undefined, options);
     },
 

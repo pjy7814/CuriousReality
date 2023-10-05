@@ -6,22 +6,21 @@
       <router-link class="category" to="/103">북한</router-link>
       <router-link class="category" to="/104">행정</router-link>
       <router-link class="category" to="/105">국방/외교</router-link>
-      <router-link class="category" to="/106">정치일반</router-link>
+      <!-- <router-link class="category" to="/106">정치일반</router-link> -->
     </div>
   </div>
 </template>
-  
+
 <script>
-export default {
-};
+export default {};
 </script>
-  
+
 <style>
 .sub-item {
   align-items: flex-start;
   width: 100%;
   gap: 21px;
-} 
+}
 
 .category {
   display: flex;
@@ -35,4 +34,3 @@ export default {
   text-decoration: none;
 }
 </style>
-  
