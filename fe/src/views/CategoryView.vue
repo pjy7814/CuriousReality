@@ -21,19 +21,20 @@
     </div>
 
     <div class="content-1">
-      <ArticleComponent />
+      <ArticleComponent :title="1" :articles="articles" />
     </div>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
 import VueWordCloud from "vuewordcloud";
 import Categories from "@/assets/category_data.json";
 import CategoryDataReverse from "@/assets/category_data_reverse.json";
-import { getHotKeyword } from "@/api/categoryApi";
+import { getHotKeyword, getWordCloud } from "@/api/categoryApi";
 
 export default {
   components: {
@@ -44,9 +45,10 @@ export default {
   created() {
     this.category = Categories[this.$route.params.category];
     const category1 = CategoryDataReverse[Categories[this.$route.params.category].main];
-      const category2 = this.$route.params.category;
+    const category2 = this.$route.params.category;
 
-      this.getHotKeyword(category1, category2);
+    this.getHotKeyword(category1, category2);
+    this.onWordClick(null);
   },
   watch: {
     $route(to) {
@@ -60,29 +62,42 @@ export default {
   },
   setup() {
     const route = useRouter();
+    const words = ref([]);
 
-    function onWordClick(word) {
-      const category = this.category; // 현재 카테고리 가져오기
-      route.push({
-        name: "Category", // 컴포넌트 이름
-        params: { category }, // 카테고리 파라미터
-        query: { keyword: word }, // 키워드 쿼리
+    function getWords(data) {
+      const wordCloudData = [];
+
+      data.forEach((item, index) => {
+        const keyword = item.keywords[0].keyword;
+        wordCloudData.push([keyword, 20 - index/1.1]);
       });
+
+      console.log(wordCloudData);
+      words.value = wordCloudData; 
     }
 
-    return { onWordClick };
+    async function onWordClick(keyword) {
+      try {
+        const category2 = route.currentRoute.value.params.category;
+        const category1 = CategoryDataReverse[Categories[category2].main];
+        console.log(keyword);
+        const response = await getWordCloud(category1, category2, keyword);
+        const dataArray = response.data;
+        console.log(dataArray);
+        getWords(dataArray);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    return { onWordClick, words };
   },
   data() {
     return {
       categories: Categories,
       category: "",
-      words: [
-        ["남현실", 19],
-        ["남현실논란", 3],
-        ["남현실나이", 7],
-        ["남현실충격발언", 3],
-      ],
       keywords: ["준비중입니다"],
+      articles: []
     };
   },
   methods: {
@@ -91,6 +106,16 @@ export default {
       try {
         const { data } = await getHotKeyword(category1, category2);
         this.keywords = data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getWordCloud(category1, category2, keyword) {
+      try {
+        console.log("asdf");
+        const { data } = await getWordCloud(category1, category2, keyword);
+
+        return data.data;
       } catch (error) {
         console.error(error);
       }
