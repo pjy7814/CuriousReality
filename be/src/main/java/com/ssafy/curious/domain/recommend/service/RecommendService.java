@@ -7,10 +7,11 @@ import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.model.ArticlePress;
 import com.ssafy.curious.domain.model.ArticleMetadata;
+import com.ssafy.curious.domain.recommend.entity.RecommendPoolCFEntity;
 import com.ssafy.curious.domain.recommend.entity.RecommendPoolClusterEntity;
 import com.ssafy.curious.domain.model.RecommendScore;
-import com.ssafy.curious.domain.recommend.repository.RecommendPooClusterRepository;
-import com.ssafy.curious.domain.recommend.repository.RecommendPoolRepository;
+import com.ssafy.curious.domain.recommend.repository.RecommendPoolClusterRepository;
+import com.ssafy.curious.domain.recommend.repository.RecommendPoolCFRepository;
 import com.ssafy.curious.global.utils.ArticleCategoryConverter;
 import com.ssafy.curious.global.utils.ArticlePressConverter;
 import lombok.RequiredArgsConstructor;
@@ -28,71 +29,23 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RecommendService {
 
-    private final RecommendPoolRepository recommendPoolRepository;
-    private final RecommendPooClusterRepository recommendPooClusterRepository;
+    private final RecommendPoolClusterRepository recommendPoolClusterRepository;
+    private final RecommendPoolCFRepository recommendPoolCFRepository;
     private final MemberRepository memberRepository;
     private final ArticleInfoRepository articleInfoRepository;
 
-    /**
-     * 협업 필터링 기반 추천 기사 후보군에서 추천 점수를 계산하여 추천 기사 ID 리스트 리턴
-     */
-    // Todo: 추천 점수 weight 조정, 기사 리턴 개수 구체화
-//    public List<Optional<ArticleInfoEntity>> recommendArticle(Long memberId) {
-//        // 추천 기사 후보군 가져오기
-//        LocalDate today = LocalDate.now();
-//        LocalDateTime startTime = today.atStartOfDay();
-//        LocalDateTime endTime = today.atTime(23, 59, 59);
-//
-//        RecommendPoolClusterEntity recommendPoolCluster = recommendPooClusterlRepository.findByCreatedAtBetween(startTime, endTime);
-//        List<ArticleMetadata> articleList = recommendPoolCluster.getArticleList();
-//
-//        // 멤버의 카테고리, 언론사 선호도 가져오기
-//        Optional<MemberEntity> member = memberRepository.findById(memberId);
-//        Map<ArticleCategory, Integer> categoryPreference = member.get().getCategoryPreference();
-//        Map<ArticlePress, Integer> pressPreference = member.get().getPressPreference();
-//
-//        // 추천 점수 계산
-//        List<RecommendScore> recommendScores = new ArrayList<>();
-//
-//        for (ArticleMetadata article : articleList) {
-//            Integer categoryScore = categoryPreference.getOrDefault(article.getCategory1(), -100);
-//            Integer pressScore = pressPreference.getOrDefault(article.getCompany(), -100);
-//            Float trendingScore = article.getClusterScale();
-//            Float totalScore = categoryScore + pressScore + trendingScore;
-//            recommendScores.add(new RecommendScore(article.getArticleId(), totalScore));
-//        }
-//
-//        // 추천 점수 기준 정렬
-//        recommendScores.sort(Comparator.comparing(RecommendScore::getScore).reversed());
-//
-//        // 상위 3개 기사 추출
-//        List<Optional<ArticleInfoEntity>> topArticles = new ArrayList<>();
-//        int count = 0;
-//        for (RecommendScore score : recommendScores) {
-//            if (count < 3) {
-//                topArticles.add(articleInfoRepository.findById(score.getArticleId()));
-//                count++;
-//            } else {
-//                break;
-//            }
-//        }
-//        log.info("topArticles {}", topArticles.toString());
-//
-//        return topArticles;
-//    }
+    LocalDate today = LocalDate.now();
+    LocalDateTime startTime = today.atStartOfDay();
+    LocalDateTime endTime = today.atTime(23, 59, 59);
 
     /**
      * 클러스터링 기반 추천 기사 후보군에서 추천 점수를 계산하여 추천 기사 ID 리스트 리턴
      */
     // Todo: 추천 점수 weight 조정, 기사 리턴 개수 구체화
-    public List<Optional<ArticleInfoEntity>> recommendClusterArticle(Long memberId) {
+    public List<ArticleInfoEntity> recommendClusterArticle(Long memberId) {
         // 추천 기사 후보군 가져오기
-        LocalDate today = LocalDate.now();
-        LocalDateTime startTime = today.atStartOfDay();
-        LocalDateTime endTime = today.atTime(23, 59, 59);
-
-        RecommendPoolClusterEntity recommendPoolCluster = recommendPooClusterRepository.findByCreatedAtBetween(startTime, endTime);
-        List<ArticleMetadata> articleList = recommendPoolCluster.getArticleList();
+        Optional<RecommendPoolClusterEntity> recommendPoolCluster = recommendPoolClusterRepository.findByCreatedAtBetween(startTime, endTime);
+        List<ArticleMetadata> articleList = recommendPoolCluster.get().getArticleList();
         log.info("poolCluster {}", articleList.toString());
 
         // 멤버의 카테고리, 언론사 선호도 가져오기
@@ -118,21 +71,64 @@ public class RecommendService {
 
         // 추천 점수 기준 정렬
         List<RecommendScore> bestArticleList = new ArrayList<>(bestScoresByCategory.values());
-        log.info("bestArticleList {}", bestArticleList.toString());
+        log.info("bestClusterArticleList {}", bestArticleList.toString());
 
         // 상위 5개 기사 추출
-        List<Optional<ArticleInfoEntity>> topArticles = new ArrayList<>();
+        List<ArticleInfoEntity> topArticles = new ArrayList<>();
         int count = 0;
         for (RecommendScore score : bestArticleList) {
             if (count < 5) {
-                topArticles.add(articleInfoRepository.findByOriginalUrl(score.getArticleUrl()));
-                log.info("urls {}", score.getArticleUrl());
+                // 같은 Url을 가진 여러 기사가 있는 경우 제일 첫번째 기사만 가져온다
+                Optional<List<ArticleInfoEntity>> articleInfoList = articleInfoRepository.findAllByOriginalUrl(score.getArticleUrl())
+                        .stream().findFirst();
+                // 조회한 기사가 존재할 때만 추가
+                if (articleInfoList.isPresent() && !articleInfoList.get().isEmpty()) {
+                    ArticleInfoEntity articleInfo = articleInfoList.get().get(0);
+                    topArticles.add(articleInfo);
+                }
+                log.info("cluster article urls {}", score.getArticleUrl());
                 count++;
             } else {
                 break;
             }
         }
         log.info("topArticles {}", topArticles.toString());
+
+        return topArticles;
+    }
+
+    /**
+     * 협업 필터링 기반 추천 기사 후보군에서 추천 점수를 계산하여 추천 기사 ID 리스트 리턴
+     */
+    public List<ArticleInfoEntity> recommendCFArticle(Long memberId) {
+        // 추천 기사 후보군 가져오기
+        Optional<RecommendPoolCFEntity> recommendPoolCF = recommendPoolCFRepository.findByCreatedAtBetweenAndMemberId(startTime, endTime, memberId);
+        // 협업 필터링 추천 후보군이 비어있을 경우 추천하지 않음
+        if(recommendPoolCF.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<String> articleUrlList = recommendPoolCF.get().getArticleList();
+        log.info("articleUrlList {}", articleUrlList.toString());
+
+        // 상위 5개 기사 추출
+        List<ArticleInfoEntity> topArticles = new ArrayList<>();
+        int count = 0;
+        for (String articleUrl : articleUrlList) {
+            if (count < 5) {
+                // 같은 Url을 가진 여러 기사가 있는 경우 제일 첫번째 기사만 가져온다
+                Optional<List<ArticleInfoEntity>> articleInfoList = articleInfoRepository.findAllByOriginalUrl(articleUrl)
+                        .stream().findFirst();
+                // 기사가 있는 경우에만 처리
+                if (articleInfoList.isPresent() && !articleInfoList.get().isEmpty()) {
+                    ArticleInfoEntity articleInfo = articleInfoList.get().get(0);
+                    topArticles.add(articleInfo);
+                }
+                count++;
+            } else {
+                break;
+            }
+        }
+        log.info("topCFArticles {}", topArticles.toString());
 
         return topArticles;
     }
