@@ -62,7 +62,7 @@ public class SearchController {
             List<Keyword> keywords = arti.getKeywords();
             for (Keyword kw : keywords) {
                 String keywordText = kw.getKeyword();
-                double tfidf = kw.getTfidf();
+                double tfidf = kw.getTf_idf();
                 // 이미 해당 키워드가 맵에 존재하는 경우 그냥 넘어감(TF_IDF 값은 모두 동일하기에)
                 if (keywordMap.containsKey(keywordText)) {
                     continue;
@@ -83,14 +83,18 @@ public class SearchController {
                 response.setCategory1(null);
                 response.setCategory2(null);
                 response.setTitle(null);
+                response.setCreatedAt(null);
                 response.setOriginalUrl(null);
                 response.setThumbnail(null);
+                response.setArticle(null);
             }else{
                 response.setCategory1(result.get(i).getCategory1());
                 response.setCategory2(result.get(i).getCategory2());
                 response.setTitle(result.get(i).getTitle());
+                response.setCreatedAt(result.get(i).getCreatedAt());
                 response.setOriginalUrl(result.get(i).getOriginalUrl());
                 response.setThumbnail(result.get(i).getThumbnail());
+                response.setArticle(result.get(i).getArticle());
             }
             Entry<String, Double> entry1 = entryList.get(i);
             String keywordText = entry1.getKey();
@@ -99,7 +103,7 @@ public class SearchController {
             List<Keyword> keywords = new ArrayList<>();
             Keyword keyword1 = new Keyword();
             keyword1.setKeyword(keywordText);
-            keyword1.setTfidf(tfidf);
+            keyword1.setTf_idf(tfidf);
             keywords.add(keyword1);
             response.setKeywords(keywords);
 
@@ -129,24 +133,36 @@ public class SearchController {
 
         return ResponseEntity.ok(answer);
     }
-
-
     @GetMapping("/main")
     public ResponseEntity<List<Keyword>> main(){
         // 처음 메인 페이지에 들어왔을 때 반환하는 값들
         List<MainpageEntity> result  = mainpageRepository.findAllBy();
         List<Keyword> answer= new ArrayList<>();
-
         for(int i=0;i<10;i++){
             Keyword keyword = new Keyword();
             keyword.setKeyword(result.get(0).getTfidfResult().get(i).getKeyword());
-            keyword.setTfidf(result.get(0).getTfidfResult().get(i).getTfidf());
+            keyword.setTf_idf(result.get(0).getTfidfResult().get(i).getTf_idf());
             answer.add(keyword);
         }
-
-        
         return ResponseEntity.ok(answer);
 
+    }
+    @GetMapping("/main/news")
+    public ResponseEntity<List<SearchEntity>> mainNews(@RequestParam(name = "keyword", required = true) String keyword){
+        // 메인 페이지에서 단어를 눌렀을 때 해당 키워드에 맞는 기사 정보들을 반환
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime yesterday = currentTime.minusDays(1);
+        // DateTimeFormatter를 사용하여 원하는 형식으로 포맷팅
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+        String endDate = currentTime.format(formatter); // 현재시간(기준점의 끝이라 endDate)
+        String startDate = yesterday.format(formatter); // 현재 시간 -24시간, 즉 하루 전 (기준점 -하루)
+
+
+        List<SearchEntity> result  = searchService.mainSearch(startDate,endDate,keyword);
+
+        return ResponseEntity.ok(result);
     }
 
 

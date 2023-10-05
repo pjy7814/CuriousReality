@@ -9,13 +9,11 @@ import com.ssafy.curious.domain.member.repository.MemberRepository;
 import com.ssafy.curious.domain.recommend.service.RecommendService;
 import com.ssafy.curious.global.exception.CustomValidationException;
 import com.ssafy.curious.global.exception.ErrorCode;
-import com.ssafy.curious.security.dto.UserAuth;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -68,10 +66,8 @@ public class MailServiceImpl implements MailService {
             member = memberRepository.findMemberByEmail(email);
         }
 
-        log.info("member : {}", member.getEmail());
         Long memberId = member.getId();
         String name = member.getName();
-        log.info(name);
 
         List<NewsLetterArticle> articles = new ArrayList<>();
         List<ArticleInfoEntity> recommendList = recommendService.recommendClusterArticle(memberId);

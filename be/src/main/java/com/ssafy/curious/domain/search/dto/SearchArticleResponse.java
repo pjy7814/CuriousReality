@@ -18,6 +18,8 @@ public class SearchArticleResponse {
     private String category1;
     private String category2;
     private String title;
+    private LocalDateTime createdAt;
     private String thumbnail;
     private List<Keyword> keywords;
+    private String article;
 }
