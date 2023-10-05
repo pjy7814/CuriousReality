@@ -83,14 +83,18 @@ public class SearchController {
                 response.setCategory1(null);
                 response.setCategory2(null);
                 response.setTitle(null);
+                response.setCreatedAt(null);
                 response.setOriginalUrl(null);
                 response.setThumbnail(null);
+                response.setArticle(null);
             }else{
                 response.setCategory1(result.get(i).getCategory1());
                 response.setCategory2(result.get(i).getCategory2());
                 response.setTitle(result.get(i).getTitle());
+                response.setCreatedAt(result.get(i).getCreatedAt());
                 response.setOriginalUrl(result.get(i).getOriginalUrl());
                 response.setThumbnail(result.get(i).getThumbnail());
+                response.setArticle(result.get(i).getArticle());
             }
             Entry<String, Double> entry1 = entryList.get(i);
             String keywordText = entry1.getKey();
