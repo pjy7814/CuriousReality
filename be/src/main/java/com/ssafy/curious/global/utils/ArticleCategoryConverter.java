@@ -47,24 +47,19 @@ public class ArticleCategoryConverter {
         categoryNumToEnumMap.put("308", ArticleCategory.SOCIAL_GENERAL);
 
         categoryNumToEnumMap.put("400", ArticleCategory.SCIENCE);
-        categoryNumToEnumMap.put("401", ArticleCategory.INCIDENT_ACCIDENT_SCIENCE);
-        categoryNumToEnumMap.put("402", ArticleCategory.SCIENCE_EDUCATION);
-        categoryNumToEnumMap.put("403", ArticleCategory.LABOR_SCIENCE);
-        categoryNumToEnumMap.put("404", ArticleCategory.PRESS_SCIENCE);
-        categoryNumToEnumMap.put("405", ArticleCategory.ENVIRONMENT_SCIENCE);
-        categoryNumToEnumMap.put("406", ArticleCategory.HUMAN_RIGHTS_WELFARE_SCIENCE);
-        categoryNumToEnumMap.put("407", ArticleCategory.FOOD_MEDICINE_SCIENCE);
-        categoryNumToEnumMap.put("408", ArticleCategory.SCIENCE_GENERAL);
+        categoryNumToEnumMap.put("401", ArticleCategory.INTERNET);
+        categoryNumToEnumMap.put("402", ArticleCategory.NEWMEDIA);
+        categoryNumToEnumMap.put("403", ArticleCategory.IT_GENERAL);
+        categoryNumToEnumMap.put("404", ArticleCategory.SECURITIY);
+        categoryNumToEnumMap.put("405", ArticleCategory.COMPUTER);
+        categoryNumToEnumMap.put("406", ArticleCategory.SCIENCE_GENERAL);
 
         categoryNumToEnumMap.put("500", ArticleCategory.WORLD);
-        categoryNumToEnumMap.put("501", ArticleCategory.INCIDENT_ACCIDENT_WORLD);
-        categoryNumToEnumMap.put("502", ArticleCategory.WORLD_EDUCATION);
-        categoryNumToEnumMap.put("503", ArticleCategory.LABOR_WORLD);
-        categoryNumToEnumMap.put("504", ArticleCategory.PRESS_WORLD);
-        categoryNumToEnumMap.put("505", ArticleCategory.ENVIRONMENT_WORLD);
-        categoryNumToEnumMap.put("506", ArticleCategory.HUMAN_RIGHTS_WELFARE_WORLD);
-        categoryNumToEnumMap.put("507", ArticleCategory.FOOD_MEDICINE_WORLD);
-        categoryNumToEnumMap.put("508", ArticleCategory.WORLD_GENERAL);
+        categoryNumToEnumMap.put("501", ArticleCategory.WORLD_GENERAL);
+        categoryNumToEnumMap.put("502", ArticleCategory.ASIA_AUSTRAILA);
+        categoryNumToEnumMap.put("503", ArticleCategory.USA);
+        categoryNumToEnumMap.put("504", ArticleCategory.EUROPE);
+        categoryNumToEnumMap.put("505", ArticleCategory.AFRICA);
 
         // 새로운 카테고리 추가
 
@@ -98,24 +93,19 @@ public class ArticleCategoryConverter {
         categoryEnumToKrMap.put(ArticleCategory.SOCIAL_GENERAL, "사회일반");
 
         categoryEnumToKrMap.put(ArticleCategory.SCIENCE, "IT/과학");
-        categoryEnumToKrMap.put(ArticleCategory.INCIDENT_ACCIDENT_SCIENCE, "사건사고");
-        categoryEnumToKrMap.put(ArticleCategory.SCIENCE_EDUCATION, "교육");
-        categoryEnumToKrMap.put(ArticleCategory.LABOR_SCIENCE, "노동");
-        categoryEnumToKrMap.put(ArticleCategory.PRESS_SCIENCE, "언론");
-        categoryEnumToKrMap.put(ArticleCategory.ENVIRONMENT_SCIENCE, "환경");
-        categoryEnumToKrMap.put(ArticleCategory.HUMAN_RIGHTS_WELFARE_SCIENCE, "인권/복지");
-        categoryEnumToKrMap.put(ArticleCategory.FOOD_MEDICINE_SCIENCE, "식품의료");
-        categoryEnumToKrMap.put(ArticleCategory.SCIENCE_GENERAL, "사회일반");
+        categoryEnumToKrMap.put(ArticleCategory.INTERNET, "인터넷/SNS");
+        categoryEnumToKrMap.put(ArticleCategory.NEWMEDIA, "통신/뉴미디어");
+        categoryEnumToKrMap.put(ArticleCategory.IT_GENERAL, "IT일반");
+        categoryEnumToKrMap.put(ArticleCategory.SECURITIY, "보안/해킹");
+        categoryEnumToKrMap.put(ArticleCategory.COMPUTER, "컴퓨터");
+        categoryEnumToKrMap.put(ArticleCategory.SCIENCE_GENERAL, "과학일반");
 
         categoryEnumToKrMap.put(ArticleCategory.WORLD, "세계");
-        categoryEnumToKrMap.put(ArticleCategory.INCIDENT_ACCIDENT_WORLD, "사건사고");
-        categoryEnumToKrMap.put(ArticleCategory.WORLD_EDUCATION, "교육");
-        categoryEnumToKrMap.put(ArticleCategory.LABOR_WORLD, "노동");
-        categoryEnumToKrMap.put(ArticleCategory.PRESS_WORLD, "언론");
-        categoryEnumToKrMap.put(ArticleCategory.ENVIRONMENT_WORLD, "환경");
-        categoryEnumToKrMap.put(ArticleCategory.HUMAN_RIGHTS_WELFARE_WORLD, "인권/복지");
-        categoryEnumToKrMap.put(ArticleCategory.FOOD_MEDICINE_WORLD, "식품의료");
-        categoryEnumToKrMap.put(ArticleCategory.WORLD_GENERAL, "사회일반");
+        categoryEnumToKrMap.put(ArticleCategory.WORLD_GENERAL, "세계일반");
+        categoryEnumToKrMap.put(ArticleCategory.ASIA_AUSTRAILA, "아시아/호주");
+        categoryEnumToKrMap.put(ArticleCategory.USA, "미국/중남미");
+        categoryEnumToKrMap.put(ArticleCategory.EUROPE, "유럽");
+        categoryEnumToKrMap.put(ArticleCategory.AFRICA, "중동/아프리카");
 
 
         // kr to enum
@@ -123,7 +113,7 @@ public class ArticleCategoryConverter {
         categoryKrToEnum.put("경제", ArticleCategory.ECONOMICS);  // 경제
         categoryKrToEnum.put("사회", ArticleCategory.SOCIAL);  // 사회
         categoryKrToEnum.put("IT/과학", ArticleCategory.SCIENCE);  // 과학
-        categoryKrToEnum.put("국제", ArticleCategory.WORLD);  // 국제
+        categoryKrToEnum.put("세계", ArticleCategory.WORLD);  // 세계
     }
 
     public static ArticleCategory convertEnumCategory(String rawCategory) {
