@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class MailDto {
+public class MailDTO {
     private String address;
     private String title;
     private String message;

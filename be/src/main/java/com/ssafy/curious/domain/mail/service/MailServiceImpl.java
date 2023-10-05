@@ -1,22 +1,24 @@
 package com.ssafy.curious.domain.mail.service;
 
-import com.ssafy.curious.domain.mail.dto.MailDto;
+import com.ssafy.curious.domain.mail.dto.MailDTO;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @AllArgsConstructor
-public class MailService {
+public class MailServiceImpl implements MailService {
     GenerateCertPassword generateCertPassword;
 
     private JavaMailSender mailSender;
     private static final String FROM_ADDRESS = "no_repy@boki.com";
 
     @Async
-    public String mailSimpleSend(MailDto mailDto) {
+    public String mailSimpleSend(MailDTO mailDto) {
         SimpleMailMessage message = new SimpleMailMessage();
 
         String cert = generateCertPassword.executeGenerate();
@@ -32,7 +34,7 @@ public class MailService {
     }
 
     @Async
-    public void justSend(MailDto mailDto) {
+    public void justSend(MailDTO mailDto) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
