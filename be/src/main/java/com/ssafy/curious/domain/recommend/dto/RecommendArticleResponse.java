@@ -21,6 +21,7 @@ public class RecommendArticleResponse {
     private String thumbnail;
     private String company;
     private String article;
+    private List<Keyword> keywords;
 
     public static RecommendArticleResponse from(ArticleInfoEntity articleInfo) {
         RecommendArticleResponse recommendArticleResponse = new RecommendArticleResponse();
@@ -36,4 +37,5 @@ public class RecommendArticleResponse {
 
         return recommendArticleResponse;
     }
+
 }

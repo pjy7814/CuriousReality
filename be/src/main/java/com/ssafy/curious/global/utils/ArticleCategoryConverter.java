@@ -47,15 +47,12 @@ public class ArticleCategoryConverter {
         categoryNumToEnumMap.put("308", ArticleCategory.SOCIAL_GENERAL);
 
         categoryNumToEnumMap.put("400", ArticleCategory.SCIENCE);
-        categoryNumToEnumMap.put("401", ArticleCategory.INTERNET);
+        categoryNumToEnumMap.put("401", ArticleCategory.MOBILE);
         categoryNumToEnumMap.put("402", ArticleCategory.NEWMEDIA);
-        categoryNumToEnumMap.put("403", ArticleCategory.IT_GENERAL);
         categoryNumToEnumMap.put("404", ArticleCategory.SECURITIY);
         categoryNumToEnumMap.put("405", ArticleCategory.COMPUTER);
-        categoryNumToEnumMap.put("406", ArticleCategory.SCIENCE_GENERAL);
 
         categoryNumToEnumMap.put("500", ArticleCategory.WORLD);
-        categoryNumToEnumMap.put("501", ArticleCategory.WORLD_GENERAL);
         categoryNumToEnumMap.put("502", ArticleCategory.ASIA_AUSTRAILA);
         categoryNumToEnumMap.put("503", ArticleCategory.USA);
         categoryNumToEnumMap.put("504", ArticleCategory.EUROPE);
@@ -93,15 +90,12 @@ public class ArticleCategoryConverter {
         categoryEnumToKrMap.put(ArticleCategory.SOCIAL_GENERAL, "사회일반");
 
         categoryEnumToKrMap.put(ArticleCategory.SCIENCE, "IT/과학");
-        categoryEnumToKrMap.put(ArticleCategory.INTERNET, "인터넷/SNS");
+        categoryEnumToKrMap.put(ArticleCategory.MOBILE, "모바일");
         categoryEnumToKrMap.put(ArticleCategory.NEWMEDIA, "통신/뉴미디어");
-        categoryEnumToKrMap.put(ArticleCategory.IT_GENERAL, "IT일반");
         categoryEnumToKrMap.put(ArticleCategory.SECURITIY, "보안/해킹");
         categoryEnumToKrMap.put(ArticleCategory.COMPUTER, "컴퓨터");
-        categoryEnumToKrMap.put(ArticleCategory.SCIENCE_GENERAL, "과학일반");
 
         categoryEnumToKrMap.put(ArticleCategory.WORLD, "세계");
-        categoryEnumToKrMap.put(ArticleCategory.WORLD_GENERAL, "세계일반");
         categoryEnumToKrMap.put(ArticleCategory.ASIA_AUSTRAILA, "아시아/호주");
         categoryEnumToKrMap.put(ArticleCategory.USA, "미국/중남미");
         categoryEnumToKrMap.put(ArticleCategory.EUROPE, "유럽");
