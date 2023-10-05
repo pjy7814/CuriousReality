@@ -8,8 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ArticleMetadata {
-    private String articleId;
-    private ArticleCategory category1;
-    private ArticlePress company;
-    private Float clusterScale;
+    private String title;
+    private String category1;
+    private String company;
+    private String original_url;
+    private Integer cluster;
 }
