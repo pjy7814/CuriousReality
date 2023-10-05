@@ -30,11 +30,10 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router";
 import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import VueWordCloud from "vuewordcloud";
-import { getMainWordCloud } from "@/api/categoryApi";
+import { getMainWordCloud, getMainArticle } from "@/api/categoryApi";
 export default {
   name: "HomeView",
   components: {
@@ -43,23 +42,11 @@ export default {
     [VueWordCloud.name]: VueWordCloud,
   },
 
-  setup() {
-    const router = useRouter();
-
-    function onWordClick(word) {
-      router.push({
-        name: "Home",
-        query: { keyword: word },
-      });
-    }
-
-    return { onWordClick };
-  },
   data() {
     return {
       words : [],
-      articles : {},
       keywords: [],
+      articles: [],
       date: null,
     };
   },
@@ -84,10 +71,20 @@ export default {
       });
       this.words = wordCloudData;
       this.keywords  = hotKeywordData
+    },
+    async onWordClick(keyword) {
+      try {
+        const response = await getMainArticle(keyword);
+        this.articles = response.data;
+        console.log(this.articles);
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   created() {
     this.getMainWordCloud();
+    this.onWordClick(null);
   }
 };
 </script>

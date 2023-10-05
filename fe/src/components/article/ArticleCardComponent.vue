@@ -10,7 +10,7 @@
           <div class="content">
             <div class="body">
               <div class="title">{{ article[index].title }}</div>
-              <div class="created-at">{{ article[index].createdAt }}</div>
+              <div class="created-at">{{ formatDate(article[index].createdAt) }}</div>
               <div class="article">{{ article[index].article }}</div>
             </div>
           </div>
@@ -117,6 +117,10 @@ export default {
       } else {
         return true;
       }
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
     },
 
     // 모달 설정

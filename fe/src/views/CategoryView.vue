@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import ArticleComponent from "@/components/article/ArticleComponent.vue";
 import KeywordComponent from "@/components/keyword/KeywordComponent.vue";
@@ -63,74 +63,16 @@ export default {
   },
   setup() {
     const route = useRouter();
-    const words = ref(["준비중입니다", 100]);
-    const articles = {};
 
-    function getWords(data) {
-      const wordCloudData = [];
-
-      data.forEach((item, index) => {
-        const keyword = item.keywords[0].keyword;
-        wordCloudData.push([keyword, 20 - index / 1.1]);
-      });
-
-      console.log(wordCloudData);
-      words.value = wordCloudData;
-    }
-
-    function getArticleArray(data) {
-      const articleData = [];
-
-      data.forEach(item => {
-        if (
-          item.originalUrl !== null &&
-          item.category1 !== null &&
-          item.category2 !== null &&
-          item.title !== null &&
-          item.thumbnail !== null
-        ) {
-          const article = getArticle(item);
-          articleData.push(article);
-        }
-      });
-
-      this.articles = articleData;
-    }
-
-    function getArticle(data) {
-      const articleData = data.map(item => {
-        return {
-          thumbnail: item.thumbnail,
-          title: item.title,
-          createAt: item.createAt, 
-          article: item.article 
-        };
-      });
-
-      return articleData;
-    }
-
-    async function onWordClick(keyword) {
-      try {
-        const category2 = route.currentRoute.value.params.category;
-        const category1 = CategoryDataReverse[Categories[category2].main];
-        const response = await getWordCloud(category1, category2, keyword);
-        const dataArray = response.data;
-        getWords(dataArray);
-        getArticleArray(dataArray);
-      } catch (error) {
-        words.value=["준비중입니다", 100];
-        console.error(error);
-      }
-    }
-
-    return { onWordClick, words, articles };
+    return { route };
   },
   data() {
     return {
       categories: Categories,
       category: "",
       keywords: ["준비중입니다"],
+      words : [],
+      articles: {}
     };
   },
   methods: {
@@ -143,6 +85,33 @@ export default {
         console.error(error);
       }
     },
+
+    getWords(data) {
+      const wordCloudData = [];
+
+      data.forEach((item, index) => {
+        const keyword = item.keywords[0].keyword;
+        wordCloudData.push([keyword, 20 - index / 1.1]);
+      });
+
+      console.log(wordCloudData);
+      this.words = wordCloudData;
+    },
+    
+    async onWordClick(keyword) {
+      try {
+        const category2 = this.route.currentRoute.value.params.category;
+        const category1 = CategoryDataReverse[Categories[category2].main];
+        const response = await getWordCloud(category1, category2, keyword);
+        const dataArray = response.data;
+        console.log(dataArray);
+        this.getWords(dataArray);
+        this.articles = dataArray;
+      } catch (error) {
+        this.words =["준비중입니다", 100];
+        console.error(error);
+      }
+    }
   }
 };
 </script>

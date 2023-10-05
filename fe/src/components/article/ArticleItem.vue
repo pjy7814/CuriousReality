@@ -1,6 +1,10 @@
 <template>
   <div class="item">
-    <img :src="article.thumbnail" />
+    <div>
+      <img :src="article.thumbnail" v-if="article.thumbnail"/>
+      <img v-else src="@/assets/logo.png" />
+    </div>
+    
 
     <div class="body">
       <a :href="article.originalUrl" target="_blank" class="title" @click="addHistory">{{ article.title }}</a>
@@ -8,8 +12,11 @@
       <div class="article">{{ article.article }}</div>
     </div>
 
-    <div class="bookmark">
+    <div class="bookmark" v-if="!checkLogin">
       <img :src="images[articleCopy.bookmarked ? 1 : 0]" @click="bookmarked" />
+    </div>
+    <div class="bookmark" v-if="checkLogin">
+      <div class="null-image"></div>
     </div>
   </div>
 </template>
@@ -53,7 +60,15 @@ export default {
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
       return new Date(dateString).toLocaleDateString(undefined, options);
-    }
+    },
+    checkLogin() {
+      const email = localStorage.getItem("userEmail");
+      if (!email) {
+        return false;
+      } else {
+        return true;
+      }
+    },
   },
 };
 </script>
@@ -117,5 +132,10 @@ img {
   height: 100px;
   cursor: pointer;
   object-fit: cover;
+}
+
+.null-image{
+  width: 100px;
+  height: 100px;
 }
 </style>
