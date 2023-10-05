@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class RecommendScore {
-    private String articleId;
-    private Float score;
+    private String articleUrl;
+    private Integer score;
 
-    public RecommendScore(String articleId, Float score) {
-        this.articleId = articleId;
+    public RecommendScore(String articleUrl, Integer score) {
+        this.articleUrl = articleUrl;
         this.score = score;
     }
 }
