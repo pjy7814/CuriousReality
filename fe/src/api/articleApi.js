@@ -45,4 +45,16 @@ function addHistory(history) {
   return axios.post(`${BASE_URL}/history`, history, { headers });
 }
 
-export { getBookmarkList, articleClippings, getPreference, addHistory };
+// 사용자 추천
+
+function getRecommend() {
+  const BASE_URL = process.env.VUE_APP_API_URL;
+
+  const userToken = localStorage.getItem("userToken");
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  return axios.get(`${BASE_URL}/article/recommend`, { headers });
+}
+
+export { getBookmarkList, articleClippings, getPreference, addHistory, getRecommend };

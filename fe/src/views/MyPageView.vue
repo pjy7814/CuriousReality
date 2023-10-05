@@ -101,7 +101,8 @@ export default {
       } catch (error) {
         if (error.response && error.response.status === 401) {
           console.log("AccessToken 연장");
-          getNewAccessToken();
+          this.getNewAccessToken();
+          this.getBookmarkList();
         } else {
           alert("로그인 후 이용해주세요.");
           localStorage.removeItem("userEmail");

@@ -23,7 +23,7 @@ function getWordCloud(category1, category2, keyword) {
   });
 }
 
-
+// main page
 function getMainWordCloud() {
   const BASE_URL = process.env.VUE_APP_API_URL;
   return axios.get(`${BASE_URL}/article/main`);

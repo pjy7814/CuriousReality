@@ -6,11 +6,11 @@
       <div class="article-content">
         <img class="arrow" src="@/assets/left_button.png" @click="prevBtn" />
         <div class="main-content">
-          <img :src="article.thumbnail" />
+          <img :src="article[index].thumbnail" />
           <div class="content">
             <div class="body">
               <div class="title">{{ article[index].title }}</div>
-              <div class="created-at">{{ article[index].created_at }}</div>
+              <div class="created-at">{{ article[index].createdAt }}</div>
               <div class="article">{{ article[index].article }}</div>
             </div>
           </div>
@@ -19,13 +19,16 @@
       </div>
       <div class="button-content">
         <button @click="openOriginalUrl">기사 읽기</button>
-        <button>스크랩하기</button>
+        <button @click="bookmarked">스크랩하기</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getRecommend } from "@/api/articleApi";
+import { getNewAccessToken } from "@/api/userApi";
+import { articleClippings } from "@/api/articleApi";
 export default {
   props: {
     isOpenArticleCard: Boolean,
@@ -33,64 +36,87 @@ export default {
   data() {
     return {
       index: 0,
-      article: [
-        {
-          id: "650d2bed1e0a7e280bd14f9a",
-          originalUrl: "testurl",
-          category1: "정치",
-          category2: "대통령실",
-          title: "인도네시아 동포 어쩌구1",
-          createdAt: "2023-09-05T22:43:46",
-          thumbnail: "thumbnail",
-          company: "CJB",
-          article: "블라블라",
-          keywords: [
-            {
-              keyword: "예시 키워드",
-              tfidf: 0.9,
-            },
-          ],
-        },
-        {
-          id: "650d2bed1e0a7e280bd14f9a",
-          originalUrl: "testurl",
-          category1: "정치",
-          category2: "대통령실",
-          title: "인도네시아 동포 어쩌구2",
-          createdAt: "2023-09-05T22:43:46",
-          thumbnail: "thumbnail",
-          company: "CJB",
-          article: "블라블라",
-          keywords: [
-            {
-              keyword: "예시 키워드",
-              tfidf: 0.9,
-            },
-          ],
-        },
-        {
-          id: "650d2bed1e0a7e280bd14f9a",
-          originalUrl: "testurl",
-          category1: "정치",
-          category2: "대통령실",
-          title: "인도네시아 동포 어쩌구3",
-          createdAt: "2023-09-05T22:43:46",
-          thumbnail: "thumbnail",
-          company: "CJB",
-          article: "블라블라",
-          keywords: [
-            {
-              keyword: "예시 키워드",
-              tfidf: 0.9,
-            },
-          ],
-        },
-      ],
+      article: [{
+        "id": "",
+        "originalUrl": "",
+        "category1": "",
+        "category2": "",
+        "title": "",
+        "createdAt": "",
+        "thumbnail": "",
+        "company": "",
+        "article": "",
+        "keywords": null
+      }],
     };
   },
+  created() {
+    if (this.checkLogin()) {
+      this.getRecommend();
+    }
+  },
   methods: {
+    // 통신
+    async getRecommend() {
+
+      try {
+        const { data } = await getRecommend();
+        this.article = [...data];
+        console.log(data);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          console.log("AccessToken 연장");
+          this.getNewAccessToken();
+          this.getRecommend();
+        } else {
+          alert("로그인 후 이용해주세요.");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
+        }
+      }
+    },
+    async getNewAccessToken() {
+      try {
+        const { data } = await getNewAccessToken();
+        localStorage.setItem("userToken", data.accessToken);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+
+          alert("로그인 후 이용해주세요.");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
+        } else if (error.response && error.response.status === 601) {
+          alert("로그인이 만료되었습니다.");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userToken");
+          window.location.href = "/";
+        }
+      }
+    },
+
+    async bookmarked() {
+      try {
+        await articleClippings(this.article[this.index].originalUrl);
+        alert("북마크에 저장되었습니다!");
+      } catch (error) {
+        console.error("Error bookmarking article:", error);
+      }
+    },
+
+    checkLogin() {
+      const email = localStorage.getItem("userEmail");
+      if (!email) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+
+    // 모달 설정
     openOriginalUrl() {
-      window.open(this.article[this.index].original_url, "_blank");
+      window.open(this.article[this.index].originalUrl, "_blank");
     },
     closeModal() {
       this.$emit("closeModal");

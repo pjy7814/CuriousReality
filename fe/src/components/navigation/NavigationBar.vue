@@ -6,7 +6,8 @@
     <div class="category">사회</div>
     <div class="category">IT/과학</div>
     <div class="category">세계</div>
-    <div class="recommend-news" @click="openModal">추천뉴스</div>
+    <div v-if="checkLogin()" class="recommend-news" @click="openModal">추천뉴스</div>
+    <div v-else class="recommend-news" @click="openModal"></div>
     <router-link v-if="userEmail" class="mypage" to="/mypage">마이페이지</router-link>
     <router-link v-else class="login" to="/login">로그인</router-link>
   </div>
@@ -27,6 +28,14 @@ export default {
   methods: {
     openModal() {
       this.$emit('openModal');
+    },
+    checkLogin() {
+      const email = localStorage.getItem("userEmail");
+      if (!email) {
+        return false;
+      } else {
+        return true;
+      }
     },
   }
 };
