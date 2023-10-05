@@ -5,7 +5,9 @@ import com.ssafy.curious.domain.model.ArticleCategory;
 import com.ssafy.curious.domain.model.Keyword;
 import com.ssafy.curious.domain.search.dto.SearchArticleResponse;
 import com.ssafy.curious.domain.search.entity.HotkeyEntity;
+import com.ssafy.curious.domain.search.entity.MainpageEntity;
 import com.ssafy.curious.domain.search.entity.SearchEntity;
+import com.ssafy.curious.domain.search.repository.MainpageRepository;
 import com.ssafy.curious.domain.search.service.HotkeyService;
 import com.ssafy.curious.domain.search.service.SearchService;
 import com.ssafy.curious.global.utils.ArticleCategoryConverter;
@@ -32,6 +34,7 @@ import java.util.Map.Entry;
 public class SearchController {
     private final SearchService searchService;
     private final HotkeyService hotkeyService;
+    private final MainpageRepository mainpageRepository;
     @GetMapping("/search")
     public ResponseEntity<List<SearchArticleResponse>> search(@RequestParam(name = "category1", required = true) String category1,
                                                               @RequestParam(name = "category2", required = true) String category2,
@@ -126,6 +129,26 @@ public class SearchController {
 
         return ResponseEntity.ok(answer);
     }
+
+
+    @GetMapping("/main")
+    public ResponseEntity<List<Keyword>> main(){
+        // 처음 메인 페이지에 들어왔을 때 반환하는 값들
+        List<MainpageEntity> result  = mainpageRepository.findAllBy();
+        List<Keyword> answer= new ArrayList<>();
+
+        for(int i=0;i<10;i++){
+            Keyword keyword = new Keyword();
+            keyword.setKeyword(result.get(0).getTfidfResult().get(i).getKeyword());
+            keyword.setTfidf(result.get(0).getTfidfResult().get(i).getTfidf());
+            answer.add(keyword);
+        }
+
+        
+        return ResponseEntity.ok(answer);
+
+    }
+
 
 
 }
