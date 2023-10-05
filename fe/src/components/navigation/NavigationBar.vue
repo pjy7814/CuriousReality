@@ -44,10 +44,10 @@ export default {
 <style scoped>
 .navigation-bar {
   width: 100%;
-  height: 70px;
+  height: 75px;
   position: fixed;
   flex-shrink: 0;
-  background: #fbfbfb;
+  background: #fafafa;
   display: flex;
   justify-content: space-around;
   align-items: center;

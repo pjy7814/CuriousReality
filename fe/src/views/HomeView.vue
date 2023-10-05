@@ -1,10 +1,6 @@
 <template>
   <div class="content">
     <div class="content-1">
-      <!-- <div class="search">
-        <input type="text" maxlength="10" placeholder="검색어를 입력해주세요" />
-        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" />
-      </div> -->
     </div>
 
     <div class="content-1">

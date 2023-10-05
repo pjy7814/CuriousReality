@@ -2,7 +2,7 @@
   <div class="item">
     <div>
       <img :src="article.thumbnail" v-if="article.thumbnail"/>
-      <img v-else src="@/assets/logo.png" />
+      <img v-else src="@/assets/logo.png" class="reality-image"/>
     </div>
     
 
@@ -12,10 +12,10 @@
       <div class="article">{{ article.article }}</div>
     </div>
 
-    <div class="bookmark" v-if="!checkLogin">
+    <div class="bookmark" v-if="checkLogin()">
       <img :src="images[articleCopy.bookmarked ? 1 : 0]" @click="bookmarked" />
     </div>
-    <div class="bookmark" v-if="checkLogin">
+    <div class="bookmark" v-else>
       <div class="null-image"></div>
     </div>
   </div>
@@ -137,5 +137,9 @@ img {
 .null-image{
   width: 100px;
   height: 100px;
+}
+
+.reality-image{
+  opacity: 30%;
 }
 </style>
