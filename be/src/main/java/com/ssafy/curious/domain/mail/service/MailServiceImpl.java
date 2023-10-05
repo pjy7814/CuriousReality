@@ -65,7 +65,7 @@ public class MailServiceImpl implements MailService {
         log.info("member : {}", member.getEmail());
         Long memberId = member.getId();
 
-        List<Optional<ArticleInfoEntity>> recommendList = recommendService.recommendClusterArticle(memberId);
+        List<ArticleInfoEntity> recommendList = recommendService.recommendClusterArticle(memberId);
 
         String title = member.getName().toString() + "님을 위한 뉴스레터입니다.";
         log.info(title);
