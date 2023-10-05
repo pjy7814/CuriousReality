@@ -20,4 +20,5 @@ public class SearchArticleResponse {
     private String title;
     private String thumbnail;
     private List<Keyword> keywords;
+
 }
