@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,16 +36,11 @@ public class RecommendController {
         // 추천 기사 리스트 받아오기
         Optional<MemberEntity> member  = memberRepository.findByEmail(userAuth.getEmail());
         Long memberId = member.get().getId();
-        List<ArticleInfoEntity> recommendClusterArticleList = recommendService.recommendClusterArticle(memberId);
-        List<ArticleInfoEntity> recommendCFArticleList = recommendService.recommendCFArticle(memberId);
-        List<ArticleInfoEntity> recommendArticleList = Stream.concat(
-                recommendClusterArticleList.stream(), recommendCFArticleList.stream())
-                .collect(Collectors.toList());
+        List<Optional<ArticleInfoEntity>> recommendArticleList = recommendService.recommendClusterArticle(memberId);
 
-        log.info("recommendArticles {}", recommendArticleList.toString());
         // DTO 변환
         List<RecommendArticleResponse> recommendArticleResponseList = new ArrayList<>();
-        for (ArticleInfoEntity articleInfo : recommendArticleList) {
+        for (Optional<ArticleInfoEntity> articleInfo : recommendArticleList) {
             log.info(String.valueOf(articleInfo));
             recommendArticleResponseList.add(RecommendArticleResponse.from(articleInfo));
         }
