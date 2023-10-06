@@ -69,7 +69,7 @@ public class MemberEntity extends CUDEntity {
     private List<HistoryEntity> articleHistory = new ArrayList<>();
 
     @Builder
-    public MemberEntity(Long id, String email, String password,String name, LocalDate birthday, String contact, Boolean isSocial) {
+    public MemberEntity(Long id, String email, String password, String name, LocalDate birthday, String contact, Boolean isSocial) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -83,8 +83,15 @@ public class MemberEntity extends CUDEntity {
     // 카테고리, 언론사 선호도를 5.0F 초기값 설정
     private void initializePreference() {
         this.categoryPreference = new HashMap<>();
+
         for (ArticleCategory category : ArticleCategory.values()) {
-            this.categoryPreference.put(category, 0);
+            if (category == ArticleCategory.POLITICS ||
+                    category == ArticleCategory.ECONOMICS ||
+                    category == ArticleCategory.SOCIAL ||
+                    category == ArticleCategory.SCIENCE ||
+                    category == ArticleCategory.WORLD) {
+                this.categoryPreference.put(category, 0);
+            }
         }
 
         this.pressPreference = new HashMap<>();
@@ -93,7 +100,7 @@ public class MemberEntity extends CUDEntity {
         }
     }
 
-    public void updateProfile(String password, String contact){
+    public void updateProfile(String password, String contact) {
         this.password = password;
         this.contact = contact;
     }
