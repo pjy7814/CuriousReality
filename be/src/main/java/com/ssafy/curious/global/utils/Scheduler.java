@@ -18,7 +18,7 @@ public class Scheduler {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Scheduled(cron="0 0 * * * ?")
+    @Scheduled(cron="0 0 8 * * ?")
     public void schedule(){
         List<MemberEntity> members = memberRepository.findAll();
         log.info("print size ===== {}", members.size());
