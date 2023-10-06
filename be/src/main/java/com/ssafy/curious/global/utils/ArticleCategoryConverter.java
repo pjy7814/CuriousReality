@@ -48,9 +48,9 @@ public class ArticleCategoryConverter {
 
         categoryNumToEnumMap.put("400", ArticleCategory.SCIENCE);
         categoryNumToEnumMap.put("401", ArticleCategory.MOBILE);
-        categoryNumToEnumMap.put("402", ArticleCategory.NEWMEDIA);
+        categoryNumToEnumMap.put("403", ArticleCategory.NEWMEDIA);
         categoryNumToEnumMap.put("404", ArticleCategory.SECURITIY);
-        categoryNumToEnumMap.put("405", ArticleCategory.COMPUTER);
+        categoryNumToEnumMap.put("406", ArticleCategory.COMPUTER);
 
         categoryNumToEnumMap.put("500", ArticleCategory.WORLD);
         categoryNumToEnumMap.put("502", ArticleCategory.ASIA_AUSTRAILA);
@@ -63,17 +63,17 @@ public class ArticleCategoryConverter {
 
         categoryEnumToKrMap.put(ArticleCategory.POLITICS, "정치");
         categoryEnumToKrMap.put(ArticleCategory.PRESIDENT, "대통령실");
-        categoryEnumToKrMap.put(ArticleCategory.NATIONAL_ASSEMBLY, "국회/정당");
+        categoryEnumToKrMap.put(ArticleCategory.NATIONAL_ASSEMBLY, "국회정당");
         categoryEnumToKrMap.put(ArticleCategory.NORTH_KOREA, "북한");
         categoryEnumToKrMap.put(ArticleCategory.ADMINISTRATION, "행정");
-        categoryEnumToKrMap.put(ArticleCategory.DEFENSE_DIPLOMACY, "국방/외교");
+        categoryEnumToKrMap.put(ArticleCategory.DEFENSE_DIPLOMACY, "국방외교");
         categoryEnumToKrMap.put(ArticleCategory.POLITICS_GENERAL, "정치일반");
 
         categoryEnumToKrMap.put(ArticleCategory.ECONOMICS, "경제");
         categoryEnumToKrMap.put(ArticleCategory.FINANCE, "금융");
         categoryEnumToKrMap.put(ArticleCategory.SECURITIES, "증권");
-        categoryEnumToKrMap.put(ArticleCategory.SOCIAL_ECONOMY, "사회/재계");
-        categoryEnumToKrMap.put(ArticleCategory.MIDDLE_SMALL, "중기/벤쳐");
+        categoryEnumToKrMap.put(ArticleCategory.SOCIAL_ECONOMY, "산업재계");
+        categoryEnumToKrMap.put(ArticleCategory.MIDDLE_SMALL, "중기벤처");
         categoryEnumToKrMap.put(ArticleCategory.REAL_ESTATE, "부동산");
         categoryEnumToKrMap.put(ArticleCategory.GLOBAL_ECONOMY, "글로벌경제");
         categoryEnumToKrMap.put(ArticleCategory.LIVING_ECONOMY, "생활경제");
@@ -85,28 +85,28 @@ public class ArticleCategoryConverter {
         categoryEnumToKrMap.put(ArticleCategory.LABOR, "노동");
         categoryEnumToKrMap.put(ArticleCategory.PRESS, "언론");
         categoryEnumToKrMap.put(ArticleCategory.ENVIRONMENT, "환경");
-        categoryEnumToKrMap.put(ArticleCategory.HUMAN_RIGHTS_WELFARE, "인권/복지");
+        categoryEnumToKrMap.put(ArticleCategory.HUMAN_RIGHTS_WELFARE, "인권복지");
         categoryEnumToKrMap.put(ArticleCategory.FOOD_MEDICINE, "식품의료");
         categoryEnumToKrMap.put(ArticleCategory.SOCIAL_GENERAL, "사회일반");
 
-        categoryEnumToKrMap.put(ArticleCategory.SCIENCE, "IT/과학");
+        categoryEnumToKrMap.put(ArticleCategory.SCIENCE, "IT과학");
         categoryEnumToKrMap.put(ArticleCategory.MOBILE, "모바일");
-        categoryEnumToKrMap.put(ArticleCategory.NEWMEDIA, "통신/뉴미디어");
-        categoryEnumToKrMap.put(ArticleCategory.SECURITIY, "보안/해킹");
+        categoryEnumToKrMap.put(ArticleCategory.NEWMEDIA, "통신뉴미디어");
+        categoryEnumToKrMap.put(ArticleCategory.SECURITIY, "보안해킹");
         categoryEnumToKrMap.put(ArticleCategory.COMPUTER, "컴퓨터");
 
         categoryEnumToKrMap.put(ArticleCategory.WORLD, "세계");
-        categoryEnumToKrMap.put(ArticleCategory.ASIA_AUSTRAILA, "아시아/호주");
-        categoryEnumToKrMap.put(ArticleCategory.USA, "미국/중남미");
+        categoryEnumToKrMap.put(ArticleCategory.ASIA_AUSTRAILA, "아시아호주");
+        categoryEnumToKrMap.put(ArticleCategory.USA, "미국중남미");
         categoryEnumToKrMap.put(ArticleCategory.EUROPE, "유럽");
-        categoryEnumToKrMap.put(ArticleCategory.AFRICA, "중동/아프리카");
+        categoryEnumToKrMap.put(ArticleCategory.AFRICA, "중동아프리카");
 
 
         // kr to enum
         categoryKrToEnum.put("정치", ArticleCategory.POLITICS);  // 정치
         categoryKrToEnum.put("경제", ArticleCategory.ECONOMICS);  // 경제
         categoryKrToEnum.put("사회", ArticleCategory.SOCIAL);  // 사회
-        categoryKrToEnum.put("IT/과학", ArticleCategory.SCIENCE);  // 과학
+        categoryKrToEnum.put("IT과학", ArticleCategory.SCIENCE);  // 과학
         categoryKrToEnum.put("세계", ArticleCategory.WORLD);  // 세계
     }
 
