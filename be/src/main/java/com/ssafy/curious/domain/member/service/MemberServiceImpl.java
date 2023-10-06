@@ -50,6 +50,7 @@ public class MemberServiceImpl implements MemberService {
         return MemberDTO.Response.builder()
                 .email(member.getEmail())
                 .name(member.getName())
+                .birthday(member.getBirthday())
                 .contact(member.getContact())
                 .categoryPreference(member.getCategoryPreference())
                 .build();
